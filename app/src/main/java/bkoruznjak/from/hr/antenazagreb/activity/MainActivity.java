@@ -1,0 +1,274 @@
+package bkoruznjak.from.hr.antenazagreb.activity;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.squareup.otto.Subscribe;
+
+import bkoruznjak.from.hr.antenazagreb.R;
+import bkoruznjak.from.hr.antenazagreb.RadioApplication;
+import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
+import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
+import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
+import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
+import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
+import bkoruznjak.from.hr.antenazagreb.model.db.Song;
+import bkoruznjak.from.hr.antenazagreb.service.RadioService;
+import bkoruznjak.from.hr.antenazagreb.views.VolumeSlider;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, VolumeSlider.OnSliderMovedListener {
+
+    @BindView(R.id.btnMainStream)
+    Button btnMainStream;
+    @BindView(R.id.btnHitStream)
+    Button btnHitStream;
+    @BindView(R.id.btnRockStream)
+    Button btnRockStream;
+    @BindView(R.id.btn2000Stream)
+    Button btn2000Stream;
+    @BindView(R.id.btn90Stream)
+    Button btn90Stream;
+    @BindView(R.id.btn80Stream)
+    Button btn80Stream;
+    @BindView(R.id.btnRadioController)
+    ImageButton btnRadioController;
+
+    @BindView(R.id.btnVolUp)
+    Button btnVolUp;
+    @BindView(R.id.btnVolDown)
+    Button btnVolDown;
+
+    @BindView(R.id.volumeControl)
+    VolumeSlider volumeControl;
+
+    @BindView(R.id.radioStateTextView)
+    TextView txtRadioState;
+    @BindView(R.id.songInfoTextView)
+    TextView txtSongInfo;
+
+    private RadioBus myBus;
+    private RadioStateModel mRadioStateModel;
+    private Animation infiniteRotateAnim;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        myBus.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        myBus.unregister(this);
+    }
+
+    private void init() {
+        ButterKnife.bind(this);
+        infiniteRotateAnim = AnimationUtils.loadAnimation(this, R.anim.inf_rotate);
+        myBus = ((RadioApplication) getApplication()).getBus();
+        mRadioStateModel = ((RadioApplication) getApplication()).getRadioStateModel();
+        updateViewsByRadioState(mRadioStateModel);
+        bindOnClickListeners();
+        bingOnLongClickListeners();
+    }
+
+    private void bindOnClickListeners() {
+        btnMainStream.setOnClickListener(this);
+        btnHitStream.setOnClickListener(this);
+        btnRockStream.setOnClickListener(this);
+        btn2000Stream.setOnClickListener(this);
+        btn90Stream.setOnClickListener(this);
+        btn80Stream.setOnClickListener(this);
+        btnRadioController.setOnClickListener(this);
+        btnVolUp.setOnClickListener(this);
+        btnVolDown.setOnClickListener(this);
+
+        volumeControl.setOnSliderMovedListener(this);
+    }
+
+    private void bingOnLongClickListeners() {
+        btnRadioController.setOnLongClickListener(this);
+    }
+
+    private void updateViewsByRadioState(RadioStateModel stateModel) {
+        Log.d("BBB", "updating views with state model:" + stateModel.toString());
+        txtSongInfo.setText(stateModel.getSongAuthor()
+                .concat(" - ")
+                .concat(stateModel.getSongTitle()));
+
+        txtRadioState.setText(stateModel.getStateEnum().toString());
+
+        if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.BUFFERING){
+            btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_load));
+            btnRadioController.startAnimation(infiniteRotateAnim);
+        }
+        else if (stateModel.isMusicPlaying()) {
+            btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_pause));
+        } else {
+            btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+        }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnMainStream:
+                Log.d("BBB", "MAIN STREAM PRESSED!");
+                myBus.post(StreamUriConstants.ANTENA_MAIN);
+                break;
+            case R.id.btnHitStream:
+                Log.d("BBB", "HIT STREAM PRESSED!");
+                myBus.post(StreamUriConstants.ANTENA_HIT);
+                break;
+            case R.id.btnRockStream:
+                Log.d("BBB", "ROCK STREAM PRESSED!");
+                myBus.post(StreamUriConstants.ANTENA_ROCK);
+                break;
+            case R.id.btn2000Stream:
+                Log.d("BBB", "2000 STREAM PRESSED!");
+                myBus.post(StreamUriConstants.ANTENA_2000);
+                break;
+            case R.id.btn90Stream:
+                Log.d("BBB", "90S STREAM PRESSED!");
+                myBus.post(StreamUriConstants.ANTENA_90);
+                break;
+            case R.id.btn80Stream:
+                Log.d("BBB", "80S STREAM PRESSED!");
+                myBus.post(StreamUriConstants.ANTENA_80);
+                break;
+            case R.id.btnRadioController:
+                Log.d("BBB", "RADIO CONTROLLER PRESSED!");
+                if(mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying()){
+                    myBus.post(RadioCommandEnum.PAUSE);
+                    btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                } else if(mRadioStateModel.isServiceUp()){
+                    myBus.post(RadioCommandEnum.PLAY);
+                } else {
+                    Log.d("BBB", "starting service anew");
+                    Intent startRadioServiceIntent = new Intent(this, RadioService.class);
+                    startService(startRadioServiceIntent);
+                }
+                break;
+
+            case R.id.btnVolDown:
+//                myBus.post(VolumeEnum.VOLUME_DOWN);
+                AudioManager audioManager =
+                        (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,--currentVolume,1);
+                break;
+            case R.id.btnVolUp:
+                AudioManager audioManagerTwo =
+                        (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                int currentVolumeTwo = audioManagerTwo.getStreamVolume(AudioManager.STREAM_MUSIC);
+                audioManagerTwo.setStreamVolume(AudioManager.STREAM_MUSIC,++currentVolumeTwo,1);
+//                myBus.post(VolumeEnum.VOLUME_UP);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnRadioController:
+                Log.d("BBB", "stopping service!");
+                Intent stopRadioServiceIntent = new Intent(this, RadioService.class);
+                stopService(stopRadioServiceIntent);
+                btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                return true;
+        }
+        return false;
+    }
+
+    @Subscribe
+    public void handleStreamStateChange(RadioStateEnum streamState) {
+        switch (streamState) {
+            case BUFFERING:
+                txtRadioState.setText(RadioStateEnum.BUFFERING.toString());
+                btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_load));
+                btnRadioController.startAnimation(infiniteRotateAnim);
+                break;
+            case ENDED:
+                txtRadioState.setText(RadioStateEnum.ENDED.toString());
+                btnRadioController.clearAnimation();
+                btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                break;
+            case IDLE:
+                txtRadioState.setText(RadioStateEnum.IDLE.toString());
+                break;
+            case PREPARING:
+                txtRadioState.setText(RadioStateEnum.PREPARING.toString());
+                btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_load));
+                btnRadioController.startAnimation(infiniteRotateAnim);
+                break;
+            case READY:
+                //stop buffering animation if it exists
+                txtRadioState.setText(RadioStateEnum.READY.toString());
+                btnRadioController.clearAnimation();
+                if(mRadioStateModel.isMusicPlaying()) {
+                    btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_pause));
+                } else {
+                    btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                }
+                break;
+            case UNKNOWN:
+                txtRadioState.setText(RadioStateEnum.UNKNOWN.toString());
+                break;
+        }
+    }
+
+    @Subscribe
+    public void handleSongMetadata(Song song) {
+        //update view song data
+        txtSongInfo.setText(song.getmAuthor().concat(" - ").concat(song.getTitle()));
+        //update notification song data
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle("Antena Radio")
+                .setContentText(song.getmAuthor().concat(" - ").concat(song.getTitle()))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(pendingIntent)
+                .build();
+
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        notificationManager.notify(1337, notification);
+    }
+
+    @Override
+    public void onSliderMoved(double pos) {
+        Log.d("BBB", "i moved" + pos);
+    }
+}
