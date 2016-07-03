@@ -32,7 +32,7 @@ import bkoruznjak.from.hr.antenazagreb.views.VolumeSlider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, VolumeSlider.OnSliderMovedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener,VolumeSlider.OnSectorChangedListener {
 
     @BindView(R.id.btnMainStream)
     Button btnMainStream;
@@ -48,11 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btn80Stream;
     @BindView(R.id.btnRadioController)
     ImageButton btnRadioController;
-
-    @BindView(R.id.btnVolUp)
-    Button btnVolUp;
-    @BindView(R.id.btnVolDown)
-    Button btnVolDown;
 
     @BindView(R.id.volumeControl)
     VolumeSlider volumeControl;
@@ -93,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         updateViewsByRadioState(mRadioStateModel);
         bindOnClickListeners();
         bingOnLongClickListeners();
+        bindCustomListeners();
+    }
+
+    private void bindCustomListeners() {
+        volumeControl.setOnSectorChangedListener(this);
     }
 
     private void bindOnClickListeners() {
@@ -103,10 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn90Stream.setOnClickListener(this);
         btn80Stream.setOnClickListener(this);
         btnRadioController.setOnClickListener(this);
-        btnVolUp.setOnClickListener(this);
-        btnVolDown.setOnClickListener(this);
-
-        volumeControl.setOnSliderMovedListener(this);
     }
 
     private void bingOnLongClickListeners() {
@@ -120,7 +116,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .concat(stateModel.getSongTitle()));
 
         txtRadioState.setText(stateModel.getStateEnum().toString());
+        refreshControlButtonDrawable(stateModel,infiniteRotateAnim);
+    }
 
+    private void refreshControlButtonDrawable(RadioStateModel stateModel, Animation animation){
+        //ovo ojačaj kod jer treba maknut rucno dodavanje na gumb animacije i sranja.
         if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.BUFFERING){
             btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_load));
             btnRadioController.startAnimation(infiniteRotateAnim);
@@ -172,21 +172,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent startRadioServiceIntent = new Intent(this, RadioService.class);
                     startService(startRadioServiceIntent);
                 }
-                break;
-
-            case R.id.btnVolDown:
-//                myBus.post(VolumeEnum.VOLUME_DOWN);
-                AudioManager audioManager =
-                        (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-                int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,--currentVolume,1);
-                break;
-            case R.id.btnVolUp:
-                AudioManager audioManagerTwo =
-                        (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-                int currentVolumeTwo = audioManagerTwo.getStreamVolume(AudioManager.STREAM_MUSIC);
-                audioManagerTwo.setStreamVolume(AudioManager.STREAM_MUSIC,++currentVolumeTwo,1);
-//                myBus.post(VolumeEnum.VOLUME_UP);
                 break;
         }
     }
@@ -268,7 +253,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onSliderMoved(double pos) {
-        Log.d("BBB", "i moved" + pos);
+    public void changeSector(int sectorID) {
+        //Log.d("BBB", "sector id:" + sectorID);
+        AudioManager audioManager =
+                (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,sectorID,1);
     }
 }

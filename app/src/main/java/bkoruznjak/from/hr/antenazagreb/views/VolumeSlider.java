@@ -21,6 +21,20 @@ import bkoruznjak.from.hr.antenazagreb.R;
 public class VolumeSlider extends View {
 
     /**
+     * Listener interface used to detect when slider changes sector.
+     */
+    public static interface OnSectorChangedListener {
+
+        /**
+         * This method is invoked when slider changes sector.
+         *
+         * @param sectorID Value between 1 and 16 representing the current sector where the slider
+         *                 is located
+         */
+        public void changeSector(int sectorID);
+    }
+
+    /**
      * Listener interface used to detect when slider moves around.
      */
     public static interface OnSliderMovedListener {
@@ -53,6 +67,44 @@ public class VolumeSlider extends View {
 
     private Paint mPaint = new Paint();
     private OnSliderMovedListener mListener;
+    private OnSectorChangedListener mSectorListener;
+
+    //SECTORS
+    private int sectorID = 8;
+
+    private final float SECTOR_MAX_ANGLE = 3.14f;
+    private final float SECTOR_MIN_ANGLE = 0F;
+    private final int NUMBER_OF_SECTORS = 8;
+    private final float SECTOR_ANGLE = SECTOR_MAX_ANGLE / NUMBER_OF_SECTORS;
+    private final float[] SECTOR_ANGLES = {0.0F
+            , SECTOR_ANGLE * 1
+            , SECTOR_ANGLE * 2
+            , SECTOR_ANGLE * 3
+            , SECTOR_ANGLE * 4
+            , SECTOR_ANGLE * 5
+            , SECTOR_ANGLE * 6
+            , SECTOR_ANGLE * 7
+            , SECTOR_ANGLE * 8};
+
+    private boolean[] sectorLocatorArray = {
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+    };
+
 
     public VolumeSlider(Context context) {
         this(context, null);
@@ -106,6 +158,20 @@ public class VolumeSlider extends View {
         setPadding(padding);
 
         a.recycle();
+    }
+
+    private void updateSectorPosition(int sector) {
+        //retard safety check
+        if (sectorLocatorArray.length < sector) {
+            return;
+        }
+        for (int index = 0; index < sectorLocatorArray.length; index++) {
+            if (index == sector - 1) {
+                sectorLocatorArray[index] = true;
+            } else {
+                sectorLocatorArray[index] = false;
+            }
+        }
     }
 
     /* ***** Setters ***** */
@@ -190,6 +256,7 @@ public class VolumeSlider extends View {
 
     /**
      * Invoked when slider starts moving or is currently moving. This method calculates and sets position and angle of the thumb.
+     * Method returns id of sector in which the thumbDialer is currently in
      *
      * @param touchX Where is the touch identifier now on X axis
      * @param touchY Where is the touch identifier now on Y axis
@@ -200,13 +267,76 @@ public class VolumeSlider extends View {
         //noinspection SuspiciousNameCombination
         double c = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
         mAngle = Math.acos(distanceX / c);
+        boolean isTopSide = true;
         if (distanceY < 0) {
             mAngle = -mAngle;
+            isTopSide = false;
+        }
+
+        if (isTopSide) {
+            if (!sectorLocatorArray[0] && mAngle < SECTOR_ANGLES[1] && mAngle > SECTOR_ANGLES[0]) {
+                updateSectorPosition(1);
+                changeSector(1);
+            } else if (!sectorLocatorArray[1] && mAngle < SECTOR_ANGLES[2] && mAngle > SECTOR_ANGLES[1]) {
+                updateSectorPosition(2);
+                changeSector(2);
+            } else if (!sectorLocatorArray[2] && mAngle < SECTOR_ANGLES[3] && mAngle > SECTOR_ANGLES[2]) {
+                updateSectorPosition(3);
+                changeSector(3);
+            } else if (!sectorLocatorArray[3] && mAngle < SECTOR_ANGLES[4] && mAngle > SECTOR_ANGLES[3]) {
+                updateSectorPosition(4);
+                changeSector(4);
+            } else if (!sectorLocatorArray[4] && mAngle < SECTOR_ANGLES[5] && mAngle > SECTOR_ANGLES[4]) {
+                updateSectorPosition(5);
+                changeSector(5);
+            } else if (!sectorLocatorArray[5] && mAngle < SECTOR_ANGLES[6] && mAngle > SECTOR_ANGLES[5]) {
+                updateSectorPosition(6);
+                changeSector(6);
+            } else if (!sectorLocatorArray[6] && mAngle < SECTOR_ANGLES[7] && mAngle > SECTOR_ANGLES[6]) {
+                updateSectorPosition(7);
+                changeSector(7);
+            } else if (!sectorLocatorArray[7] && mAngle < SECTOR_ANGLES[8] && mAngle > SECTOR_ANGLES[7]) {
+                updateSectorPosition(8);
+                changeSector(8);
+            }
+        } else {
+            if (!sectorLocatorArray[15] && -mAngle < SECTOR_ANGLES[1] && -mAngle > SECTOR_ANGLES[0]) {
+                updateSectorPosition(16);
+                changeSector(16);
+            } else if (!sectorLocatorArray[14] && -mAngle < SECTOR_ANGLES[2] && -mAngle > SECTOR_ANGLES[1]) {
+                updateSectorPosition(15);
+                changeSector(15);
+            } else if (!sectorLocatorArray[13] && -mAngle < SECTOR_ANGLES[3] && -mAngle > SECTOR_ANGLES[2]) {
+                updateSectorPosition(14);
+                changeSector(14);
+            } else if (!sectorLocatorArray[12] && -mAngle < SECTOR_ANGLES[4] && -mAngle > SECTOR_ANGLES[3]) {
+                updateSectorPosition(13);
+                changeSector(13);
+            } else if (!sectorLocatorArray[11] && -mAngle < SECTOR_ANGLES[5] && -mAngle > SECTOR_ANGLES[4]) {
+                updateSectorPosition(12);
+                changeSector(12);
+            } else if (!sectorLocatorArray[10] && -mAngle < SECTOR_ANGLES[6] && -mAngle > SECTOR_ANGLES[5]) {
+                updateSectorPosition(11);
+                changeSector(11);
+            } else if (!sectorLocatorArray[9] && -mAngle < SECTOR_ANGLES[7] && -mAngle > SECTOR_ANGLES[6]) {
+                updateSectorPosition(10);
+                changeSector(10);
+            } else if (!sectorLocatorArray[8] && -mAngle < SECTOR_ANGLES[8] && -mAngle > SECTOR_ANGLES[7]) {
+                updateSectorPosition(9);
+                changeSector(9);
+            }
         }
 
         if (mListener != null) {
             // notify slider moved listener of the new position which should be in [0..1] range
             mListener.onSliderMoved((mAngle - mStartAngle) / (2 * Math.PI));
+        }
+    }
+
+    public void changeSector(int sectorID) {
+        this.sectorID = sectorID;
+        if (mSectorListener != null) {
+            mSectorListener.changeSector(sectorID);
         }
     }
 
@@ -221,6 +351,15 @@ public class VolumeSlider extends View {
         if (pos >= 0 && pos <= 1) {
             mAngle = mStartAngle + pos * 2 * Math.PI;
         }
+    }
+
+    /**
+     * Saves a new slider sector listner. Set {@link VolumeSlider.OnSectorChangedListener} to {@code null} to remove it.
+     *
+     * @param listener Instance of the slider sector listener, or null when removing it
+     */
+    public void setOnSectorChangedListener(OnSectorChangedListener listener) {
+        mSectorListener = listener;
     }
 
     /**
@@ -268,5 +407,4 @@ public class VolumeSlider extends View {
         invalidate();
         return true;
     }
-
 }
