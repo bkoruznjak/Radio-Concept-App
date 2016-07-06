@@ -7,6 +7,7 @@ import com.squareup.leakcanary.LeakCanary;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
+import bkoruznjak.from.hr.antenazagreb.util.NetworkUtils;
 
 /**
  * Created by bkoruznjak on 29/06/16.
@@ -19,6 +20,7 @@ public class RadioApplication extends Application {
     public void onCreate() {
         super.onCreate();
         LeakCanary.install(this);
+        NetworkUtils.registerLoganSquareTypeConverters();
     }
 
     public RadioBus getBus() {

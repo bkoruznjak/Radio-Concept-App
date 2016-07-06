@@ -8,7 +8,7 @@ import java.util.Map;
 
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
-import bkoruznjak.from.hr.antenazagreb.model.db.Song;
+import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 
 /**
  * Created by bkoruznjak on 30/06/16.
@@ -51,7 +51,7 @@ public class IcyMetadataHandler {
                                     if (!stateModel.getSongAuthor().equals(songArtist) && !stateModel.getSongTitle().equals(songName)) {
                                         stateModel.setSongAuthor(songArtist);
                                         stateModel.setSongTitle(songName);
-                                        myBus.post(new Song(songName, songArtist));
+                                        myBus.post(new SongModel(songName, songArtist));
                                     }
                                 }
                             }

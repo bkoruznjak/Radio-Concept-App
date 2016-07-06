@@ -82,6 +82,13 @@
         android:text="Author : Title"
         android:textSize="10sp" />
 
+    <Button android:id="@+id/btnGetArticles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get_Articles">
+
+    </Button>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

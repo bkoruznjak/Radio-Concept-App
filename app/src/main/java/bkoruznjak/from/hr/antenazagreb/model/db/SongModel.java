@@ -5,16 +5,16 @@ import java.io.Serializable;
 /**
  * Created by bkoruznjak on 04/06/16.
  */
-public class Song implements Serializable {
+public class SongModel implements Serializable {
 
     private String mTitle;
     private String mAuthor;
 
-    public Song(){
+    public SongModel(){
         this("unknown", "Unknown");
     }
 
-    public Song(String title, String author){
+    public SongModel(String title, String author){
         this.mAuthor = author;
         this.mTitle = title;
     }

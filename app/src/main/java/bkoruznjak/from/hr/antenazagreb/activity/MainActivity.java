@@ -21,12 +21,13 @@ import com.squareup.otto.Subscribe;
 
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
+import bkoruznjak.from.hr.antenazagreb.articles.ArticleStore;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
-import bkoruznjak.from.hr.antenazagreb.model.db.Song;
+import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 import bkoruznjak.from.hr.antenazagreb.service.RadioService;
 import bkoruznjak.from.hr.antenazagreb.views.VolumeSlider;
 import butterknife.BindView;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btn90Stream;
     @BindView(R.id.btn80Stream)
     Button btn80Stream;
+    @BindView(R.id.btnGetArticles)
+    Button btnGetArticlesButton;
     @BindView(R.id.btnRadioController)
     ImageButton btnRadioController;
 
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn90Stream.setOnClickListener(this);
         btn80Stream.setOnClickListener(this);
         btnRadioController.setOnClickListener(this);
+        btnGetArticlesButton.setOnClickListener(this);
     }
 
     private void bingOnLongClickListeners() {
@@ -173,6 +177,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     startService(startRadioServiceIntent);
                 }
                 break;
+            case R.id.btnGetArticles:
+                new ArticleStore().fetchAllArticles();
+                break;
         }
     }
 
@@ -227,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Subscribe
-    public void handleSongMetadata(Song song) {
+    public void handleSongMetadata(SongModel song) {
         //update view song data
         txtSongInfo.setText(song.getmAuthor().concat(" - ").concat(song.getTitle()));
         //update notification song data
