@@ -9,6 +9,7 @@ public class NetworkConstants {
     public static final String API_KEY = "myapikey";
     public static final String API_URI = "http://api.antenazagreb.xyz/news/getRecent?api_key=";
 
-    public static int BUFFER_SEGMENT_SIZE = 64 * 2048;
-    public static int BUFFER_SEGMENT_COUNT = 256;
+    public static final int BUFFER_SEGMENT_SIZE = 64 * 4096;
+    public static final int BUFFER_SEGMENT_COUNT_256 = 256;
+    public static final int BUFFER_SEGMENT_COUNT_160 = 160;
 }

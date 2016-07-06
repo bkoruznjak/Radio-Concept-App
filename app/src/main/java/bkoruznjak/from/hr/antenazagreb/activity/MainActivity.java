@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void refreshControlButtonDrawable(RadioStateModel stateModel, Animation animation){
         //ovo ojačaj kod jer treba maknut rucno dodavanje na gumb animacije i sranja.
-        if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.BUFFERING){
+        if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.PREPARING){
             btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_load));
             btnRadioController.startAnimation(infiniteRotateAnim);
         }
@@ -257,6 +257,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Log.d("BBB", "sector id:" + sectorID);
         AudioManager audioManager =
                 (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,sectorID,1);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,sectorID,AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
     }
 }

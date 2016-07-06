@@ -66,13 +66,14 @@ public class VolumeSlider extends View {
     private boolean mIsThumbSelected = false;
 
     private Paint mPaint = new Paint();
+    private Paint mVolumeTextPaint = new Paint();
     private OnSliderMovedListener mListener;
     private OnSectorChangedListener mSectorListener;
 
     //SECTORS
     private int sectorID = 8;
 
-    private final float SECTOR_MAX_ANGLE = 3.14f;
+    private final float SECTOR_MAX_ANGLE = (float)Math.PI;
     private final float SECTOR_MIN_ANGLE = 0F;
     private final int NUMBER_OF_SECTORS = 8;
     private final float SECTOR_ANGLE = SECTOR_MAX_ANGLE / NUMBER_OF_SECTORS;
@@ -236,11 +237,20 @@ public class VolumeSlider extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(mBorderThickness);
         mPaint.setAntiAlias(true);
+
+        mVolumeTextPaint.setColor(Color.WHITE);
+        mVolumeTextPaint.setStyle(Paint.Style.STROKE);
+        mVolumeTextPaint.setStrokeWidth(1.0f);
+        mVolumeTextPaint.setAntiAlias(true);
+        mVolumeTextPaint.setTextSize(50.0f);
+        mVolumeTextPaint.setTextAlign(Paint.Align.CENTER);
+
         canvas.drawCircle(mCircleCenterX, mCircleCenterY, mCircleRadius, mPaint);
 
         // find thumb position
         mThumbX = (int) (mCircleCenterX + mCircleRadius * Math.cos(mAngle));
         mThumbY = (int) (mCircleCenterY - mCircleRadius * Math.sin(mAngle));
+
 
         if (mThumbImage != null) {
             // draw png
@@ -251,6 +261,7 @@ public class VolumeSlider extends View {
             mPaint.setColor(mThumbColor);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(mThumbX, mThumbY, mThumbSize, mPaint);
+            canvas.drawText(""+sectorID,mThumbX,mThumbY+15f,mVolumeTextPaint);
         }
     }
 

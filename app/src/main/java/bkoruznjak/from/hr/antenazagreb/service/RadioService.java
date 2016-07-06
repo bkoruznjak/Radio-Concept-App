@@ -143,10 +143,11 @@ public class RadioService extends Service implements ExoPlayer.Listener {
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(this, "SOmething got fucked", duration);
+        Toast toast = Toast.makeText(this, "Selected stream appears to be down...", duration);
         toast.show();
         stop();
         radioState.setStateEnum(RadioStateEnum.ENDED);
+        radioState.setMusicPlaying(false);
         myBus.post(RadioStateEnum.ENDED);
         Log.e("BBB", "on player error," + error.toString());
     }
@@ -161,7 +162,7 @@ public class RadioService extends Service implements ExoPlayer.Listener {
         OkHttpClient okHttpClient = new OkHttpClient();
         OkHttpDataSource okHttpDataSource = new OkHttpDataSource(okHttpClient, streamURI, null, bandwidthMeter);
         DataSource okDataSource = new DefaultUriDataSource(this, bandwidthMeter, okHttpDataSource);
-        ExtractorSampleSource extractorSampleSource = new ExtractorSampleSource(Uri.parse(streamURI), okDataSource, bufferAllocator, NetworkConstants.BUFFER_SEGMENT_COUNT * NetworkConstants.BUFFER_SEGMENT_SIZE, 3);
+        ExtractorSampleSource extractorSampleSource = new ExtractorSampleSource(Uri.parse(streamURI), okDataSource, bufferAllocator, NetworkConstants.BUFFER_SEGMENT_COUNT_256 * NetworkConstants.BUFFER_SEGMENT_SIZE, 3);
         mAudioTrackRenderer = new MediaCodecAudioTrackRenderer(extractorSampleSource, MediaCodecSelector.DEFAULT);
         mExoPlayer.prepare(mAudioTrackRenderer);
 
@@ -186,7 +187,7 @@ public class RadioService extends Service implements ExoPlayer.Listener {
 
     private void stop() {
         if (mExoPlayer != null) {
-            radioState.setMusicPlaying(false);
+            pause();
             mExoPlayer.stop();
             mExoPlayer.seekTo(0);
         }
