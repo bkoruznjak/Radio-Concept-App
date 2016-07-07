@@ -24,28 +24,31 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     //radio
-    compile 'com.google.android.exoplayer:exoplayer:r1.5.8'
 
     //general
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.3.0'
-    compile 'com.jakewharton:butterknife:8.1.0'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
 
     //observer
-    compile 'com.squareup:otto:1.3.8'
 
     //tests
     testCompile 'junit:junit:4.12'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
 
     //network
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     apt 'com.bluelinelabs:logansquare-compiler:1.3.6'
-    compile 'com.bluelinelabs:logansquare:1.3.6'
 
     //graphics
 
 
+    compile 'com.google.android.exoplayer:exoplayer:r1.5.8'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.jakewharton:butterknife:8.1.0'
+    compile 'com.squareup:otto:1.3.8'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile 'com.bluelinelabs:logansquare:1.3.6'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:cardview-v7:23.0.+'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

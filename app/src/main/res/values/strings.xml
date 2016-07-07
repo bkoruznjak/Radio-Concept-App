@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Antena Zagreb</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_news_fragment">Hello news fragment</string>
+    <string name="hello_podcast_fragment">Hello podcast fragment</string>
 </resources>

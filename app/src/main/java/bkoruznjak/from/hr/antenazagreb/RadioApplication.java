@@ -1,6 +1,7 @@
 package bkoruznjak.from.hr.antenazagreb;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
 
@@ -13,11 +14,21 @@ import bkoruznjak.from.hr.antenazagreb.util.NetworkUtils;
  * Created by bkoruznjak on 29/06/16.
  */
 public class RadioApplication extends Application {
+    private static RadioApplication instance;
     private static RadioBus myBus;
     private static RadioStateModel myStateModel;
 
+    public static RadioApplication getInstance() {
+        return instance;
+    }
+
+    public static Context getContext() {
+        return instance;
+    }
+
     @Override
     public void onCreate() {
+        instance = this;
         super.onCreate();
         LeakCanary.install(this);
         NetworkUtils.registerLoganSquareTypeConverters();

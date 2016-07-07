@@ -2,7 +2,6 @@ package bkoruznjak.from.hr.antenazagreb.model.network;
 
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +31,6 @@ public class ArticleModel {
         public String file_name;
         public Date created_at;
         public Date updated_at;
-        public URL url;
+        public String url;
     }
 }

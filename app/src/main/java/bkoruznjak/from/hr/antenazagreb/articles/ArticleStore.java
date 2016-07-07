@@ -5,8 +5,10 @@ import android.util.Log;
 import com.bluelinelabs.logansquare.LoganSquare;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
+import bkoruznjak.from.hr.antenazagreb.RadioApplication;
+import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.NetworkConstants;
 import bkoruznjak.from.hr.antenazagreb.model.network.ArticleModel;
 import okhttp3.OkHttpClient;
@@ -16,13 +18,16 @@ import okhttp3.Response;
 /**
  * Created by bkoruznjak on 06/07/16.
  */
-public class ArticleStore{
+public class ArticleStore {
 
-    public ArticleStore(){
+    private static RadioBus myBus;
 
+    public ArticleStore() {
+        myBus = RadioApplication.getInstance().getBus();
+        myBus.register(this);
     }
 
-    public void fetchAllArticles(){
+    public void fetchAllArticles() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -31,29 +36,15 @@ public class ArticleStore{
                 Request request = new Request.Builder()
                         .url(NetworkConstants.API_URI.concat(NetworkConstants.API_KEY))
                         .build();
-                try{
+                try {
                     Response response = client.newCall(request).execute();
-                    List<ArticleModel> articleList = LoganSquare.parseList(response.body().byteStream(),ArticleModel.class);
-
-                    for (ArticleModel article : articleList){
-                        Log.d("BBB", ""+article.id);
-                        Log.d("BBB", ""+article.published_at);
-                        List<ArticleModel.Image> articleImagesList = article.images;
-                        for (ArticleModel.Image articleImage : articleImagesList){
-                            Log.d("BBB", articleImage.file_name);
-                            Log.d("BBB", ""+articleImage.id);
-                            Log.d("BBB", articleImage.url.toString());
-                        }
-                    }
-
-                }catch(IOException IoEx){
+                    ArrayList<ArticleModel> articleList = (ArrayList<ArticleModel>) LoganSquare.parseList(response.body().byteStream(), ArticleModel.class);
+                    response.body().byteStream().close();
+                    myBus.post(articleList);
+                } catch (IOException IoEx) {
                     Log.e("BBB", IoEx.toString());
                 }
             }
         }).start();
-    }
-
-    public static void registerTypeConverters(){
-
     }
 }
