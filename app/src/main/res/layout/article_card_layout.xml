@@ -9,8 +9,8 @@
         android:id="@+id/newsCardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/colorWhite"
-        card_view:cardCornerRadius="10dp"
+        card_view:cardBackgroundColor="@color/colorTextIcons"
+        card_view:cardCornerRadius="2dp"
         card_view:cardElevation="5dp"
         card_view:cardUseCompatPadding="true">
 
@@ -26,7 +26,8 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/img_placeholder"
-                android:tag="image_tag" />
+                android:tag="image_tag"
+                android:transitionName="" />
 
             <LinearLayout
                 android:layout_width="0dp"

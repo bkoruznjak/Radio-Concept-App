@@ -2,6 +2,7 @@ package bkoruznjak.from.hr.antenazagreb.model.network;
 
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by bkoruznjak on 06/07/16.
  */
 @JsonObject(fieldDetectionPolicy = JsonObject.FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS)
-public class ArticleModel {
+public class ArticleModel implements Serializable {
 
     public int id;
     public int user_id;
