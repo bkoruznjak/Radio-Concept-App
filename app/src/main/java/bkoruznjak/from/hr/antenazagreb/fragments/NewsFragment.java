@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bluelinelabs.logansquare.LoganSquare;
-import com.kogitune.activity_transition.ActivityTransitionLauncher;
 import com.squareup.otto.Subscribe;
 
 import java.io.IOException;
@@ -92,17 +91,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onItemClick(View view, int position) {
                     Toast.makeText(getActivity().getApplicationContext(), "clicked item:" + position, Toast.LENGTH_SHORT).show();
-//                    Intent openArticleIntent = new Intent(getActivity().getApplicationContext(), SingleArticleActivity.class);
-//                    startActivity(openArticleIntent);
-
-//                    Intent openArticleIntent = new Intent(getActivity().getApplicationContext(), SingleArticleActivity.class);
-//                    String transitionName = getString(R.string.material_transition_name);
-//                    ActivityOptionsCompat options =
-//                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-//                                    view,   // The view which starts the transition
-//                                    transitionName    // The transitionName of the view we’re transitioning to
-//                            );
-//                    ActivityCompat.startActivity(getActivity(), openArticleIntent, options.toBundle());
 
                     final Intent openArticleIntent = new Intent(getActivity(), SingleArticleActivity.class);
                     String jsonArticle = "";
@@ -112,7 +100,8 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
                     }
                     openArticleIntent.putExtra("ARTICLE", jsonArticle);
-                    ActivityTransitionLauncher.with(getActivity()).from(view).launch(openArticleIntent);
+                    //ActivityTransitionLauncher.with(getActivity()).from(view).launch(openArticleIntent);
+                    startActivity(openArticleIntent);
                 }
 
                 @Override

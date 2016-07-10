@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.media.MediaCodec;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
 import com.google.android.exoplayer.MediaCodecSelector;
+import com.google.android.exoplayer.MediaCodecTrackRenderer;
 import com.google.android.exoplayer.extractor.ExtractorSampleSource;
 import com.google.android.exoplayer.upstream.Allocator;
 import com.google.android.exoplayer.upstream.BandwidthMeter;
@@ -38,7 +40,7 @@ import okhttp3.OkHttpClient;
 /**
  * Created by bkoruznjak on 29/06/16.
  */
-public class RadioService extends Service implements ExoPlayer.Listener {
+public class RadioService extends Service implements ExoPlayer.Listener, MediaCodecTrackRenderer.EventListener {
 
     private RadioBus myBus;
     private RadioStateModel radioState;
@@ -108,26 +110,34 @@ public class RadioService extends Service implements ExoPlayer.Listener {
         }
         switch (playbackState) {
             case ExoPlayer.STATE_BUFFERING:
+                Log.d("BBB", "STATE BUFFERING IN RADIO SERVICE");
                 radioState.setStateEnum(RadioStateEnum.BUFFERING);
                 myBus.post(RadioStateEnum.BUFFERING);
                 break;
             case ExoPlayer.STATE_ENDED:
+                Log.d("BBB", "STATE ENDED IN RADIO SERVICE");
                 radioState.setStateEnum(RadioStateEnum.ENDED);
                 myBus.post(RadioStateEnum.ENDED);
                 break;
             case ExoPlayer.STATE_IDLE:
+                Log.d("BBB", "STATE IDLE IN RADIO SERVICE");
+                radioState.setStreamInterrupted(true);
                 radioState.setStateEnum(RadioStateEnum.IDLE);
                 myBus.post(RadioStateEnum.IDLE);
                 break;
             case ExoPlayer.STATE_PREPARING:
+                Log.d("BBB", "STATE PREPARING IN RADIO SERVICE");
                 radioState.setStateEnum(RadioStateEnum.PREPARING);
                 myBus.post(RadioStateEnum.PREPARING);
                 break;
             case ExoPlayer.STATE_READY:
+                Log.d("BBB", "STATE READY IN RADIO SERVICE");
+                radioState.setStreamInterrupted(false);
                 radioState.setStateEnum(RadioStateEnum.READY);
                 myBus.post(RadioStateEnum.READY);
                 break;
             default:
+                Log.d("BBB", "STATE UNKNOWN IN RADIO SERVICE");
                 radioState.setStateEnum(RadioStateEnum.UNKNOWN);
                 myBus.post(RadioStateEnum.UNKNOWN);
                 break;
@@ -265,15 +275,18 @@ public class RadioService extends Service implements ExoPlayer.Listener {
         }
     }
 
-//    @Subscribe
-//    public void handleVolume(VolumeEnum volumeDirection){
-//        switch (volumeDirection){
-//            case VOLUME_UP:
-//                mExoPlayer.sendMessage(mAudioTrackRenderer, MediaCodecAudioTrackRenderer.MSG_SET_VOLUME, 0.2f);
-//                break;
-//            case VOLUME_DOWN:
-//                mExoPlayer.sendMessage(mAudioTrackRenderer, MediaCodecAudioTrackRenderer.MSG_SET_VOLUME, 0.0f);
-//                break;
-//        }
-//    }
+    @Override
+    public void onDecoderInitializationError(MediaCodecTrackRenderer.DecoderInitializationException e) {
+
+    }
+
+    @Override
+    public void onCryptoError(MediaCodec.CryptoException e) {
+
+    }
+
+    @Override
+    public void onDecoderInitialized(String decoderName, long elapsedRealtimeMs, long initializationDurationMs) {
+
+    }
 }

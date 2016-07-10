@@ -11,6 +11,8 @@ public class RadioStateModel implements Serializable{
 
     private boolean isServiceUp;
     private boolean isMusicPlaying;
+    //added for testing when something breaks
+    private boolean isStreamInterrupted;
 
     private String streamUri;
     private String songAuthor;
@@ -32,20 +34,20 @@ public class RadioStateModel implements Serializable{
         this.setStateEnum(RadioStateEnum.UNKNOWN);
     }
 
-    public void setServiceUp(boolean isServiceUp){
-        this.isServiceUp = isServiceUp;
-    }
-
-    public void setMusicPlaying(boolean isMusicPlaying){
-        this.isMusicPlaying = isMusicPlaying;
-    }
-
     public boolean isServiceUp(){
         return isServiceUp;
     }
 
+    public void setServiceUp(boolean isServiceUp) {
+        this.isServiceUp = isServiceUp;
+    }
+
     public boolean isMusicPlaying(){
         return isMusicPlaying;
+    }
+
+    public void setMusicPlaying(boolean isMusicPlaying) {
+        this.isMusicPlaying = isMusicPlaying;
     }
 
     public String getStreamUri() {
@@ -78,6 +80,14 @@ public class RadioStateModel implements Serializable{
 
     public void setStateEnum(RadioStateEnum stateEnum) {
         this.stateEnum = stateEnum;
+    }
+
+    public boolean isStreamInterrupted() {
+        return this.isStreamInterrupted;
+    }
+
+    public void setStreamInterrupted(boolean interrupted) {
+        this.isStreamInterrupted = interrupted;
     }
 
     @Override

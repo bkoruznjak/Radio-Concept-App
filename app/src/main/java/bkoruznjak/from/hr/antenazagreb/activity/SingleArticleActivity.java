@@ -7,8 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bluelinelabs.logansquare.LoganSquare;
-import com.kogitune.activity_transition.ActivityTransition;
-import com.kogitune.activity_transition.ExitActivityTransition;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -33,15 +31,16 @@ public class SingleArticleActivity extends AppCompatActivity {
     @BindView(R.id.articleCardBottomTextViewBig)
     TextView articleBottomText;
 
-    private ExitActivityTransition exitTransition;
+    //private ExitActivityTransition exitTransition;
     private ArticleModel articleModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_article);
+        overridePendingTransition(R.anim.article_enter_in, R.anim.article_enter_out);
         ButterKnife.bind(this);
-        exitTransition = ActivityTransition.with(getIntent()).to(findViewById(R.id.singleArticleContainer)).start(savedInstanceState);
+        //exitTransition = ActivityTransition.with(getIntent()).to(findViewById(R.id.singleArticleContainer)).start(savedInstanceState);
         String jsonArticle = getIntent().getStringExtra("ARTICLE");
         try {
             articleModel = LoganSquare.parse(jsonArticle, ArticleModel.class);
@@ -67,6 +66,8 @@ public class SingleArticleActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        exitTransition.exit(this);
+        //exitTransition.exit(this)
+        finish();
+        overridePendingTransition(R.anim.article_exit_in, R.anim.article_exit_out);
     }
 }

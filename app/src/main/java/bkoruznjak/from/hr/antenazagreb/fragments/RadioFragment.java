@@ -129,7 +129,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
         if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.PREPARING) {
             btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_load));
             btnRadioController.startAnimation(infiniteRotateAnim);
-        } else if (stateModel.isMusicPlaying()) {
+        } else if (stateModel.isMusicPlaying() && !stateModel.isStreamInterrupted()) {
             btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_pause));
         } else {
             btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
@@ -166,7 +166,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
                 break;
             case R.id.btnRadioController:
                 Log.d("BBB", "RADIO CONTROLLER PRESSED!");
-                if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying()) {
+                if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
                     myBus.post(RadioCommandEnum.PAUSE);
                     btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
                 } else if (mRadioStateModel.isServiceUp()) {
@@ -208,6 +208,8 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
                 break;
             case IDLE:
                 txtRadioState.setText(RadioStateEnum.IDLE.toString());
+                btnRadioController.clearAnimation();
+                btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
                 break;
             case PREPARING:
                 txtRadioState.setText(RadioStateEnum.PREPARING.toString());
@@ -218,7 +220,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
                 //stop buffering animation if it exists
                 txtRadioState.setText(RadioStateEnum.READY.toString());
                 btnRadioController.clearAnimation();
-                if (mRadioStateModel.isMusicPlaying()) {
+                if (mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
                     btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_pause));
                 } else {
                     btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
