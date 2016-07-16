@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
+import bkoruznjak.from.hr.antenazagreb.views.AntenaTabFactory;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -48,12 +49,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupTabBar() {
-        antenaTabLayout.addTab(antenaTabLayout.newTab().setText(getResources().getString(R.string.radio_tab)));
-        antenaTabLayout.addTab(antenaTabLayout.newTab().setText(getResources().getString(R.string.news_tab)));
-        antenaTabLayout.addTab(antenaTabLayout.newTab().setText(getResources().getString(R.string.podcast_tab)));
-        antenaTabLayout.addTab(antenaTabLayout.newTab().setText(getResources().getString(R.string.promo_tab)));
-        antenaTabLayout.addTab(antenaTabLayout.newTab().setText(getResources().getString(R.string.social_tab)));
+
+        antenaTabLayout.addTab(antenaTabLayout.newTab());
+        antenaTabLayout.addTab(antenaTabLayout.newTab());
+        antenaTabLayout.addTab(antenaTabLayout.newTab());
+        antenaTabLayout.addTab(antenaTabLayout.newTab());
+        antenaTabLayout.addTab(antenaTabLayout.newTab());
         antenaTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        AntenaTabFactory tabFactory = new AntenaTabFactory(this);
+        antenaTabLayout.getTabAt(0).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.radio_tab), getResources().getDrawable(R.drawable.ic_radio_white_24dp)));
+        antenaTabLayout.getTabAt(1).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.news_tab), getResources().getDrawable(R.drawable.ic_news_white_24dp)));
+        antenaTabLayout.getTabAt(2).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.podcast_tab), getResources().getDrawable(R.drawable.ic_mic_white_24dp)));
+        antenaTabLayout.getTabAt(3).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.promo_tab), getResources().getDrawable(R.drawable.ic_promo_border_white_24dp)));
+        antenaTabLayout.getTabAt(4).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.social_tab), getResources().getDrawable(R.drawable.ic_social_white_24dp)));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.antenaViewPager);
         final AntenaPagerAdapter adapter = new AntenaPagerAdapter
