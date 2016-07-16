@@ -11,4 +11,6 @@
     <string name="single_article_activity_name">Details</string>
 
     <string name="material_transition_name">MaterialTransitionName</string>
+    <string name="hello_social_fragment">hello social fragment</string>
+    <string name="promo_text">Hello promo fragment</string>
 </resources>

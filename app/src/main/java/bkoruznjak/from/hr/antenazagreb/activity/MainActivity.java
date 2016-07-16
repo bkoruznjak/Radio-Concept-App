@@ -26,10 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         ButterKnife.bind(this);
-
-        tabLayout.addTab(tabLayout.newTab().setText("News"));
         tabLayout.addTab(tabLayout.newTab().setText("Radio"));
-        tabLayout.addTab(tabLayout.newTab().setText("Podcasts"));
+        tabLayout.addTab(tabLayout.newTab().setText("Novosti"));
+        tabLayout.addTab(tabLayout.newTab().setText("Podcast"));
+        tabLayout.addTab(tabLayout.newTab().setText("Promo"));
+        tabLayout.addTab(tabLayout.newTab().setText("Social"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.antenaViewPager);
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //set the initial load on the radio screen
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(0);
     }
 
 }
