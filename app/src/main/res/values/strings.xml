@@ -1,16 +1,14 @@
 <resources>
     <string name="app_name">Antena Zagreb</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_news_fragment">Hello news fragment</string>
-    <string name="hello_podcast_fragment">Hello podcast fragment</string>
+    <!-- TAB TITLES -->
+    <string name="radio_tab">Radio</string>
+    <string name="news_tab">Novosti</string>
+    <string name="podcast_tab">Podcast</string>
+    <string name="promo_tab">Promo</string>
+    <string name="social_tab">Social</string>
 
-
-    <string name="hello_world">Hello world!</string>
+    <!-- SETTINGS -->
     <string name="action_settings">Settings</string>
     <string name="single_article_activity_name">Details</string>
-
-    <string name="material_transition_name">MaterialTransitionName</string>
-    <string name="hello_social_fragment">hello social fragment</string>
-    <string name="promo_text">Hello promo fragment</string>
 </resources>

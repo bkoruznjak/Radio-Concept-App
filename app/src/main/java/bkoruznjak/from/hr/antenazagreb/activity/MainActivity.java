@@ -26,11 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         ButterKnife.bind(this);
-        tabLayout.addTab(tabLayout.newTab().setText("Radio"));
-        tabLayout.addTab(tabLayout.newTab().setText("Novosti"));
-        tabLayout.addTab(tabLayout.newTab().setText("Podcast"));
-        tabLayout.addTab(tabLayout.newTab().setText("Promo"));
-        tabLayout.addTab(tabLayout.newTab().setText("Social"));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.radio_tab)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.news_tab)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.podcast_tab)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.promo_tab)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.social_tab)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.antenaViewPager);
