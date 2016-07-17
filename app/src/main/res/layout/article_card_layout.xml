@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/newsCardLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="128dp"
         card_view:cardBackgroundColor="@color/colorPrimaryLight"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="5dp"
@@ -17,43 +17,49 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="10">
 
             <ImageView
                 android:id="@+id/articleCardImageView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
+                android:layout_weight="4"
+                android:scaleType="centerCrop"
                 android:src="@drawable/img_placeholder"
-                android:tag="image_tag"
-                android:transitionName="" />
+                android:tag="image_tag" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:layout_weight="2"
+                android:layout_weight="6"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/articleCardTopTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Android Name"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/colorSecondaryText" />
 
                 <TextView
                     android:id="@+id/articleCardBottomTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-
-                    android:text="Android Version"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:maxLines="3"
+                    android:text="Android title"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorAccent" />
 
             </LinearLayout>
         </LinearLayout>

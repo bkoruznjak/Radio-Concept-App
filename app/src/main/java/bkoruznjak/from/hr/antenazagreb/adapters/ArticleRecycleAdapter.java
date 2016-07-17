@@ -1,6 +1,7 @@
 package bkoruznjak.from.hr.antenazagreb.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.constants.AnimationConstants;
+import bkoruznjak.from.hr.antenazagreb.constants.UtilConstants;
 import bkoruznjak.from.hr.antenazagreb.model.network.ArticleModel;
 
 /**
@@ -25,9 +27,13 @@ import bkoruznjak.from.hr.antenazagreb.model.network.ArticleModel;
 public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAdapter.ArticleViewHolder> {
 
     private ArrayList<ArticleModel> dataSet;
+    private int imageWidth;
+    private int imageHeight;
 
     public ArticleRecycleAdapter(ArrayList<ArticleModel> data) {
         this.dataSet = data;
+        this.imageHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UtilConstants.ARTICLE_IMAGE_HEIGHT, RadioApplication.getContext().getResources().getDisplayMetrics());
+        this.imageWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UtilConstants.ARTICLE_IMAGE_WIDTH, RadioApplication.getContext().getResources().getDisplayMetrics());
     }
 
     @Override
@@ -44,15 +50,15 @@ public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAd
 
     @Override
     public void onBindViewHolder(final ArticleViewHolder holder, final int listPosition) {
-        TextView textViewName = holder.textViewName;
-        TextView textViewVersion = holder.textViewVersion;
+        TextView textViewDate = holder.textViewDate;
+        TextView textViewTitle = holder.textViewTitle;
         ImageView imageView = holder.imageViewIcon;
 
-        textViewName.setText(dataSet.get(listPosition).title);
-        textViewVersion.setText(dataSet.get(listPosition).published_at.toString());
+        textViewDate.setText(dataSet.get(listPosition).published_at.toString());
+        textViewTitle.setText(dataSet.get(listPosition).title);
         ArrayList<ArticleModel.Image> articleImagesList = (ArrayList<ArticleModel.Image>) dataSet.get(listPosition).images;
         for (ArticleModel.Image articleImage : articleImagesList) {
-            Picasso.with(RadioApplication.getContext()).load(articleImage.url).into(imageView);
+            Picasso.with(RadioApplication.getContext()).load(articleImage.url).resize(imageHeight, imageWidth).centerCrop().into(imageView);
         }
         setScaleAnimation(holder.itemView);
     }
@@ -81,16 +87,16 @@ public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAd
 
     public static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewName;
-        TextView textViewVersion;
+        TextView textViewDate;
+        TextView textViewTitle;
         ImageView imageViewIcon;
         View mItemView;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
             this.mItemView = itemView;
-            this.textViewName = (TextView) itemView.findViewById(R.id.articleCardTopTextView);
-            this.textViewVersion = (TextView) itemView.findViewById(R.id.articleCardBottomTextView);
+            this.textViewDate = (TextView) itemView.findViewById(R.id.articleCardTopTextView);
+            this.textViewTitle = (TextView) itemView.findViewById(R.id.articleCardBottomTextView);
             this.imageViewIcon = (ImageView) itemView.findViewById(R.id.articleCardImageView);
         }
 
