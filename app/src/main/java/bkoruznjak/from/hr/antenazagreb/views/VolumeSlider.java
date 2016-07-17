@@ -20,60 +20,7 @@ import bkoruznjak.from.hr.antenazagreb.R;
 
 public class VolumeSlider extends View {
 
-    /**
-     * Listener interface used to detect when slider changes sector.
-     */
-    public static interface OnSectorChangedListener {
-
-        /**
-         * This method is invoked when slider changes sector.
-         *
-         * @param sectorID Value between 1 and 16 representing the current sector where the slider
-         *                 is located
-         */
-        public void changeSector(int sectorID);
-    }
-
-    /**
-     * Listener interface used to detect when slider moves around.
-     */
-    public static interface OnSliderMovedListener {
-
-        /**
-         * This method is invoked when slider moves, providing position of the slider thumb.
-         *
-         * @param pos Value between 0 and 1 representing the current angle.<br>
-         *            {@code pos = (Angle - StartingAngle) / (2 * Pi)}
-         */
-        public void onSliderMoved(double pos);
-    }
-
-    private int mThumbX;
-    private int mThumbY;
-
-    private int mCircleCenterX;
-    private int mCircleCenterY;
-    private int mCircleRadius;
-
-    private Drawable mThumbImage;
-    private int mPadding;
-    private int mThumbSize;
-    private int mThumbColor;
-    private int mBorderColor;
-    private int mBorderThickness;
-    private double mStartAngle;
-    private double mAngle = mStartAngle;
-    private boolean mIsThumbSelected = false;
-
-    private Paint mPaint = new Paint();
-    private Paint mVolumeTextPaint = new Paint();
-    private OnSliderMovedListener mListener;
-    private OnSectorChangedListener mSectorListener;
-
-    //SECTORS
-    private int sectorID = 8;
-
-    private final float SECTOR_MAX_ANGLE = (float)Math.PI;
+    private final float SECTOR_MAX_ANGLE = (float) Math.PI;
     private final float SECTOR_MIN_ANGLE = 0F;
     private final int NUMBER_OF_SECTORS = 8;
     private final float SECTOR_ANGLE = SECTOR_MAX_ANGLE / NUMBER_OF_SECTORS;
@@ -86,7 +33,26 @@ public class VolumeSlider extends View {
             , SECTOR_ANGLE * 6
             , SECTOR_ANGLE * 7
             , SECTOR_ANGLE * 8};
-
+    private int mThumbX;
+    private int mThumbY;
+    private int mCircleCenterX;
+    private int mCircleCenterY;
+    private int mCircleRadius;
+    private Drawable mThumbImage;
+    private int mPadding;
+    private int mThumbSize;
+    private int mThumbColor;
+    private int mBorderColor;
+    private int mBorderThickness;
+    private double mStartAngle;
+    private double mAngle = mStartAngle;
+    private boolean mIsThumbSelected = false;
+    private Paint mPaint = new Paint();
+    private Paint mVolumeTextPaint = new Paint();
+    private OnSliderMovedListener mListener;
+    private OnSectorChangedListener mSectorListener;
+    //SECTORS
+    private int sectorID = 8;
     private boolean[] sectorLocatorArray = {
             false,
             false,
@@ -105,8 +71,6 @@ public class VolumeSlider extends View {
             false,
             false,
     };
-
-
     public VolumeSlider(Context context) {
         this(context, null);
     }
@@ -114,6 +78,7 @@ public class VolumeSlider extends View {
     public VolumeSlider(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
 
     public VolumeSlider(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -167,11 +132,7 @@ public class VolumeSlider extends View {
             return;
         }
         for (int index = 0; index < sectorLocatorArray.length; index++) {
-            if (index == sector - 1) {
-                sectorLocatorArray[index] = true;
-            } else {
-                sectorLocatorArray[index] = false;
-            }
+            sectorLocatorArray[index] = index == sector - 1;
         }
     }
 
@@ -261,7 +222,7 @@ public class VolumeSlider extends View {
             mPaint.setColor(mThumbColor);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(mThumbX, mThumbY, mThumbSize, mPaint);
-            canvas.drawText(""+sectorID,mThumbX,mThumbY+15f,mVolumeTextPaint);
+            canvas.drawText("" + sectorID, mThumbX, mThumbY + 15f, mVolumeTextPaint);
         }
     }
 
@@ -391,6 +352,7 @@ public class VolumeSlider extends View {
                 int x = (int) ev.getX();
                 int y = (int) ev.getY();
                 if (x < mThumbX + mThumbSize && x > mThumbX - mThumbSize && y < mThumbY + mThumbSize && y > mThumbY - mThumbSize) {
+                    getParent().requestDisallowInterceptTouchEvent(true);
                     mIsThumbSelected = true;
                     updateSliderState(x, y);
                 }
@@ -408,6 +370,7 @@ public class VolumeSlider extends View {
             }
 
             case MotionEvent.ACTION_UP: {
+                getParent().requestDisallowInterceptTouchEvent(false);
                 // finished moving (this is the last touch)
                 mIsThumbSelected = false;
                 break;
@@ -417,5 +380,33 @@ public class VolumeSlider extends View {
         // redraw the whole component
         invalidate();
         return true;
+    }
+
+    /**
+     * Listener interface used to detect when slider changes sector.
+     */
+    public interface OnSectorChangedListener {
+
+        /**
+         * This method is invoked when slider changes sector.
+         *
+         * @param sectorID Value between 1 and 16 representing the current sector where the slider
+         *                 is located
+         */
+        void changeSector(int sectorID);
+    }
+
+    /**
+     * Listener interface used to detect when slider moves around.
+     */
+    public interface OnSliderMovedListener {
+
+        /**
+         * This method is invoked when slider moves, providing position of the slider thumb.
+         *
+         * @param pos Value between 0 and 1 representing the current angle.<br>
+         *            {@code pos = (Angle - StartingAngle) / (2 * Pi)}
+         */
+        void onSliderMoved(double pos);
     }
 }
