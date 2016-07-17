@@ -9,7 +9,7 @@
         android:id="@+id/newsCardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/colorTextIcons"
+        card_view:cardBackgroundColor="@color/colorPrimaryLight"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="5dp"
         card_view:cardUseCompatPadding="true">

@@ -6,7 +6,7 @@
     <!-- Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme -->
     <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_menu_black_24dp</item>
-        <item name="android:tint">@color/colorTextIcons</item>
+        <item name="android:tint">@color/colorPrimary</item>
         <item name="android:background">?android:attr/actionBarItemBackground</item>
         <item name="android:contentDescription">"Settings icon"</item>
     </style>

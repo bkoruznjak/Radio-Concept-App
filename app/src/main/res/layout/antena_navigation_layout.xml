@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:tabIndicatorColor="@color/colorTextIcons"
+        app:tabIndicatorColor="@color/colorDivider"
         app:tabSelectedTextColor="@color/colorTextIcons"
         app:tabTextColor="@color/colorTextIcons" />
 </android.support.design.widget.AppBarLayout>

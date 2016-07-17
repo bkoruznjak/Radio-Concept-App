@@ -32,6 +32,7 @@ import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 import bkoruznjak.from.hr.antenazagreb.service.RadioService;
+import bkoruznjak.from.hr.antenazagreb.views.RippleBackground;
 import bkoruznjak.from.hr.antenazagreb.views.VolumeSlider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +65,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
     private RadioBus myBus;
     private RadioStateModel mRadioStateModel;
     private Animation infiniteRotateAnim;
+    private RippleBackground rippleBackground;
 
     @Nullable
     @Override
@@ -71,6 +73,16 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
         View radioFragmentView = inflater.inflate(R.layout.fragment_radio, container, false);
         init(radioFragmentView);
         return radioFragmentView;
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (rippleBackground != null) {
+            rippleBackground.stopRippleAnimation();
+            rippleBackground = null;
+        }
     }
 
     @Override
@@ -87,6 +99,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
 
     private void init(View view) {
         ButterKnife.bind(this, view);
+        rippleBackground = (RippleBackground) view.findViewById(R.id.content);
         infiniteRotateAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.inf_rotate);
         myBus = ((RadioApplication) getActivity().getApplication()).getBus();
         mRadioStateModel = ((RadioApplication) getActivity().getApplication()).getRadioStateModel();
@@ -131,8 +144,10 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
             btnRadioController.startAnimation(infiniteRotateAnim);
         } else if (stateModel.isMusicPlaying() && !stateModel.isStreamInterrupted()) {
             btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_pause));
+            rippleBackground.startRippleAnimation();
         } else {
             btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+            rippleBackground.stopRippleAnimation();
         }
     }
 
@@ -169,6 +184,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
                 if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
                     myBus.post(RadioCommandEnum.PAUSE);
                     btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                    rippleBackground.stopRippleAnimation();
                 } else if (mRadioStateModel.isServiceUp()) {
                     myBus.post(RadioCommandEnum.PLAY);
                 } else {
@@ -188,6 +204,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
                 Intent stopRadioServiceIntent = new Intent(getActivity(), RadioService.class);
                 getActivity().stopService(stopRadioServiceIntent);
                 btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                rippleBackground.stopRippleAnimation();
                 return true;
         }
         return false;
@@ -205,11 +222,13 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
                 txtRadioState.setText(RadioStateEnum.ENDED.toString());
                 btnRadioController.clearAnimation();
                 btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                rippleBackground.stopRippleAnimation();
                 break;
             case IDLE:
                 txtRadioState.setText(RadioStateEnum.IDLE.toString());
                 btnRadioController.clearAnimation();
                 btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                rippleBackground.stopRippleAnimation();
                 break;
             case PREPARING:
                 txtRadioState.setText(RadioStateEnum.PREPARING.toString());
@@ -222,8 +241,10 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
                 btnRadioController.clearAnimation();
                 if (mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
                     btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_pause));
+                    rippleBackground.startRippleAnimation();
                 } else {
                     btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                    rippleBackground.stopRippleAnimation();
                 }
                 break;
             case UNKNOWN:
