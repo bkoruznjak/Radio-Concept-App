@@ -80,7 +80,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
     public void onDestroyView() {
         super.onDestroyView();
         if (rippleBackground != null) {
-            rippleBackground.stopRippleAnimation();
+            rippleBackground.hardStopRippleAnimation();
             rippleBackground = null;
         }
     }
