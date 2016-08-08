@@ -96,6 +96,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
     @Override
     public void onDestroy() {
         super.onDestroy();
+        radioState.setStateEnum(RadioStateEnum.ENDED);
         radioState.setServiceUp(false);
         myBus.unregister(this);
         purgeRadio();
@@ -192,6 +193,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
         if (mExoPlayer != null) {
             radioState.setMusicPlaying(false);
             mExoPlayer.setPlayWhenReady(false);
+            radioState.setStateEnum(RadioStateEnum.ENDED);
         }
     }
 

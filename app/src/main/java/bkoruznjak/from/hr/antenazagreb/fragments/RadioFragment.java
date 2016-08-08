@@ -184,6 +184,13 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
                 if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
                     myBus.post(RadioCommandEnum.PAUSE);
                     btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                    btnRadioController.clearAnimation();
+                    rippleBackground.stopRippleAnimation();
+                } else if (mRadioStateModel.getStateEnum() == RadioStateEnum.BUFFERING) {
+                    //todo ovo treba malo doradit, stavio sam tu samo da mozes prekinut buffeering na naglo
+                    myBus.post(RadioCommandEnum.PAUSE);
+                    btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
+                    btnRadioController.clearAnimation();
                     rippleBackground.stopRippleAnimation();
                 } else if (mRadioStateModel.isServiceUp()) {
                     myBus.post(RadioCommandEnum.PLAY);
@@ -201,8 +208,11 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
         switch (v.getId()) {
             case R.id.btnRadioController:
                 Log.d("BBB", "stopping service!");
+                myBus.post(RadioCommandEnum.STOP);
                 Intent stopRadioServiceIntent = new Intent(getActivity(), RadioService.class);
                 getActivity().stopService(stopRadioServiceIntent);
+
+                btnRadioController.clearAnimation();
                 btnRadioController.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_play));
                 rippleBackground.stopRippleAnimation();
                 return true;
