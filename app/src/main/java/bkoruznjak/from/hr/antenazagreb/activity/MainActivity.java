@@ -2,6 +2,7 @@ package bkoruznjak.from.hr.antenazagreb.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -9,15 +10,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import com.mxn.soul.flowingdrawer_core.FlowingView;
+import com.mxn.soul.flowingdrawer_core.LeftDrawerLayout;
+
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
+import bkoruznjak.from.hr.antenazagreb.views.AntenaMenuFragment;
 import bkoruznjak.from.hr.antenazagreb.views.AntenaTabFactory;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static int counter = 1;
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout antenaTabLayout;
     @BindView(R.id.antenaToolbar)
     Toolbar antenaToolbar;
+    @BindView(R.id.drawer_layout)
+    LeftDrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +51,19 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setupActionBar();
         setupTabBar();
+        setupDrawer();
 
+    }
+
+    private void setupDrawer() {
+        FragmentManager fm = getSupportFragmentManager();
+        AntenaMenuFragment mMenuFragment = (AntenaMenuFragment) fm.findFragmentById(R.id.id_container_menu);
+        FlowingView mFlowingView = (FlowingView) findViewById(R.id.sv);
+        if (mMenuFragment == null) {
+            fm.beginTransaction().add(R.id.id_container_menu, mMenuFragment = new AntenaMenuFragment()).commit();
+        }
+        drawerLayout.setFluidView(mFlowingView);
+        drawerLayout.setMenuFragment(mMenuFragment);
     }
 
     private void setupActionBar() {
@@ -94,5 +111,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

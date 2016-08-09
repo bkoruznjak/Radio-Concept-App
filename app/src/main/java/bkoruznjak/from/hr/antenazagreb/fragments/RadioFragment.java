@@ -61,7 +61,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
     TextView txtRadioState;
     @BindView(R.id.songInfoTextView)
     TextView txtSongInfo;
-
+    View radioFragmentView;
     private RadioBus myBus;
     private RadioStateModel mRadioStateModel;
     private Animation infiniteRotateAnim;
@@ -70,7 +70,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View radioFragmentView = inflater.inflate(R.layout.fragment_radio, container, false);
+        radioFragmentView = inflater.inflate(R.layout.fragment_radio, container, false);
         init(radioFragmentView);
         return radioFragmentView;
     }

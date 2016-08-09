@@ -158,11 +158,8 @@ public class RippleBackground extends RelativeLayout {
     }
 
     public void hardStopRippleAnimation() {
-        if (isRippleAnimationRunning()) {
             animatorSet.end();
             animationRunning = false;
-            rippleViewList = null;
-        }
     }
 
     public boolean isRippleAnimationRunning() {
