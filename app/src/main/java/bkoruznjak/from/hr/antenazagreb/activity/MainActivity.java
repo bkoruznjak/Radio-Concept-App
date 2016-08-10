@@ -7,9 +7,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.mxn.soul.flowingdrawer_core.FlowingView;
 import com.mxn.soul.flowingdrawer_core.LeftDrawerLayout;
 
@@ -32,19 +34,16 @@ public class MainActivity extends AppCompatActivity {
     Toolbar antenaToolbar;
     @BindView(R.id.drawer_layout)
     LeftDrawerLayout drawerLayout;
+    @BindView(R.id.floatingDrawer)
+    FlowingView mFlowingView;
+
+    private boolean isOutSideClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.antena_menu, menu);
-        return true;
     }
 
     private void init() {
@@ -55,10 +54,57 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Overridden method to catch touch events outside the open floating drawer.
+     * Touching the screen outside the drawer will close the same.
+     *
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (drawerLayout.isShown()) {
+
+                float floatingDrawerWidth = mFlowingView.getWidth();
+                float touchY = event.getY();
+
+                isOutSideClicked = touchY > floatingDrawerWidth;
+
+            } else {
+                return super.dispatchTouchEvent(event);
+            }
+        } else if (event.getAction() == MotionEvent.ACTION_DOWN && isOutSideClicked) {
+            isOutSideClicked = false;
+            return super.dispatchTouchEvent(event);
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE && isOutSideClicked) {
+            return super.dispatchTouchEvent(event);
+        }
+
+        if (isOutSideClicked) {
+            if (drawerLayout.isShown()) {
+                drawerLayout.closeDrawer();
+            }
+            return true;
+        } else {
+            return super.dispatchTouchEvent(event);
+        }
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            drawerLayout.toggle();
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
     private void setupDrawer() {
         FragmentManager fm = getSupportFragmentManager();
         AntenaMenuFragment mMenuFragment = (AntenaMenuFragment) fm.findFragmentById(R.id.id_container_menu);
-        FlowingView mFlowingView = (FlowingView) findViewById(R.id.sv);
         if (mMenuFragment == null) {
             fm.beginTransaction().add(R.id.id_container_menu, mMenuFragment = new AntenaMenuFragment()).commit();
         }
@@ -67,7 +113,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupActionBar() {
+        antenaToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.colorPrimary)));
+        antenaToolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
         setSupportActionBar(antenaToolbar);
+
+        antenaToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.toggle();
+            }
+        });
     }
 
     private void setupTabBar() {

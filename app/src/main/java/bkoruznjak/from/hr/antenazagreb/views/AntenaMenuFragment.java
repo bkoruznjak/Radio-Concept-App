@@ -3,7 +3,6 @@ package bkoruznjak.from.hr.antenazagreb.views;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v7.widget.ActionMenuView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +22,7 @@ import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 /**
  * Created by bkoruznjak on 08/08/16.
  */
-public class AntenaMenuFragment extends MenuFragment implements ActionMenuView.OnMenuItemClickListener {
+public class AntenaMenuFragment extends MenuFragment {
 
 
     private RadioBus myBus;
@@ -58,8 +57,6 @@ public class AntenaMenuFragment extends MenuFragment implements ActionMenuView.O
             public boolean onNavigationItemSelected(MenuItem item) {
                 if (item.getGroupId() == R.id.stream_menu_group) {
                     //handle checking logic
-                    Log.d("bbb", "id:" + item.getTitle());
-                    Log.d("bbb", "is checked: " + item.isChecked());
                     if (!item.isChecked()) {
                         switch (item.getItemId()) {
                             case R.id.menu_main_stream:
@@ -99,17 +96,16 @@ public class AntenaMenuFragment extends MenuFragment implements ActionMenuView.O
                             }
                         }
                     }
-                    naviView.invalidate();
-                    Log.d("bbb", "is checked: " + item.isChecked());
                 }
 
                 return false;
             }
         });
-        ImageView slika = (ImageView) headerView.findViewById(R.id.ivMenuUserProfilePhoto);
-        setupHeader(slika);
+        ImageView drawerHeaderImage = (ImageView) headerView.findViewById(R.id.ivMenuUserProfilePhoto);
+        setupHeader(drawerHeaderImage);
         return setupReveal(view);
     }
+
 
     private void setupHeader(ImageView ivMenuUserProfilePhoto) {
         int avatarSize = getResources().getDimensionPixelSize(R.dimen.item_height);
@@ -128,10 +124,5 @@ public class AntenaMenuFragment extends MenuFragment implements ActionMenuView.O
 
     public void onCloseMenu() {
         //Toast.makeText(getActivity(),"onCloseMenu",Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        return false;
     }
 }

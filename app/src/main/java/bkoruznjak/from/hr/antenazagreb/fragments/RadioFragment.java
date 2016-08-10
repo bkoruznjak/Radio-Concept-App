@@ -154,6 +154,7 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
 
     @Override
     public void onClick(View v) {
+        //todo remove tese buttons not needed
         switch (v.getId()) {
             case R.id.btnMainStream:
                 Log.d("BBB", "MAIN STREAM PRESSED!");
