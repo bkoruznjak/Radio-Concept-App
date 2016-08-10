@@ -63,33 +63,15 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (drawerLayout.isShown()) {
-
-                float floatingDrawerWidth = mFlowingView.getWidth();
-                float touchY = event.getY();
-
-                isOutSideClicked = touchY > floatingDrawerWidth;
-
-            } else {
-                return super.dispatchTouchEvent(event);
-            }
-        } else if (event.getAction() == MotionEvent.ACTION_DOWN && isOutSideClicked) {
-            isOutSideClicked = false;
-            return super.dispatchTouchEvent(event);
-        } else if (event.getAction() == MotionEvent.ACTION_MOVE && isOutSideClicked) {
-            return super.dispatchTouchEvent(event);
-        }
-
-        if (isOutSideClicked) {
-            if (drawerLayout.isShown()) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN && drawerLayout.isShownMenu()) {
+            float floatingDrawerWidth = mFlowingView.getWidth();
+            float touchX = event.getX();
+            if (touchX > floatingDrawerWidth) {
                 drawerLayout.closeDrawer();
+                return false;
             }
-            return true;
-        } else {
-            return super.dispatchTouchEvent(event);
         }
-
+        return super.dispatchTouchEvent(event);
     }
 
     @Override
