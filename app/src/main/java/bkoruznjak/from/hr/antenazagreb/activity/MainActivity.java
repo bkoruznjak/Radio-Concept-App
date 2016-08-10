@@ -17,7 +17,7 @@ import com.mxn.soul.flowingdrawer_core.LeftDrawerLayout;
 
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
-import bkoruznjak.from.hr.antenazagreb.views.AntenaMenuFragment;
+import bkoruznjak.from.hr.antenazagreb.fragments.AntenaMenuFragment;
 import bkoruznjak.from.hr.antenazagreb.views.AntenaTabFactory;
 import butterknife.BindView;
 import butterknife.ButterKnife;

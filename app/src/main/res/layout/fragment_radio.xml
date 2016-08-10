@@ -29,62 +29,6 @@
             android:layout_gravity="center"
             android:text="--- RADIO STATE ---" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="6">
-
-            <Button
-                android:id="@+id/btnMainStream"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Main"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/btnHitStream"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Hit"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/btnRockStream"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Rock"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/btn2000Stream"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="2000"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/btn90Stream"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="90s"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/btn80Stream"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="80s"
-                android:textSize="10sp" />
-
-        </LinearLayout>
-
         <TextView
             android:id="@+id/songInfoTextView"
             android:layout_width="wrap_content"

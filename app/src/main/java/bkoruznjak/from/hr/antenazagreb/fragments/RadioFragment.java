@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -26,7 +25,6 @@ import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.activity.MainActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
-import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
@@ -39,24 +37,10 @@ import butterknife.ButterKnife;
 
 public class RadioFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener, VolumeSlider.OnSectorChangedListener {
 
-    @BindView(R.id.btnMainStream)
-    Button btnMainStream;
-    @BindView(R.id.btnHitStream)
-    Button btnHitStream;
-    @BindView(R.id.btnRockStream)
-    Button btnRockStream;
-    @BindView(R.id.btn2000Stream)
-    Button btn2000Stream;
-    @BindView(R.id.btn90Stream)
-    Button btn90Stream;
-    @BindView(R.id.btn80Stream)
-    Button btn80Stream;
     @BindView(R.id.btnRadioController)
     ImageButton btnRadioController;
-
     @BindView(R.id.volumeControl)
     VolumeSlider volumeControl;
-
     @BindView(R.id.radioStateTextView)
     TextView txtRadioState;
     @BindView(R.id.songInfoTextView)
@@ -114,12 +98,6 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
     }
 
     private void bindOnClickListeners() {
-        btnMainStream.setOnClickListener(this);
-        btnHitStream.setOnClickListener(this);
-        btnRockStream.setOnClickListener(this);
-        btn2000Stream.setOnClickListener(this);
-        btn90Stream.setOnClickListener(this);
-        btn80Stream.setOnClickListener(this);
         btnRadioController.setOnClickListener(this);
     }
 
@@ -156,30 +134,6 @@ public class RadioFragment extends Fragment implements View.OnClickListener, Vie
     public void onClick(View v) {
         //todo remove tese buttons not needed
         switch (v.getId()) {
-            case R.id.btnMainStream:
-                Log.d("BBB", "MAIN STREAM PRESSED!");
-                myBus.post(StreamUriConstants.ANTENA_MAIN);
-                break;
-            case R.id.btnHitStream:
-                Log.d("BBB", "HIT STREAM PRESSED!");
-                myBus.post(StreamUriConstants.ANTENA_HIT);
-                break;
-            case R.id.btnRockStream:
-                Log.d("BBB", "ROCK STREAM PRESSED!");
-                myBus.post(StreamUriConstants.ANTENA_ROCK);
-                break;
-            case R.id.btn2000Stream:
-                Log.d("BBB", "2000 STREAM PRESSED!");
-                myBus.post(StreamUriConstants.ANTENA_2000);
-                break;
-            case R.id.btn90Stream:
-                Log.d("BBB", "90S STREAM PRESSED!");
-                myBus.post(StreamUriConstants.ANTENA_90);
-                break;
-            case R.id.btn80Stream:
-                Log.d("BBB", "80S STREAM PRESSED!");
-                myBus.post(StreamUriConstants.ANTENA_80);
-                break;
             case R.id.btnRadioController:
                 Log.d("BBB", "RADIO CONTROLLER PRESSED!");
                 if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
