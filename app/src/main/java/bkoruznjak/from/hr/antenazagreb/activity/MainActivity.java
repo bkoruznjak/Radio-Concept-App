@@ -1,23 +1,35 @@
 package bkoruznjak.from.hr.antenazagreb.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.mxn.soul.flowingdrawer_core.FlowingView;
 import com.mxn.soul.flowingdrawer_core.LeftDrawerLayout;
+import com.squareup.otto.Subscribe;
 
 import bkoruznjak.from.hr.antenazagreb.R;
+import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
+import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
+import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
+import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.fragments.AntenaMenuFragment;
+import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
+import bkoruznjak.from.hr.antenazagreb.service.RadioService;
 import bkoruznjak.from.hr.antenazagreb.views.AntenaTabFactory;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,8 +48,12 @@ public class MainActivity extends AppCompatActivity {
     LeftDrawerLayout drawerLayout;
     @BindView(R.id.floatingDrawer)
     FlowingView mFlowingView;
+    @BindView(R.id.btnAntenaMainController)
+    FloatingActionButton mBtnMainController;
 
-    private boolean isOutSideClicked;
+    Animation infiniteRotateAnim;
+    RadioStateModel mRadioStateModel;
+    private RadioBus myBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +62,28 @@ public class MainActivity extends AppCompatActivity {
         init();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        myBus.register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        myBus.unregister(this);
+    }
+
     private void init() {
         ButterKnife.bind(this);
+        myBus = ((RadioApplication) getApplication()).getBus();
+        infiniteRotateAnim = AnimationUtils.loadAnimation(this, R.anim.inf_rotate);
+        mRadioStateModel = ((RadioApplication) getApplication()).getRadioStateModel();
         setupActionBar();
         setupTabBar();
         setupDrawer();
+        setupFab();
+        updateViewsByRadioState(mRadioStateModel);
 
     }
 
@@ -107,6 +140,45 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setupFab() {
+        mBtnMainController.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("bbb", "FAB CLICKED");
+                if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
+                    myBus.post(RadioCommandEnum.PAUSE);
+                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                    mBtnMainController.clearAnimation();
+                } else if (mRadioStateModel.getStateEnum() == RadioStateEnum.BUFFERING) {
+                    //todo ovo treba malo doradit, stavio sam tu samo da mozes prekinut buffeering na naglo
+                    myBus.post(RadioCommandEnum.PAUSE);
+                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                    mBtnMainController.clearAnimation();
+                } else if (mRadioStateModel.isServiceUp()) {
+                    myBus.post(RadioCommandEnum.PLAY);
+                } else {
+                    Log.d("BBB", "starting service anew");
+                    Intent startRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
+                    startService(startRadioServiceIntent);
+                }
+            }
+        });
+
+        mBtnMainController.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d("bbb", "FAB LONG CLICKED");
+                myBus.post(RadioCommandEnum.STOP);
+                Intent stopRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
+                stopService(stopRadioServiceIntent);
+
+                mBtnMainController.clearAnimation();
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                return true;
+            }
+        });
+    }
+
     private void setupTabBar() {
 
         antenaTabLayout.addTab(antenaTabLayout.newTab());
@@ -148,8 +220,52 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    @Subscribe
+    public void handleStreamStateChange(RadioStateEnum streamState) {
+        switch (streamState) {
+            case BUFFERING:
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_black_24dp));
+                mBtnMainController.startAnimation(infiniteRotateAnim);
+                break;
+            case ENDED:
+                mBtnMainController.clearAnimation();
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                break;
+            case IDLE:
+                mBtnMainController.clearAnimation();
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                break;
+            case PREPARING:
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_black_24dp));
+                mBtnMainController.startAnimation(infiniteRotateAnim);
+                break;
+            case READY:
+                //stop buffering animation if it exists
+                mBtnMainController.clearAnimation();
+                if (mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
+                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+                } else {
+                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                }
+                break;
+            case UNKNOWN:
+                break;
+        }
+    }
+
+    private void refreshControlButtonDrawable(RadioStateModel stateModel, Animation animation) {
+        //ovo ojačaj kod jer treba maknut rucno dodavanje na gumb animacije i sranja.
+        if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.PREPARING) {
+            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_black_24dp));
+            mBtnMainController.startAnimation(infiniteRotateAnim);
+        } else if (stateModel.isMusicPlaying() && !stateModel.isStreamInterrupted()) {
+            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+        } else {
+            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+        }
+    }
+
+    private void updateViewsByRadioState(RadioStateModel stateModel) {
+        refreshControlButtonDrawable(stateModel, infiniteRotateAnim);
     }
 }
