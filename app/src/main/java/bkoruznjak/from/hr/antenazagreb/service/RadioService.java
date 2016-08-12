@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
@@ -154,6 +155,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         int duration = Toast.LENGTH_SHORT;
+        Crashlytics.log(Log.ERROR, "AntenaZagreb", "Exo Error:" + error);
         Toast toast = Toast.makeText(this, "Selected stream appears to be down...", duration);
         toast.show();
         stop();

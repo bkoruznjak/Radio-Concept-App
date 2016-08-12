@@ -3,12 +3,14 @@ package bkoruznjak.from.hr.antenazagreb;
 import android.app.Application;
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.util.NetworkUtils;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by bkoruznjak on 29/06/16.
@@ -32,6 +34,7 @@ public class RadioApplication extends Application {
         super.onCreate();
         LeakCanary.install(this);
         NetworkUtils.registerLoganSquareTypeConverters();
+        Fabric.with(this, new Crashlytics());
     }
 
     public RadioBus getBus() {

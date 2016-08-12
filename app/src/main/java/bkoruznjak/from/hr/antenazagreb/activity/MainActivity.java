@@ -74,6 +74,18 @@ public class MainActivity extends AppCompatActivity {
         myBus.unregister(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!mRadioStateModel.isMusicPlaying() && mRadioStateModel.isServiceUp()) {
+            Log.d("bbb", "app shutting down");
+            myBus.post(RadioCommandEnum.STOP);
+            Intent stopRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
+            stopService(stopRadioServiceIntent);
+        }
+        this.finishAffinity();
+    }
+
     private void init() {
         ButterKnife.bind(this);
         myBus = ((RadioApplication) getApplication()).getBus();
