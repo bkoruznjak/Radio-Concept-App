@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.Map;
 
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
+import bkoruznjak.from.hr.antenazagreb.constants.SongMetadataUriConstants;
+import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 
@@ -35,26 +37,41 @@ public class IcyMetadataHandler {
                     try {
                         try {
                             Log.d("BBB", "______________________METADATA______________________");
-                            URL streamURL = new URL(stateModel.getStreamUri());
-                            mMetadata = new SongMetaProvider(streamURL).retreiveMetadata();
-                            for (Map.Entry<String, String> entry : mMetadata.entrySet()) {
-                                Log.d("BBB", "key: " + entry.getKey() + " value:" + entry.getValue());
-                                if (entry.getKey().startsWith("StreamTitle")) {
-                                    String[] metadataArray = entry.getValue().split(" - ");
-                                    String songArtist = "Unknown";
-                                    String songName = "Unknown";
-                                    if (metadataArray.length > 1) {
-                                        songArtist = metadataArray[0];
-                                        songName = metadataArray[1];
-                                    }
-                                    //only post if data differs existing data
-                                    if (!stateModel.getSongAuthor().equals(songArtist) && !stateModel.getSongTitle().equals(songName)) {
-                                        stateModel.setSongAuthor(songArtist);
-                                        stateModel.setSongTitle(songName);
-                                        myBus.post(new SongModel(songName, songArtist));
+                            if (stateModel.getStreamUri().equals(StreamUriConstants.ANTENA_MAIN)) {
+                                String songArtist = "Unknown";
+                                String songName = "Unknown";
+                                SongModel currentSong = new AntenaSongProvider(SongMetadataUriConstants.ANTENA_MAIN).fetchCurrentSong();
+                                Log.d("bbb", "title:" + currentSong.getTitle() + ", author:" + currentSong.getmAuthor());
+                                songArtist = currentSong.getmAuthor();
+                                songName = currentSong.getTitle();
+                                if (!stateModel.getSongAuthor().equals(songArtist) && !stateModel.getSongTitle().equals(songName)) {
+                                    stateModel.setSongAuthor(songArtist);
+                                    stateModel.setSongTitle(songName);
+                                    myBus.post(currentSong);
+                                }
+                            } else {
+                                URL streamURL = new URL(stateModel.getStreamUri());
+                                mMetadata = new SongMetaProvider(streamURL).retreiveMetadata();
+                                for (Map.Entry<String, String> entry : mMetadata.entrySet()) {
+                                    Log.d("BBB", "key: " + entry.getKey() + " value:" + entry.getValue());
+                                    if (entry.getKey().startsWith("StreamTitle")) {
+                                        String[] metadataArray = entry.getValue().split(" - ");
+                                        String songArtist = "Unknown";
+                                        String songName = "Unknown";
+                                        if (metadataArray.length > 1) {
+                                            songArtist = metadataArray[0];
+                                            songName = metadataArray[1];
+                                        }
+                                        //only post if data differs existing data
+                                        if (!stateModel.getSongAuthor().equals(songArtist) && !stateModel.getSongTitle().equals(songName)) {
+                                            stateModel.setSongAuthor(songArtist);
+                                            stateModel.setSongTitle(songName);
+                                            myBus.post(new SongModel(songName, songArtist));
+                                        }
                                     }
                                 }
                             }
+
                         } catch (IOException IOex) {
                             Log.e("BBB", "Exception while fetching metadata" + IOex);
                         }

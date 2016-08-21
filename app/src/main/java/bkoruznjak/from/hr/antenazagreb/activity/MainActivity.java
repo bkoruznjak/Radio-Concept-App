@@ -186,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
 
                 mBtnMainController.clearAnimation();
                 mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+
+                //todo stream choser
                 return true;
             }
         });

@@ -26,7 +26,6 @@ import com.google.android.exoplayer.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 import com.squareup.otto.Subscribe;
 
-import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.activity.MainActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
@@ -84,7 +83,6 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
         Notification notification = new Notification.Builder(this)
                 .setContentTitle("Antena Radio")
                 .setContentText(radioState.getSongAuthor().concat(" - ").concat(radioState.getSongTitle()))
-                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .build();
 
