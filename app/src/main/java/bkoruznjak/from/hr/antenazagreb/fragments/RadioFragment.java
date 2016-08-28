@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.activity.MainActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
+import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
@@ -40,10 +42,12 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     @BindView(R.id.songInfoTextView)
     TextView txtSongInfo;
     View radioFragmentView;
+    int radioVolume;
     private RadioBus myBus;
     private RadioStateModel mRadioStateModel;
     private Animation infiniteRotateAnim;
     private RippleBackground rippleBackground;
+    private SharedPreferences mPreferences;
 
     @Nullable
     @Override
@@ -67,16 +71,21 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     public void onResume() {
         super.onResume();
         myBus.register(this);
+        radioVolume = RadioApplication.getInstance().getRadioVolume();
+        volumeControl.updateSliderWithSectorID(radioVolume);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         myBus.unregister(this);
+        mPreferences.edit().putInt(PreferenceKeyConstants.KEY_VOLUME, radioVolume).commit();
     }
 
     private void init(View view) {
         ButterKnife.bind(this, view);
+        mPreferences = getActivity().getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         rippleBackground = (RippleBackground) view.findViewById(R.id.content);
         infiniteRotateAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.inf_rotate);
         myBus = ((RadioApplication) getActivity().getApplication()).getBus();
@@ -169,6 +178,8 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     @Override
     public void changeSector(int sectorID) {
         //Log.d("BBB", "sector id:" + sectorID);
+        radioVolume = sectorID;
+        RadioApplication.getInstance().setRadioVolume(radioVolume);
         AudioManager audioManager =
                 (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, sectorID, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);

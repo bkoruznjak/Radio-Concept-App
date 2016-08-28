@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -52,6 +53,7 @@ public class VolumeSlider extends View {
     private OnSliderMovedListener mListener;
     private OnSectorChangedListener mSectorListener;
     //SECTORS
+    private int numberOfSectorsPerPI = 8;
     private int sectorID = 8;
     private boolean[] sectorLocatorArray = {
             false,
@@ -224,6 +226,21 @@ public class VolumeSlider extends View {
             canvas.drawCircle(mThumbX, mThumbY, mThumbSize, mPaint);
             canvas.drawText("" + sectorID, mThumbX, mThumbY + 15f, mVolumeTextPaint);
         }
+    }
+
+    public void updateSliderWithSectorID(int sectorID) {
+        Log.d("bbb", "updating slider angle with sector id:" + sectorID);
+        updateSectorPosition(sectorID);
+        changeSector(sectorID);
+        double sectorPICoef = Math.PI / numberOfSectorsPerPI;
+        if (sectorID >= 1 && sectorID <= 8) {
+            // od 0 do 3.14
+            setAngle(sectorPICoef * sectorID);
+        } else {
+            // od -3.14 do 0
+            setAngle(-sectorPICoef * ((numberOfSectorsPerPI * 2) - sectorID));
+        }
+        invalidate();
     }
 
     /**

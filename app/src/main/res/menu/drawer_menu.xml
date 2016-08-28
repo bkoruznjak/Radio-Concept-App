@@ -1,38 +1,49 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/stream_menu_group">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/radio_menu_group">
         <item
-            android:id="@+id/menu_main_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
-            android:title="Main Stream" />
+            android:id="@+id/menu_current_stream"
+            android:icon="@drawable/ic_radio_white_24dp"
+            android:title="@string/setting_current_stream" />
         <item
-            android:id="@+id/menu_hit_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
-            android:title="Hit Stream" />
-        <item
-            android:id="@+id/menu_rock_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
-            android:title="Rock Stream" />
-        <item
-            android:id="@+id/menu_2000_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
-            android:title="2000 Stream" />
-        <item
-            android:id="@+id/menu_90s_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
-            android:title="90s Stream" />
-        <item
-            android:id="@+id/menu_80s_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
-            android:title="80s Stream" />
+            android:id="@+id/menu_current_song"
+            android:icon="@drawable/ic_artist_black_24dp"
+            android:title="@string/setting_current_song" />
+    </group>
+    <group
+        android:id="@+id/preferences_menu_group"
+        android:checkableBehavior="single">
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/setting_autoplay"
+            android:title="@string/setting_autoplay"
+            app:actionLayout="@layout/menu_switch"
+            app:showAsAction="always" />
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/setting_keep_articles"
+            android:title="@string/setting_keep_articles"
+            app:actionLayout="@layout/menu_switch"
+            app:showAsAction="always" />
     </group>
     <group android:id="@+id/general_menu_group">
         <item
-            android:id="@+id/menu_settings"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
-        <item
             android:id="@+id/menu_about"
             android:icon="@drawable/ic_info_black_24dp"
-            android:title="About" />
+            android:title="@string/setting_about" />
+        <item
+            android:id="@+id/menu_feedback"
+            android:icon="@drawable/ic_feedback_black_24dp"
+            android:title="@string/setting_feedback" />
+        <item
+            android:id="@+id/menu_third_party"
+            android:icon="@drawable/ic_third_party_black_24dp"
+            android:title="@string/setting_third_party" />
+        <item
+            android:id="@+id/menu_app_version"
+            android:icon="@drawable/ic_app_version_black_24dp"
+            android:title="@string/setting_app_version" />
+        <item
+            android:id="@+id/menu_app_author"
+            android:icon="@drawable/ic_app_author_black_24dp"
+            android:title="@string/setting_app_author" />
     </group>
 </menu>

@@ -1,14 +1,17 @@
 package bkoruznjak.from.hr.antenazagreb.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.mxn.soul.flowingdrawer_core.MenuFragment;
@@ -17,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
+import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.views.CircleTransformation;
@@ -29,12 +33,24 @@ public class AntenaMenuFragment extends MenuFragment {
 
     private RadioBus myBus;
     private RadioStateModel mRadioStateModel;
+    private SharedPreferences mPreferences;
+
+    private boolean isAutoplayOn;
+    private boolean isStoringArticleData;
+    private String defaultStation;
+    private int volume;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myBus = ((RadioApplication) getActivity().getApplication()).getBus();
         mRadioStateModel = ((RadioApplication) getActivity().getApplication()).getRadioStateModel();
+        mPreferences = getActivity().getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, Context.MODE_PRIVATE);
+
+        isAutoplayOn = mPreferences.getBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true);
+        isStoringArticleData = mPreferences.getBoolean(PreferenceKeyConstants.KEY_STORE_ARTICLES, false);
+        defaultStation = mPreferences.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.ANTENA_MAIN);
+        volume = mPreferences.getInt(PreferenceKeyConstants.KEY_VOLUME, 5);
     }
 
     @Override
@@ -58,51 +74,84 @@ public class AntenaMenuFragment extends MenuFragment {
         final int menuSize = drawerMenu.size();
         //initial checkup to set active stream
         handleStreamMenuList(mRadioStateModel.getStreamUri(), drawerMenu);
-        naviView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                if (item.getGroupId() == R.id.stream_menu_group) {
-                    //handle checking logic
-                    if (!item.isChecked()) {
-                        switch (item.getItemId()) {
-                            case R.id.menu_main_stream:
-                                handleStreamURI(StreamUriConstants.ANTENA_MAIN);
-                                break;
-                            case R.id.menu_hit_stream:
-                                handleStreamURI(StreamUriConstants.ANTENA_HIT);
-                                break;
-                            case R.id.menu_rock_stream:
-                                handleStreamURI(StreamUriConstants.ANTENA_ROCK);
-                                break;
-                            case R.id.menu_2000_stream:
-                                handleStreamURI(StreamUriConstants.ANTENA_2000);
-                                break;
-                            case R.id.menu_90s_stream:
-                                handleStreamURI(StreamUriConstants.ANTENA_90);
-                                break;
-                            case R.id.menu_80s_stream:
-                                handleStreamURI(StreamUriConstants.ANTENA_80);
-                                break;
-                        }
 
-                        for (int menuItemIndex = 0; menuItemIndex < menuSize; menuItemIndex++) {
-                            MenuItem tempMenuItem = drawerMenu.getItem(menuItemIndex);
-                            if (item.getItemId() == tempMenuItem.getItemId() && tempMenuItem.getGroupId() == R.id.stream_menu_group) {
-                                tempMenuItem.setChecked(true);
-                                tempMenuItem.setIcon(R.drawable.ic_pause_black_24dp);
-                            } else if (tempMenuItem.getGroupId() == R.id.stream_menu_group) {
-                                tempMenuItem.setChecked(false);
-                                tempMenuItem.setIcon(R.drawable.ic_play_arrow_black_24dp);
-                            }
-                        }
-                    }
-                }
+        /** OLD NAVIGATION - LEAVING IT COMENTED CAUSE YOU NEVER KNOW
 
-                return false;
-            }
+         naviView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        @Override public boolean onNavigationItemSelected(MenuItem item) {
+        if (item.getGroupId() == R.id.stream_menu_group) {
+        //handle checking logic
+        if (!item.isChecked()) {
+        switch (item.getItemId()) {
+        case R.id.menu_main_stream:
+        handleStreamURI(StreamUriConstants.ANTENA_MAIN);
+        break;
+        case R.id.menu_hit_stream:
+        handleStreamURI(StreamUriConstants.ANTENA_HIT);
+        break;
+        case R.id.menu_rock_stream:
+        handleStreamURI(StreamUriConstants.ANTENA_ROCK);
+        break;
+        case R.id.menu_2000_stream:
+        handleStreamURI(StreamUriConstants.ANTENA_2000);
+        break;
+        case R.id.menu_90s_stream:
+        handleStreamURI(StreamUriConstants.ANTENA_90);
+        break;
+        case R.id.menu_80s_stream:
+        handleStreamURI(StreamUriConstants.ANTENA_80);
+        break;
+        }
+
+        for (int menuItemIndex = 0; menuItemIndex < menuSize; menuItemIndex++) {
+        MenuItem tempMenuItem = drawerMenu.getItem(menuItemIndex);
+        if (item.getItemId() == tempMenuItem.getItemId() && tempMenuItem.getGroupId() == R.id.stream_menu_group) {
+        tempMenuItem.setChecked(true);
+        tempMenuItem.setIcon(R.drawable.ic_pause_black_24dp);
+        } else if (tempMenuItem.getGroupId() == R.id.stream_menu_group) {
+        tempMenuItem.setChecked(false);
+        tempMenuItem.setIcon(R.drawable.ic_play_arrow_black_24dp);
+        }
+        }
+        }
+        }
+
+        return false;
+        }
         });
+
+         **/
         ImageView drawerHeaderImage = (ImageView) headerView.findViewById(R.id.ivMenuUserProfilePhoto);
         setupHeader(drawerHeaderImage);
+
+        SwitchCompat autoplaySetting = (SwitchCompat) naviView.getMenu().getItem(2).getActionView();
+        if (isAutoplayOn) {
+            autoplaySetting.setChecked(true);
+        } else {
+            autoplaySetting.setChecked(false);
+        }
+        autoplaySetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("bbb", "stavljam stream autoplay na" + isChecked);
+                mPreferences.edit().putBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, isChecked).commit();
+            }
+        });
+
+        SwitchCompat keepArticlesSetting = (SwitchCompat) naviView.getMenu().getItem(3).getActionView();
+        if (isStoringArticleData) {
+            keepArticlesSetting.setChecked(true);
+        } else {
+            keepArticlesSetting.setChecked(false);
+        }
+        keepArticlesSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("bbb", "stavljam keep articles na" + isChecked);
+                mPreferences.edit().putBoolean(PreferenceKeyConstants.KEY_STORE_ARTICLES, isChecked).commit();
+            }
+        });
+
         return setupReveal(view);
     }
 

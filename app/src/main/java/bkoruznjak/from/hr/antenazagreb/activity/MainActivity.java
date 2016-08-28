@@ -3,6 +3,7 @@ package bkoruznjak.from.hr.antenazagreb.activity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -28,6 +29,7 @@ import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
+import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
@@ -76,12 +78,22 @@ public class MainActivity extends AppCompatActivity {
     AnimatorSet return80sStreamIcon;
     private RadioBus myBus;
     private boolean isRadioStationPickerShown = false;
+    private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        handleAutoPlay(mPreferences.getBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true));
+    }
+
+    private void handleAutoPlay(boolean isAutoplayOn) {
+        if (isAutoplayOn && !mRadioStateModel.isServiceUp()) {
+            Log.d("BBB", "starting service anew due to autoplay");
+            Intent startRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
+            startService(startRadioServiceIntent);
+        }
     }
 
     @Override
@@ -110,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         ButterKnife.bind(this);
+        mPreferences = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
         myBus = ((RadioApplication) getApplication()).getBus();
         mRadioStateModel = ((RadioApplication) getApplication()).getRadioStateModel();
         setupAnimations();

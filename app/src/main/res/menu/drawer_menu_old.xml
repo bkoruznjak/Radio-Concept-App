@@ -1,0 +1,49 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/stream_menu_group">
+        <item
+            android:id="@+id/menu_main_stream"
+            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:title="Main Stream" />
+        <item
+            android:id="@+id/menu_hit_stream"
+            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:title="Hit Stream" />
+        <item
+            android:id="@+id/menu_rock_stream"
+            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:title="Rock Stream" />
+        <item
+            android:id="@+id/menu_2000_stream"
+            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:title="2000 Stream" />
+        <item
+            android:id="@+id/menu_90s_stream"
+            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:title="90s Stream" />
+        <item
+            android:id="@+id/menu_80s_stream"
+            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:title="80s Stream" />
+    </group>
+    <group android:id="@+id/general_menu_group">
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
+        <item
+            android:id="@+id/menu_about"
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="About" />
+    </group>
+    <group
+        android:id="@+id/second"
+        android:checkableBehavior="single">
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/navi_item_create_notifications_sound"
+            android:title="Notifications Sounds"
+            app:actionLayout="@layout/menu_switch"
+            app:showAsAction="always" />
+
+    </group>
+</menu>
