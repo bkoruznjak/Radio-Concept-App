@@ -44,7 +44,7 @@ public class RadioApplication extends Application {
         SharedPreferences preferences = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
         if (!preferences.contains(PreferenceKeyConstants.KEY_AUTOPLAY)) {
             Log.d("BBB", "SETTING AUTOPLAY FOR FIRST TIME TO TRUE");
-            preferences.edit().putBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true).commit();
+            preferences.edit().putBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, false).commit();
         }
         if (!preferences.contains(PreferenceKeyConstants.KEY_DEFAULT_STATION)) {
             Log.d("BBB", "SETTING DEF STATIONS FOR FIRST TIME TO MAIN");

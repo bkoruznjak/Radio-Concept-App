@@ -16,8 +16,8 @@
         android:id="@+id/antenaTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:tabIndicatorColor="@color/colorDivider"
-        app:tabSelectedTextColor="@color/colorTextIcons"
-        app:tabTextColor="@color/colorTextIcons" />
+        android:background="@color/md_deep_orange_500"
+        app:tabIndicatorColor="@color/md_deep_orange_900"
+        app:tabSelectedTextColor="@color/md_grey_100"
+        app:tabTextColor="@color/md_grey_100" />
 </android.support.design.widget.AppBarLayout>

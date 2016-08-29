@@ -251,12 +251,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("bbb", "FAB CLICKED");
                 if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
                     myBus.post(RadioCommandEnum.PAUSE);
-                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                     mBtnMainController.clearAnimation();
                 } else if (mRadioStateModel.getStateEnum() == RadioStateEnum.BUFFERING) {
                     //todo ovo treba malo doradit, stavio sam tu samo da mozes prekinut buffeering na naglo
                     myBus.post(RadioCommandEnum.PAUSE);
-                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                     mBtnMainController.clearAnimation();
                 } else if (mRadioStateModel.isServiceUp()) {
                     myBus.post(RadioCommandEnum.PLAY);
@@ -363,28 +363,28 @@ public class MainActivity extends AppCompatActivity {
     public void handleStreamStateChange(RadioStateEnum streamState) {
         switch (streamState) {
             case BUFFERING:
-                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_black_24dp));
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
                 mBtnMainController.startAnimation(infiniteRotateAnim);
                 break;
             case ENDED:
                 mBtnMainController.clearAnimation();
-                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                 break;
             case IDLE:
                 mBtnMainController.clearAnimation();
-                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                 break;
             case PREPARING:
-                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_black_24dp));
+                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
                 mBtnMainController.startAnimation(infiniteRotateAnim);
                 break;
             case READY:
                 //stop buffering animation if it exists
                 mBtnMainController.clearAnimation();
                 if (mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
-                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
                 } else {
-                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                 }
                 break;
             case UNKNOWN:
@@ -395,12 +395,12 @@ public class MainActivity extends AppCompatActivity {
     private void refreshControlButtonDrawable(RadioStateModel stateModel, Animation animation) {
         //ovo ojačaj kod jer treba maknut rucno dodavanje na gumb animacije i sranja.
         if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.PREPARING) {
-            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_black_24dp));
+            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
             mBtnMainController.startAnimation(infiniteRotateAnim);
         } else if (stateModel.isMusicPlaying() && !stateModel.isStreamInterrupted()) {
-            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
         } else {
-            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
         }
     }
 

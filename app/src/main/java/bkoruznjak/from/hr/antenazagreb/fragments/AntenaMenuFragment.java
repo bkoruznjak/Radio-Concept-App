@@ -107,10 +107,10 @@ public class AntenaMenuFragment extends MenuFragment {
         MenuItem tempMenuItem = drawerMenu.getItem(menuItemIndex);
         if (item.getItemId() == tempMenuItem.getItemId() && tempMenuItem.getGroupId() == R.id.stream_menu_group) {
         tempMenuItem.setChecked(true);
-        tempMenuItem.setIcon(R.drawable.ic_pause_black_24dp);
+        tempMenuItem.setIcon(R.drawable.ic_pause_white_24dp);
         } else if (tempMenuItem.getGroupId() == R.id.stream_menu_group) {
         tempMenuItem.setChecked(false);
-        tempMenuItem.setIcon(R.drawable.ic_play_arrow_black_24dp);
+        tempMenuItem.setIcon(R.drawable.ic_play_arrow_white_24dp);
         }
         }
         }
@@ -182,37 +182,37 @@ public class AntenaMenuFragment extends MenuFragment {
                 case R.id.menu_main_stream:
                     if (StreamUriConstants.ANTENA_MAIN.equals(streamURI)) {
                         streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_black_24dp);
+                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
                     }
                     break;
                 case R.id.menu_hit_stream:
                     if (StreamUriConstants.ANTENA_HIT.equals(streamURI)) {
                         streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_black_24dp);
+                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
                     }
                     break;
                 case R.id.menu_rock_stream:
                     if (StreamUriConstants.ANTENA_ROCK.equals(streamURI)) {
                         streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_black_24dp);
+                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
                     }
                     break;
                 case R.id.menu_2000_stream:
                     if (StreamUriConstants.ANTENA_2000.equals(streamURI)) {
                         streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_black_24dp);
+                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
                     }
                     break;
                 case R.id.menu_90s_stream:
                     if (StreamUriConstants.ANTENA_90.equals(streamURI)) {
                         streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_black_24dp);
+                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
                     }
                     break;
                 case R.id.menu_80s_stream:
                     if (StreamUriConstants.ANTENA_80.equals(streamURI)) {
                         streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_black_24dp);
+                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
                     }
                     break;
             }

@@ -24,6 +24,7 @@ public class AntenaTabFactory {
         LinearLayout customTabLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.antena_tab_layout, null);
         TextView newsTabText = (TextView) customTabLayout.findViewById(R.id.tabName);
         newsTabText.setText(tabTitle);
+        newsTabText.setTextColor(mContext.getResources().getColor(R.color.md_grey_100));
         ImageView newsTabIcon = (ImageView) customTabLayout.findViewById(R.id.tabIcon);
         newsTabIcon.setImageDrawable(tabIcon);
         return customTabLayout;

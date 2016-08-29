@@ -3,27 +3,27 @@
     <group android:id="@+id/stream_menu_group">
         <item
             android:id="@+id/menu_main_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:icon="@drawable/ic_play_arrow_white_24dp"
             android:title="Main Stream" />
         <item
             android:id="@+id/menu_hit_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:icon="@drawable/ic_play_arrow_white_24dp"
             android:title="Hit Stream" />
         <item
             android:id="@+id/menu_rock_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:icon="@drawable/ic_play_arrow_white_24dp"
             android:title="Rock Stream" />
         <item
             android:id="@+id/menu_2000_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:icon="@drawable/ic_play_arrow_white_24dp"
             android:title="2000 Stream" />
         <item
             android:id="@+id/menu_90s_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:icon="@drawable/ic_play_arrow_white_24dp"
             android:title="90s Stream" />
         <item
             android:id="@+id/menu_80s_stream"
-            android:icon="@drawable/ic_play_arrow_black_24dp"
+            android:icon="@drawable/ic_play_arrow_white_24dp"
             android:title="80s Stream" />
     </group>
     <group android:id="@+id/general_menu_group">
