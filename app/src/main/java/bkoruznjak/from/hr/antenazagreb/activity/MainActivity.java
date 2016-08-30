@@ -2,8 +2,10 @@ package bkoruznjak.from.hr.antenazagreb.activity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -35,6 +37,7 @@ import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.fragments.AntenaMenuFragment;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
+import bkoruznjak.from.hr.antenazagreb.model.bus.RadioVolumeModel;
 import bkoruznjak.from.hr.antenazagreb.service.RadioService;
 import bkoruznjak.from.hr.antenazagreb.views.AntenaTabFactory;
 import butterknife.BindView;
@@ -79,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     private RadioBus myBus;
     private boolean isRadioStationPickerShown = false;
     private SharedPreferences mPreferences;
+    private AudioManager mAudioManager;
+    private RadioVolumeModel mRadioVolume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
         handleAutoPlay(mPreferences.getBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true));
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
 
     private void handleAutoPlay(boolean isAutoplayOn) {
@@ -161,6 +167,39 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    /**
+     * Overridden method to catch volume key input and notify all views to adjust acordingly
+     *
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            int volume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            if (mRadioVolume == null) {
+                mRadioVolume = new RadioVolumeModel(volume);
+            } else {
+                mRadioVolume.setVolume(volume);
+            }
+            //Log.d("bbb","volume:" + volume);
+            myBus.post(mRadioVolume);
+            return super.dispatchKeyEvent(event);
+
+        } else if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
+            int volume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            if (mRadioVolume == null) {
+                mRadioVolume = new RadioVolumeModel(volume);
+            } else {
+                mRadioVolume.setVolume(volume);
+            }
+            //Log.d("bbb","volume:" + volume);
+            myBus.post(mRadioVolume);
+            return super.dispatchKeyEvent(event);
+        }
+        return super.dispatchKeyEvent(event);
     }
 
 
@@ -328,11 +367,11 @@ public class MainActivity extends AppCompatActivity {
         antenaTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         AntenaTabFactory tabFactory = new AntenaTabFactory(this);
-        antenaTabLayout.getTabAt(0).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.radio_tab), getResources().getDrawable(R.drawable.ic_radio_white_24dp)));
-        antenaTabLayout.getTabAt(1).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.news_tab), getResources().getDrawable(R.drawable.ic_news_white_24dp)));
-        antenaTabLayout.getTabAt(2).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.podcast_tab), getResources().getDrawable(R.drawable.ic_mic_white_24dp)));
-        antenaTabLayout.getTabAt(3).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.promo_tab), getResources().getDrawable(R.drawable.ic_promo_border_white_24dp)));
-        antenaTabLayout.getTabAt(4).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.social_tab), getResources().getDrawable(R.drawable.ic_social_white_24dp)));
+        antenaTabLayout.getTabAt(0).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.promo_tab), getResources().getDrawable(R.drawable.ic_promo_border_white_24dp)));
+        antenaTabLayout.getTabAt(1).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.social_tab), getResources().getDrawable(R.drawable.ic_social_white_24dp)));
+        antenaTabLayout.getTabAt(2).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.radio_tab), getResources().getDrawable(R.drawable.ic_radio_white_24dp)));
+        antenaTabLayout.getTabAt(3).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.podcast_tab), getResources().getDrawable(R.drawable.ic_mic_white_24dp)));
+        antenaTabLayout.getTabAt(4).setCustomView(tabFactory.generateCustomTab(getResources().getString(R.string.news_tab), getResources().getDrawable(R.drawable.ic_news_white_24dp)));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.antenaViewPager);
         final AntenaPagerAdapter adapter = new AntenaPagerAdapter
@@ -356,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //set the initial load on the radio screen
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(2);
     }
 
     @Subscribe

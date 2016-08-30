@@ -27,6 +27,7 @@ import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
+import bkoruznjak.from.hr.antenazagreb.model.bus.RadioVolumeModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 import bkoruznjak.from.hr.antenazagreb.views.RippleBackground;
 import bkoruznjak.from.hr.antenazagreb.views.VolumeSlider;
@@ -81,6 +82,15 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
         super.onPause();
         myBus.unregister(this);
         mPreferences.edit().putInt(PreferenceKeyConstants.KEY_VOLUME, radioVolume).commit();
+    }
+
+    @Override
+    public void changeSector(int sectorID) {
+        //Log.d("BBB", "sector id:" + sectorID);
+        radioVolume = sectorID;
+        RadioApplication.getInstance().setRadioVolume(radioVolume);
+        AudioManager audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, sectorID, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
     }
 
     private void init(View view) {
@@ -175,13 +185,10 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
         notificationManager.notify(1337, notification);
     }
 
-    @Override
-    public void changeSector(int sectorID) {
-        //Log.d("BBB", "sector id:" + sectorID);
-        radioVolume = sectorID;
-        RadioApplication.getInstance().setRadioVolume(radioVolume);
-        AudioManager audioManager =
-                (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, sectorID, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+    @Subscribe
+    public void handleVolumeKeyPress(RadioVolumeModel volumeEvent) {
+        int volume = volumeEvent.getVolume();
+        volumeControl.updateSliderWithSectorID(volume);
+        RadioApplication.getInstance().setRadioVolume(volume);
     }
 }

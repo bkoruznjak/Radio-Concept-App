@@ -26,19 +26,19 @@ public class AntenaPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                RadioFragment tab2 = new RadioFragment();
-                return tab2;
-            case 1:
-                NewsFragment tab1 = new NewsFragment();
+                PromoFragment tab1 = new PromoFragment();
                 return tab1;
+            case 1:
+                SocialFragment tab2 = new SocialFragment();
+                return tab2;
             case 2:
-                PodcastFragment tab3 = new PodcastFragment();
+                RadioFragment tab3 = new RadioFragment();
                 return tab3;
             case 3:
-                PromoFragment tab4 = new PromoFragment();
+                PodcastFragment tab4 = new PodcastFragment();
                 return tab4;
             case 4:
-                SocialFragment tab5 = new SocialFragment();
+                NewsFragment tab5 = new NewsFragment();
                 return tab5;
             default:
                 return null;
