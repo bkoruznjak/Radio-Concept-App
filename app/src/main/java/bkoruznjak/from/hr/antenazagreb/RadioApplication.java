@@ -12,6 +12,7 @@ import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
+import bkoruznjak.from.hr.antenazagreb.util.FontsOverrideUtils;
 import bkoruznjak.from.hr.antenazagreb.util.NetworkUtils;
 import io.fabric.sdk.android.Fabric;
 
@@ -40,6 +41,11 @@ public class RadioApplication extends Application {
         LeakCanary.install(this);
         NetworkUtils.registerLoganSquareTypeConverters();
         Fabric.with(this, new Crashlytics());
+
+        FontsOverrideUtils.setDefaultFont(this, "DEFAULT", "avenir_book.ttf");
+        FontsOverrideUtils.setDefaultFont(this, "MONOSPACE", "avenir_light.ttf");
+        FontsOverrideUtils.setDefaultFont(this, "SERIF", "avenir_medium.ttf");
+        FontsOverrideUtils.setDefaultFont(this, "SANS_SERIF", "avenir_medium.ttf");
 
 
         SharedPreferences preferences = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
