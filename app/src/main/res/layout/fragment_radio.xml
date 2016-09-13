@@ -17,13 +17,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/songInfoTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/songCardId"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
             android:layout_gravity="top|center"
-            android:text="Author : Title"
-            android:textSize="10sp" />
+            android:layout_marginTop="16dp"
+            card_view:cardBackgroundColor="@color/md_deep_orange_500"
+            card_view:cardCornerRadius="15dp">
+
+            <TextView
+                android:id="@+id/songInfoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="Author : Title"
+                android:textColor="@color/md_grey_100"
+                android:textSize="16sp" />
+
+        </android.support.v7.widget.CardView>
 
         <TextView
             android:id="@+id/radioStateTextView"
