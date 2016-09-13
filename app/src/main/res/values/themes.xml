@@ -22,6 +22,12 @@
         <item name="colorPrimaryDark">@color/md_deep_orange_900</item>
         <item name="colorAccent">@color/md_deep_orange_500</item>
     </style>
+
+    <style name="AntenaButtonStyleColored" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/md_deep_orange_500</item>
+        <item name="android:textColor">@color/md_grey_100</item>
+    </style>
+
 </resources>
 
 

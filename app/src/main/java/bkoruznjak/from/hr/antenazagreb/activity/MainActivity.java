@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("bbb", "80's stream pressed");
-                handleStreamURI(StreamUriConstants.ANTENA_HIT);
+                handleStreamURI(StreamUriConstants.ANTENA_80);
             }
         });
     }

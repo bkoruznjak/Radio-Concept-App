@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -44,6 +45,7 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     TextView txtSongInfo;
     View radioFragmentView;
     int radioVolume;
+    private int mNotificationIcon;
     private RadioBus myBus;
     private RadioStateModel mRadioStateModel;
     private Animation infiniteRotateAnim;
@@ -99,7 +101,10 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
         rippleBackground = (RippleBackground) view.findViewById(R.id.content);
         infiniteRotateAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.inf_rotate);
         myBus = ((RadioApplication) getActivity().getApplication()).getBus();
-        mRadioStateModel = ((RadioApplication) getActivity().getApplication()).getRadioStateModel();
+        RadioApplication antenaApp = ((RadioApplication) getActivity().getApplication());
+        mRadioStateModel = antenaApp.getRadioStateModel();
+        mNotificationIcon = antenaApp.getRadioNotificationIcon();
+
         updateViewsByRadioState(mRadioStateModel);
         bindCustomListeners();
     }
@@ -177,8 +182,10 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
         Notification notification = new Notification.Builder(getActivity())
                 .setContentTitle("Antena Radio")
                 .setContentText(song.getmAuthor().concat(" - ").concat(song.getTitle()))
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(mNotificationIcon)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), mNotificationIcon))
                 .setContentIntent(pendingIntent)
+                .setOngoing(true)
                 .build();
 
         notification.flags |= Notification.FLAG_NO_CLEAR;

@@ -23,6 +23,7 @@ public class RadioApplication extends Application {
     private static RadioBus myBus;
     private static RadioStateModel myStateModel;
     private int radioVolume;
+    private int radioNotificationIcon;
 
     public static RadioApplication getInstance() {
         return instance;
@@ -59,6 +60,9 @@ public class RadioApplication extends Application {
             preferences.edit().putInt(PreferenceKeyConstants.KEY_VOLUME, 5).commit();
         }
         radioVolume = preferences.getInt(PreferenceKeyConstants.KEY_VOLUME, 5);
+
+        boolean useVector = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        radioNotificationIcon = useVector ? R.drawable.antena_icon_vector : R.drawable.antena_icon;
     }
 
     public RadioBus getBus() {
@@ -82,5 +86,9 @@ public class RadioApplication extends Application {
 
     public void setRadioVolume(int radioVolume) {
         this.radioVolume = radioVolume;
+    }
+
+    public int getRadioNotificationIcon() {
+        return this.radioNotificationIcon;
     }
 }

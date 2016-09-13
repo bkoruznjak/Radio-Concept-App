@@ -8,13 +8,16 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mxn.soul.flowingdrawer_core.MenuFragment;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import bkoruznjak.from.hr.antenazagreb.R;
@@ -23,13 +26,33 @@ import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
+import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 import bkoruznjak.from.hr.antenazagreb.views.CircleTransformation;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by bkoruznjak on 08/08/16.
  */
 public class AntenaMenuFragment extends MenuFragment {
 
+
+    @BindView(R.id.setting_autoplay)
+    public SwitchCompat settingAutoplay;
+    @BindView(R.id.setting_keep_articles)
+    public SwitchCompat settingKeepArticles;
+    @BindView(R.id.ivMenuUserProfilePhoto)
+    public ImageView drawerImage;
+    @BindView(R.id.radioStationNameId)
+    public TextView radioStationText;
+    @BindView(R.id.songNameId)
+    public TextView currentlyPlayingText;
+    @BindView(R.id.setting_about)
+    public Button buttonAbout;
+    @BindView(R.id.setting_feedback)
+    public Button buttonFeedback;
+    @BindView(R.id.setting_third_party)
+    public Button buttonThirdParty;
 
     private RadioBus myBus;
     private RadioStateModel mRadioStateModel;
@@ -67,92 +90,70 @@ public class AntenaMenuFragment extends MenuFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu, container, false);
-        final NavigationView naviView = (NavigationView) view.findViewById(R.id.vNavigation);
-        View headerView = naviView.getHeaderView(0);
-        final Menu drawerMenu = naviView.getMenu();
-        final int menuSize = drawerMenu.size();
-        //initial checkup to set active stream
-        handleStreamMenuList(mRadioStateModel.getStreamUri(), drawerMenu);
-
-        /** OLD NAVIGATION - LEAVING IT COMENTED CAUSE YOU NEVER KNOW
-
-         naviView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-        @Override public boolean onNavigationItemSelected(MenuItem item) {
-        if (item.getGroupId() == R.id.stream_menu_group) {
-        //handle checking logic
-        if (!item.isChecked()) {
-        switch (item.getItemId()) {
-        case R.id.menu_main_stream:
-        handleStreamURI(StreamUriConstants.ANTENA_MAIN);
-        break;
-        case R.id.menu_hit_stream:
-        handleStreamURI(StreamUriConstants.ANTENA_HIT);
-        break;
-        case R.id.menu_rock_stream:
-        handleStreamURI(StreamUriConstants.ANTENA_ROCK);
-        break;
-        case R.id.menu_2000_stream:
-        handleStreamURI(StreamUriConstants.ANTENA_2000);
-        break;
-        case R.id.menu_90s_stream:
-        handleStreamURI(StreamUriConstants.ANTENA_90);
-        break;
-        case R.id.menu_80s_stream:
-        handleStreamURI(StreamUriConstants.ANTENA_80);
-        break;
-        }
-
-        for (int menuItemIndex = 0; menuItemIndex < menuSize; menuItemIndex++) {
-        MenuItem tempMenuItem = drawerMenu.getItem(menuItemIndex);
-        if (item.getItemId() == tempMenuItem.getItemId() && tempMenuItem.getGroupId() == R.id.stream_menu_group) {
-        tempMenuItem.setChecked(true);
-        tempMenuItem.setIcon(R.drawable.ic_pause_white_24dp);
-        } else if (tempMenuItem.getGroupId() == R.id.stream_menu_group) {
-        tempMenuItem.setChecked(false);
-        tempMenuItem.setIcon(R.drawable.ic_play_arrow_white_24dp);
-        }
-        }
-        }
-        }
-
-        return false;
-        }
-        });
-
-         **/
-        ImageView drawerHeaderImage = (ImageView) headerView.findViewById(R.id.ivMenuUserProfilePhoto);
+        View drawerMenu = inflater.inflate(R.layout.fragment_drawer_menu, container, false);
+        ButterKnife.bind(this, drawerMenu);
+        final NavigationView naviView = (NavigationView) drawerMenu.findViewById(R.id.vNavigation);
+        ImageView drawerHeaderImage = (ImageView) drawerMenu.findViewById(R.id.ivMenuUserProfilePhoto);
         setupHeader(drawerHeaderImage);
 
-        SwitchCompat autoplaySetting = (SwitchCompat) naviView.getMenu().getItem(2).getActionView();
+        //radio and song information
+        radioStationText.setText(mRadioStateModel.getRadioStationName());
+        currentlyPlayingText.setText(mRadioStateModel.getSongAuthor().concat(" - ").concat(mRadioStateModel.getSongTitle()));
+        currentlyPlayingText.setSelected(true);
+        //switch settings department
         if (isAutoplayOn) {
-            autoplaySetting.setChecked(true);
+            settingAutoplay.setChecked(true);
         } else {
-            autoplaySetting.setChecked(false);
+            settingAutoplay.setChecked(false);
         }
-        autoplaySetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        settingAutoplay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("bbb", "stavljam stream autoplay na" + isChecked);
                 mPreferences.edit().putBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, isChecked).commit();
             }
         });
-
-        SwitchCompat keepArticlesSetting = (SwitchCompat) naviView.getMenu().getItem(3).getActionView();
         if (isStoringArticleData) {
-            keepArticlesSetting.setChecked(true);
+            settingKeepArticles.setChecked(true);
         } else {
-            keepArticlesSetting.setChecked(false);
+            settingKeepArticles.setChecked(false);
         }
-        keepArticlesSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        settingKeepArticles.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("bbb", "stavljam keep articles na" + isChecked);
                 mPreferences.edit().putBoolean(PreferenceKeyConstants.KEY_STORE_ARTICLES, isChecked).commit();
             }
         });
+        //other info department
+        buttonAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("bbb", "idem na about");
+                Toast.makeText(getActivity(), "about clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        buttonFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("bbb", "idem na feedback");
+                Toast.makeText(getActivity(), "feedback clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        buttonThirdParty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("bbb", "idem na third party");
+                Toast.makeText(getActivity(), "third party clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        return setupReveal(view);
+        return setupReveal(drawerMenu);
+    }
+
+    @Subscribe
+    public void handleSongMetadata(SongModel song) {
+        radioStationText.setText(mRadioStateModel.getRadioStationName());
+        currentlyPlayingText.setText(mRadioStateModel.getSongAuthor().concat(" - ").concat(mRadioStateModel.getSongTitle()));
+        currentlyPlayingText.setSelected(true);
     }
 
     /**
@@ -168,57 +169,6 @@ public class AntenaMenuFragment extends MenuFragment {
             mRadioStateModel.setStreamUri(streamURI);
         }
     }
-
-    /**
-     * Method handles the current selected stream and then goes through all menu icons and
-     * updates the one stream that is currently selected / playing
-     *
-     * @param streamURI
-     * @param streamMenu
-     */
-    private void handleStreamMenuList(String streamURI, Menu streamMenu) {
-        for (int menuItemIndex = 0; menuItemIndex < streamMenu.size(); menuItemIndex++) {
-            switch (streamMenu.getItem(menuItemIndex).getItemId()) {
-                case R.id.menu_main_stream:
-                    if (StreamUriConstants.ANTENA_MAIN.equals(streamURI)) {
-                        streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
-                    }
-                    break;
-                case R.id.menu_hit_stream:
-                    if (StreamUriConstants.ANTENA_HIT.equals(streamURI)) {
-                        streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
-                    }
-                    break;
-                case R.id.menu_rock_stream:
-                    if (StreamUriConstants.ANTENA_ROCK.equals(streamURI)) {
-                        streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
-                    }
-                    break;
-                case R.id.menu_2000_stream:
-                    if (StreamUriConstants.ANTENA_2000.equals(streamURI)) {
-                        streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
-                    }
-                    break;
-                case R.id.menu_90s_stream:
-                    if (StreamUriConstants.ANTENA_90.equals(streamURI)) {
-                        streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
-                    }
-                    break;
-                case R.id.menu_80s_stream:
-                    if (StreamUriConstants.ANTENA_80.equals(streamURI)) {
-                        streamMenu.getItem(menuItemIndex).setChecked(true);
-                        streamMenu.getItem(menuItemIndex).setIcon(R.drawable.ic_pause_white_24dp);
-                    }
-                    break;
-            }
-        }
-    }
-
 
     private void setupHeader(ImageView ivMenuUserProfilePhoto) {
         int avatarSize = getResources().getDimensionPixelSize(R.dimen.item_height);

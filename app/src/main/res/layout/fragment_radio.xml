@@ -18,19 +18,19 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/radioStateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
-            android:text="--- RADIO STATE ---" />
-
-        <TextView
             android:id="@+id/songInfoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
+            android:layout_gravity="top|center"
             android:text="Author : Title"
             android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/radioStateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:text="--- RADIO STATE ---" />
 
         <ImageView
             android:layout_width="100dp"

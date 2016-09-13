@@ -7,7 +7,7 @@
             android:title="@string/setting_current_stream" />
         <item
             android:id="@+id/menu_current_song"
-            android:icon="@drawable/ic_artist_black_24dp"
+            android:icon="@drawable/ic_artist_grey_24dp"
             android:title="@string/setting_current_song" />
     </group>
     <group
@@ -45,5 +45,10 @@
             android:id="@+id/menu_app_author"
             android:icon="@drawable/ic_app_author_black_24dp"
             android:title="@string/setting_app_author" />
+
+        <item
+            android:id="@+id/menu_testiram"
+            app:actionLayout="@layout/menu_item_view"
+            app:showAsAction="always" />
     </group>
 </menu>

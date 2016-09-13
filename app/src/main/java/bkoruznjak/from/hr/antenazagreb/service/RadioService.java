@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaCodec;
 import android.net.Uri;
@@ -49,6 +50,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
     private ExoPlayer mExoPlayer;
     private IcyMetadataHandler icyMetadataHandler;
     private MediaCodecAudioTrackRenderer mAudioTrackRenderer;
+    private int mNotificationIcon;
 
     @Nullable
     @Override
@@ -60,7 +62,9 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
     public void onCreate() {
         super.onCreate();
         myBus = ((RadioApplication) getApplication()).getBus();
-        radioState = ((RadioApplication) getApplication()).getRadioStateModel();
+        RadioApplication antenaApp = ((RadioApplication) getApplication());
+        radioState = antenaApp.getRadioStateModel();
+        mNotificationIcon = antenaApp.getRadioNotificationIcon();
         radioState.setServiceUp(true);
         if (mExoPlayer == null) {
             mExoPlayer = ExoPlayer.Factory.newInstance(1);
@@ -85,7 +89,10 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
         Notification notification = new Notification.Builder(this)
                 .setContentTitle("Antena Radio")
                 .setContentText(radioState.getSongAuthor().concat(" - ").concat(radioState.getSongTitle()))
+                .setSmallIcon(mNotificationIcon)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), mNotificationIcon))
                 .setContentIntent(pendingIntent)
+                .setOngoing(true)
                 .build();
 
         notification.flags |= Notification.FLAG_NO_CLEAR;

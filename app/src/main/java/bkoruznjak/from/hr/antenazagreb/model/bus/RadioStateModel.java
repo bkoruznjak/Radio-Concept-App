@@ -2,6 +2,7 @@ package bkoruznjak.from.hr.antenazagreb.model.bus;
 
 import java.io.Serializable;
 
+import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 
 /**
@@ -15,6 +16,7 @@ public class RadioStateModel implements Serializable{
     private boolean isStreamInterrupted;
 
     private String streamUri;
+    private String radioStationName;
     private String songAuthor;
     private String songTitle;
 
@@ -29,6 +31,7 @@ public class RadioStateModel implements Serializable{
         this.isMusicPlaying = isMusicPlaying;
 
         this.setStreamUri("Unknown");
+        this.setRadioStationName("Unknown");
         this.setSongAuthor("Unknown");
         this.setSongTitle("Unknown");
         this.setStateEnum(RadioStateEnum.UNKNOWN);
@@ -56,6 +59,21 @@ public class RadioStateModel implements Serializable{
 
     public void setStreamUri(String streamUri) {
         this.streamUri = streamUri;
+        if (StreamUriConstants.ANTENA_MAIN.equals(streamUri)) {
+            radioStationName = "Antena Live";
+        } else if (StreamUriConstants.ANTENA_80.equals(streamUri)) {
+            radioStationName = "Antena 80's";
+        } else if (StreamUriConstants.ANTENA_ROCK.equals(streamUri)) {
+            radioStationName = "Antena Rock";
+        }
+    }
+
+    public String getRadioStationName() {
+        return radioStationName;
+    }
+
+    public void setRadioStationName(String radioStationName) {
+        this.radioStationName = radioStationName;
     }
 
     public String getSongAuthor() {
@@ -95,6 +113,7 @@ public class RadioStateModel implements Serializable{
         return ""
                 .concat("service running: " + isServiceUp)
                 .concat(", music playing: " + isMusicPlaying)
+                .concat(", radio station: " + radioStationName)
                 .concat(", stream uri: " + streamUri)
                 .concat(", stream author: " + songAuthor)
                 .concat(", stream title: " + songTitle);
