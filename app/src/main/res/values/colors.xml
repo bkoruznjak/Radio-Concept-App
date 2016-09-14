@@ -21,6 +21,9 @@
     <color name="colorDivider">#B6B6B6</color>
     <color name="colorAccent">#FF5722</color>
 
+    <color name="antena_beige">#ede6d8</color>
+    <color name="antena_black">#3e3b35</color>
+
 
     <color name="colorSecondary">@color/material_deep_teal_200</color>
     <color name="colorSecondaryDark">@color/material_deep_teal_500</color>

@@ -10,9 +10,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:alpha="0"
-        android:src="@android:drawable/ic_menu_compass"
         app:backgroundTint="@color/colorAccent"
-        app:fabSize="mini" />
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_live_stream_icon" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_rock_stream"
@@ -21,9 +21,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:alpha="0"
-        android:src="@android:drawable/ic_menu_myplaces"
         app:backgroundTint="@color/colorAccent"
-        app:fabSize="mini" />
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_rock_stream_icon" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_80_stream"
@@ -32,7 +32,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:alpha="0"
-        android:src="@android:drawable/ic_menu_share"
         app:backgroundTint="@color/colorAccent"
-        app:fabSize="mini" />
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_80_stream_icon" />
 </FrameLayout>

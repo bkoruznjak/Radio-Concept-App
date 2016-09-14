@@ -44,7 +44,7 @@ public class RadioApplication extends Application {
 
         FontsOverrideUtils.setDefaultFont(this, "DEFAULT", "avenir_book.ttf");
         FontsOverrideUtils.setDefaultFont(this, "MONOSPACE", "avenir_light.ttf");
-        FontsOverrideUtils.setDefaultFont(this, "SERIF", "avenir_medium.ttf");
+        FontsOverrideUtils.setDefaultFont(this, "SERIF", "roboto_regular.ttf");
         FontsOverrideUtils.setDefaultFont(this, "SANS_SERIF", "avenir_medium.ttf");
 
 

@@ -5,7 +5,7 @@
     android:id="@+id/singleArticleContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_grey_100"
+    android:background="@color/antena_beige"
     android:orientation="vertical"
     tools:context=".activity.SingleArticleActivity">
 
@@ -17,7 +17,7 @@
         android:layout_marginTop="2dp"
         android:paddingBottom="2dp"
         android:paddingTop="2dp"
-        flickr:cardBackgroundColor="@color/md_grey_100"
+        flickr:cardBackgroundColor="@color/antena_beige"
         flickr:cardCornerRadius="4dp"
         flickr:cardPreventCornerOverlap="false"
         flickr:contentPaddingBottom="16dp"

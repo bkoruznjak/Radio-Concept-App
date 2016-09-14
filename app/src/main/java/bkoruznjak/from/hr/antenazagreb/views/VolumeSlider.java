@@ -219,6 +219,7 @@ public class VolumeSlider extends View {
             // draw png
             mThumbImage.setBounds(mThumbX - mThumbSize / 2, mThumbY - mThumbSize / 2, mThumbX + mThumbSize / 2, mThumbY + mThumbSize / 2);
             mThumbImage.draw(canvas);
+            canvas.drawText("" + sectorID, mThumbX, mThumbY + 15f, mVolumeTextPaint);
         } else {
             // draw colored circle
             mPaint.setColor(mThumbColor);

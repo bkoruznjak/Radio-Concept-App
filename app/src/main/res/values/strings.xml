@@ -17,7 +17,6 @@
     <string name="setting_air_title">Trenutno svira:</string>
     <string name="setting_current_stream">You currently have no stream selected</string>
     <string name="setting_current_song">Unknown - Unknown</string>
-
     <string name="setting_autoplay">Play on startup</string>
     <string name="setting_keep_articles">Keep articles</string>
     <string name="setting_about">About</string>
@@ -26,6 +25,10 @@
 
     <string name="setting_app_version">Antena Radio v1.0.0</string>
     <string name="setting_app_author">Premium Binary 2016</string>
+
+    <!-- RADIO FRAGMENT -->
+    <string name="author">Izvođač</string>
+    <string name="song">Pjesma</string>
 
 
 </resources>

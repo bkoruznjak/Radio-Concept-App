@@ -18,6 +18,6 @@
         android:layout_height="wrap_content"
         android:background="@color/md_deep_orange_500"
         app:tabIndicatorColor="@color/md_deep_orange_900"
-        app:tabSelectedTextColor="@color/md_grey_100"
-        app:tabTextColor="@color/md_grey_100" />
+        app:tabSelectedTextColor="@color/antena_beige"
+        app:tabTextColor="@color/antena_beige" />
 </android.support.design.widget.AppBarLayout>

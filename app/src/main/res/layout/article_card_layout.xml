@@ -9,7 +9,7 @@
         android:id="@+id/newsCardLayout"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        card_view:cardBackgroundColor="@color/colorPrimaryLight"
+        card_view:cardBackgroundColor="@color/antena_beige"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="5dp"
         card_view:cardUseCompatPadding="true">
@@ -32,7 +32,6 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_weight="6"
                 android:orientation="vertical">
 

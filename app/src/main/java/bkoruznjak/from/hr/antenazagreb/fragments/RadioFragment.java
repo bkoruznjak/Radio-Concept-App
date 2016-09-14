@@ -41,8 +41,10 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     VolumeSlider volumeControl;
     @BindView(R.id.radioStateTextView)
     TextView txtRadioState;
+    @BindView(R.id.authorInfoTextView)
+    TextView txtAuthorName;
     @BindView(R.id.songInfoTextView)
-    TextView txtSongInfo;
+    TextView txtSongName;
     View radioFragmentView;
     int radioVolume;
     private int mNotificationIcon;
@@ -115,10 +117,8 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
 
     private void updateViewsByRadioState(RadioStateModel stateModel) {
         Log.d("BBB", "updating views with state model:" + stateModel.toString());
-        txtSongInfo.setText(stateModel.getSongAuthor()
-                .concat(" - ")
-                .concat(stateModel.getSongTitle()));
-
+        txtSongName.setText(stateModel.getSongTitle());
+        txtSongName.setSelected(true);
         txtRadioState.setText(stateModel.getStateEnum().toString());
         refreshControlButtonDrawable(stateModel, infiniteRotateAnim);
     }
@@ -167,7 +167,9 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     @Subscribe
     public void handleSongMetadata(SongModel song) {
         //update view song data
-        txtSongInfo.setText(song.getmAuthor().concat(" - ").concat(song.getTitle()));
+        txtAuthorName.setText(song.getmAuthor());
+        txtSongName.setText(song.getTitle());
+        txtSongName.setSelected(true);
         //update notification song data
         NotificationManager notificationManager =
                 (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
