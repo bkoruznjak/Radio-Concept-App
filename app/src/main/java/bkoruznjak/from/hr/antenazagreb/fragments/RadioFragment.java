@@ -39,8 +39,8 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
 
     @BindView(R.id.volumeControl)
     VolumeSlider volumeControl;
-    @BindView(R.id.radioStateTextView)
-    TextView txtRadioState;
+    //    @BindView(R.id.radioStateTextView)
+//    TextView txtRadioState;
     @BindView(R.id.authorInfoTextView)
     TextView txtAuthorName;
     @BindView(R.id.songInfoTextView)
@@ -117,9 +117,10 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
 
     private void updateViewsByRadioState(RadioStateModel stateModel) {
         Log.d("BBB", "updating views with state model:" + stateModel.toString());
-        txtSongName.setText(stateModel.getSongTitle());
+        txtAuthorName.setText(stateModel.getSongAuthor().trim());
+        txtSongName.setText(stateModel.getSongTitle().trim());
         txtSongName.setSelected(true);
-        txtRadioState.setText(stateModel.getStateEnum().toString());
+//        txtRadioState.setText(stateModel.getStateEnum().toString());
         refreshControlButtonDrawable(stateModel, infiniteRotateAnim);
     }
 
@@ -136,22 +137,22 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     public void handleStreamStateChange(RadioStateEnum streamState) {
         switch (streamState) {
             case BUFFERING:
-                txtRadioState.setText(RadioStateEnum.BUFFERING.toString());
+//                txtRadioState.setText(RadioStateEnum.BUFFERING.toString());
                 break;
             case ENDED:
-                txtRadioState.setText(RadioStateEnum.ENDED.toString());
+//                txtRadioState.setText(RadioStateEnum.ENDED.toString());
                 rippleBackground.stopRippleAnimation();
                 break;
             case IDLE:
-                txtRadioState.setText(RadioStateEnum.IDLE.toString());
+//                txtRadioState.setText(RadioStateEnum.IDLE.toString());
                 rippleBackground.stopRippleAnimation();
                 break;
             case PREPARING:
-                txtRadioState.setText(RadioStateEnum.PREPARING.toString());
+//                txtRadioState.setText(RadioStateEnum.PREPARING.toString());
                 break;
             case READY:
                 //stop buffering animation if it exists
-                txtRadioState.setText(RadioStateEnum.READY.toString());
+//                txtRadioState.setText(RadioStateEnum.READY.toString());
                 if (mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
                     rippleBackground.startRippleAnimation();
                 } else {
@@ -159,7 +160,7 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
                 }
                 break;
             case UNKNOWN:
-                txtRadioState.setText(RadioStateEnum.UNKNOWN.toString());
+//                txtRadioState.setText(RadioStateEnum.UNKNOWN.toString());
                 break;
         }
     }
@@ -167,8 +168,8 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     @Subscribe
     public void handleSongMetadata(SongModel song) {
         //update view song data
-        txtAuthorName.setText(song.getmAuthor());
-        txtSongName.setText(song.getTitle());
+        txtAuthorName.setText(song.getmAuthor().trim());
+        txtSongName.setText(song.getTitle().trim());
         txtSongName.setSelected(true);
         //update notification song data
         NotificationManager notificationManager =

@@ -202,7 +202,7 @@ public class VolumeSlider extends View {
         mPaint.setAntiAlias(true);
 
         mVolumeTextPaint.setColor(Color.WHITE);
-        mVolumeTextPaint.setStyle(Paint.Style.STROKE);
+        mVolumeTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mVolumeTextPaint.setStrokeWidth(1.0f);
         mVolumeTextPaint.setAntiAlias(true);
         mVolumeTextPaint.setTextSize(50.0f);
@@ -219,7 +219,7 @@ public class VolumeSlider extends View {
             // draw png
             mThumbImage.setBounds(mThumbX - mThumbSize / 2, mThumbY - mThumbSize / 2, mThumbX + mThumbSize / 2, mThumbY + mThumbSize / 2);
             mThumbImage.draw(canvas);
-            canvas.drawText("" + sectorID, mThumbX, mThumbY + 15f, mVolumeTextPaint);
+            canvas.drawText("" + sectorID, mThumbX + 15f, mThumbY, mVolumeTextPaint);
         } else {
             // draw colored circle
             mPaint.setColor(mThumbColor);

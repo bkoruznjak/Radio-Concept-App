@@ -17,62 +17,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/songCardId"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             android:layout_marginTop="16dp"
-            card_view:cardBackgroundColor="@color/md_deep_orange_500"
-            card_view:cardCornerRadius="15dp">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="300dp"
+            <TextView
+                android:id="@+id/authorInfoTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:orientation="vertical">
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/author"
+                android:textColor="@color/antena_black"
+                android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/authorInfoTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="@string/author"
-                    android:textColor="@color/antena_beige"
-                    android:textSize="12sp" />
+            <TextView
+                android:id="@+id/songInfoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/song"
+                android:textColor="@color/antena_black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/songInfoTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="@string/song"
-                    android:textColor="@color/antena_beige"
-                    android:textSize="15sp" />
+        </LinearLayout>
 
-            </LinearLayout>
-
-
-        </android.support.v7.widget.CardView>
-
-        <TextView
-            android:id="@+id/radioStateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:text="--- RADIO STATE ---" />
 
         <ImageView
             android:layout_width="100dp"
@@ -96,7 +81,7 @@
                 circular:angle="3.14"
                 circular:border_color="@color/md_deep_orange_500"
                 circular:border_thickness="14dp"
-                circular:thumb_image="@drawable/circle_orange"
+                circular:thumb_image="@drawable/volume_control_icon"
                 circular:thumb_size="48dp" />
         </LinearLayout>
     </FrameLayout>
