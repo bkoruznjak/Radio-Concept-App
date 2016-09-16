@@ -12,7 +12,7 @@
         android:alpha="0"
         app:backgroundTint="@color/colorAccent"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_live_stream_icon" />
+        app:srcCompat="@drawable/ic_live_stream_icon_beige" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_rock_stream"
@@ -23,7 +23,7 @@
         android:alpha="0"
         app:backgroundTint="@color/colorAccent"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_rock_stream_icon" />
+        app:srcCompat="@drawable/ic_rock_stream_icon_beige" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_80_stream"
@@ -34,5 +34,5 @@
         android:alpha="0"
         app:backgroundTint="@color/colorAccent"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_80_stream_icon" />
+        app:srcCompat="@drawable/ic_80_stream_icon_beige" />
 </FrameLayout>

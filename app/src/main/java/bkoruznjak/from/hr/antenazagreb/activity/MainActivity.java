@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -337,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("bbb", "main stream pressed");
                 handleStreamURI(StreamUriConstants.ANTENA_MAIN);
+                refreshStreamButtons(StreamUriConstants.ANTENA_MAIN);
             }
         });
 
@@ -345,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("bbb", "rock stream pressed");
                 handleStreamURI(StreamUriConstants.ANTENA_ROCK);
+                refreshStreamButtons(StreamUriConstants.ANTENA_ROCK);
             }
         });
 
@@ -353,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("bbb", "80's stream pressed");
                 handleStreamURI(StreamUriConstants.ANTENA_80);
+                refreshStreamButtons(StreamUriConstants.ANTENA_80);
             }
         });
     }
@@ -443,8 +447,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void refreshStreamButtons(String radioStreamUri) {
+        mBtnMainStream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.md_deep_orange_500)));
+        mBtnMainStream.setImageDrawable(getResources().getDrawable(R.drawable.ic_live_stream_icon_beige));
+        mBtn80Stream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.md_deep_orange_500)));
+        mBtn80Stream.setImageDrawable(getResources().getDrawable(R.drawable.ic_80_stream_icon_beige));
+        mBtnRockStream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.md_deep_orange_500)));
+        mBtnRockStream.setImageDrawable(getResources().getDrawable(R.drawable.ic_rock_stream_icon_beige));
+        switch (radioStreamUri) {
+            case StreamUriConstants.ANTENA_MAIN:
+                mBtnMainStream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.antena_beige)));
+                mBtnMainStream.setImageDrawable(getResources().getDrawable(R.drawable.ic_live_stream_icon_orange));
+                break;
+            case StreamUriConstants.ANTENA_ROCK:
+                mBtnRockStream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.antena_beige)));
+                mBtnRockStream.setImageDrawable(getResources().getDrawable(R.drawable.ic_rock_stream_icon_orange));
+                break;
+            case StreamUriConstants.ANTENA_80:
+                mBtn80Stream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.antena_beige)));
+                mBtn80Stream.setImageDrawable(getResources().getDrawable(R.drawable.ic_80_stream_icon_orange));
+                break;
+        }
+    }
+
     private void updateViewsByRadioState(RadioStateModel stateModel) {
         refreshControlButtonDrawable(stateModel, infiniteRotateAnim);
+        refreshStreamButtons(stateModel.getStreamUri());
     }
 
     /**
