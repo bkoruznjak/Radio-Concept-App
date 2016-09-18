@@ -118,6 +118,7 @@ public class RippleBackground extends RelativeLayout {
             alphaAnimator.setStartDelay(i * rippleDelay);
             alphaAnimator.setDuration(rippleDurationTime);
             animatorList.add(alphaAnimator);
+//            rippleView.animate().scaleX(rippleScale).scaleY(rippleScale).alpha(0f);
         }
 
         animatorSet.playTogether(animatorList);
@@ -148,9 +149,11 @@ public class RippleBackground extends RelativeLayout {
     public void stopRippleAnimation() {
         if (isRippleAnimationRunning()) {
             if (animatorList != null) {
+                Log.d("bbb", "animatorList size" + animatorList.size());
                 for (Animator anim : animatorList) {
                     if (anim instanceof ObjectAnimator)
-                        ((ObjectAnimator) anim).setRepeatCount(0);
+                        Log.d("bbb", "stavljam repeat count na 0 trenutno " + ((ObjectAnimator) anim).getRepeatMode() + ", " + ((ObjectAnimator) anim).getRepeatCount());
+                    ((ObjectAnimator) anim).setRepeatCount(0);
                 }
             }
             animationRunning = false;
@@ -158,8 +161,9 @@ public class RippleBackground extends RelativeLayout {
     }
 
     public void hardStopRippleAnimation() {
-            animatorSet.end();
-            animationRunning = false;
+        Log.d("bbb", "hard stoppam ripple");
+        animatorSet.end();
+        animationRunning = false;
     }
 
     public boolean isRippleAnimationRunning() {

@@ -3,14 +3,20 @@ package bkoruznjak.from.hr.antenazagreb;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 
+import java.util.Locale;
+
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
+import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.util.FontsOverrideUtils;
 import bkoruznjak.from.hr.antenazagreb.util.NetworkUtils;
@@ -64,6 +70,18 @@ public class RadioApplication extends Application {
         if (!preferences.contains(PreferenceKeyConstants.KEY_VOLUME)) {
             Log.d("BBB", "SETTING VOLUME FOR FIRST TIME TO 5");
             preferences.edit().putInt(PreferenceKeyConstants.KEY_VOLUME, 5).commit();
+        }
+
+        if (!preferences.contains(PreferenceKeyConstants.KEY_LANGUAGE)) {
+            Log.d("BBB", "SETTING LANGUAGE FOR THE FIRST TIME TO HR");
+            String defaultLanguage = LanguagesEnum.hr.toString();
+            preferences.edit().putString(PreferenceKeyConstants.KEY_LANGUAGE, defaultLanguage).commit();
+            Locale defaultLocale = new Locale(defaultLanguage);
+            Resources res = getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
+            conf.locale = defaultLocale;
+            res.updateConfiguration(conf, dm);
         }
         radioVolume = preferences.getInt(PreferenceKeyConstants.KEY_VOLUME, 5);
 

@@ -1,0 +1,33 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/antena_beige"
+    tools:context="bkoruznjak.from.hr.antenazagreb.activity.TutorialActivity">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tutorialViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.cleveroad.splittransformation.SquareViewPagerIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/pager_indicator_margin"
+        app:trans_debugItemsCount="4" />
+
+    <Button
+        android:id="@+id/btn_skip_tutorial"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:text="@string/skip"
+        android:textColor="@color/antena_black" />
+
+</android.support.design.widget.CoordinatorLayout>

@@ -8,6 +8,7 @@ public class PreferenceKeyConstants {
 
     public static final String KEY_AUTOPLAY = "keyAutoplay";
     public static final String KEY_DEFAULT_STATION = "keyDefaultStation";
+    public static final String KEY_LANGUAGE = "keyLanguage";
     public static final String KEY_STORE_ARTICLES = "keyStoreArticles";
     public static final String KEY_VOLUME = "keyVolume";
 }

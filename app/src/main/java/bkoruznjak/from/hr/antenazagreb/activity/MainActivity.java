@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -28,12 +31,15 @@ import com.mxn.soul.flowingdrawer_core.FlowingView;
 import com.mxn.soul.flowingdrawer_core.LeftDrawerLayout;
 import com.squareup.otto.Subscribe;
 
+import java.util.Locale;
+
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
+import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.fragments.AntenaMenuFragment;
@@ -87,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioVolumeModel mRadioVolume;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
@@ -107,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         myBus.register(this);
+        Locale locale = new Locale(mPreferences.getString(PreferenceKeyConstants.KEY_LANGUAGE, "hr"));
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+
     }
 
     @Override
@@ -433,6 +446,20 @@ public class MainActivity extends AppCompatActivity {
             case UNKNOWN:
                 break;
         }
+    }
+
+    @Subscribe
+    public void handleLanguageChange(LanguagesEnum languageEvent) {
+        Log.d("bbb", "mijenjam jezik na:" + languageEvent.toString());
+        Locale myLocale = new Locale(languageEvent.toString());
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
+        finish();
     }
 
     private void refreshControlButtonDrawable(RadioStateModel stateModel, Animation animation) {

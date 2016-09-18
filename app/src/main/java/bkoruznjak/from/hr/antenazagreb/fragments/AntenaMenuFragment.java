@@ -1,6 +1,7 @@
 package bkoruznjak.from.hr.antenazagreb.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,15 +17,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.mxn.soul.flowingdrawer_core.MenuFragment;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
+import bkoruznjak.from.hr.antenazagreb.activity.TutorialActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
+import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 import bkoruznjak.from.hr.antenazagreb.views.CircleTransformation;
@@ -49,10 +53,14 @@ public class AntenaMenuFragment extends MenuFragment {
     public TextView currentlyPlayingText;
     @BindView(R.id.setting_about)
     public Button buttonAbout;
+    @BindView(R.id.setting_tutorial)
+    public Button buttonTutorial;
     @BindView(R.id.setting_feedback)
     public Button buttonFeedback;
     @BindView(R.id.setting_third_party)
     public Button buttonThirdParty;
+    @BindView(R.id.material_language_spinner)
+    public MaterialSpinner materialLanguageSpinner;
 
     private RadioBus myBus;
     private RadioStateModel mRadioStateModel;
@@ -131,6 +139,14 @@ public class AntenaMenuFragment extends MenuFragment {
                 Toast.makeText(getActivity(), "about clicked", Toast.LENGTH_SHORT).show();
             }
         });
+        buttonTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("bbb", "idem na tutorial");
+                Intent tutorialIntent = new Intent(getActivity(), TutorialActivity.class);
+                startActivity(tutorialIntent);
+            }
+        });
         buttonFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +159,29 @@ public class AntenaMenuFragment extends MenuFragment {
             public void onClick(View v) {
                 Log.d("bbb", "idem na third party");
                 Toast.makeText(getActivity(), "third party clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        materialLanguageSpinner.setItems("English", "Hrvatski");
+        final String language = mPreferences.getString(PreferenceKeyConstants.KEY_LANGUAGE, "hr");
+        if (LanguagesEnum.hr.toString().equals(language)) {
+            materialLanguageSpinner.setSelectedIndex(1);
+        } else {
+            materialLanguageSpinner.setSelectedIndex(0);
+        }
+        materialLanguageSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+
+                if (position == 0 && !LanguagesEnum.en.toString().equals(language)) {
+                    mPreferences.edit().putString(PreferenceKeyConstants.KEY_LANGUAGE, LanguagesEnum.en.toString()).commit();
+                    myBus.post(LanguagesEnum.en);
+                } else if (position == 1 && !LanguagesEnum.hr.toString().equals(language)) {
+                    mPreferences.edit().putString(PreferenceKeyConstants.KEY_LANGUAGE, LanguagesEnum.hr.toString()).commit();
+                    myBus.post(LanguagesEnum.hr);
+                }
+
             }
         });
 

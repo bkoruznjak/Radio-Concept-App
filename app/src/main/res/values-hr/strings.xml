@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Antena Zagreb</string>
+
+    <!-- TAB TITLES -->
+    <string name="radio_tab">Radio</string>
+    <string name="news_tab">Novosti</string>
+    <string name="podcast_tab">Podcast</string>
+    <string name="promo_tab">Promo</string>
+    <string name="social_tab">Social</string>
+
+    <!-- SETTINGS -->
+    <string name="action_settings">Postavke</string>
+    <string name="single_article_activity_name">Detalji</string>
+    <!-- Drawer -->
+
+    <string name="setting_radio_title">Radio:</string>
+    <string name="setting_air_title">Trenutno svira:</string>
+    <string name="setting_current_stream">Trenutno nemate odabranu stanicu</string>
+    <string name="setting_current_song">Nepoznato - Nepoznato</string>
+    <string name="setting_autoplay">Samopokretanje</string>
+    <string name="setting_keep_articles">Sačuvaj članke</string>
+    <string name="setting_about">O aplikaciji</string>
+    <string name="setting_feedback">Podrška</string>
+    <string name="setting_third_party">3rd party license</string>
+
+    <string name="setting_app_version">Antena Radio v1.0.0</string>
+    <string name="setting_app_author">Premium Binary 2016</string>
+
+    <!-- RADIO FRAGMENT -->
+    <string name="author">Izvođač</string>
+    <string name="song">Pjesma</string>
+    <string name="tutorial">Upute</string>
+
+    <string name="title_activity_tutorial">Upute</string>
+    <string name="skip">Preskoči</string>
+    <string name="language">Jezik</string>
+
+</resources>

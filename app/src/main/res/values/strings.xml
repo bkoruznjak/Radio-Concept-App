@@ -3,7 +3,7 @@
 
     <!-- TAB TITLES -->
     <string name="radio_tab">Radio</string>
-    <string name="news_tab">Novosti</string>
+    <string name="news_tab">News</string>
     <string name="podcast_tab">Podcast</string>
     <string name="promo_tab">Promo</string>
     <string name="social_tab">Social</string>
@@ -14,7 +14,7 @@
     <!-- Drawer -->
 
     <string name="setting_radio_title">Radio:</string>
-    <string name="setting_air_title">Trenutno svira:</string>
+    <string name="setting_air_title">Currently playing:</string>
     <string name="setting_current_stream">You currently have no stream selected</string>
     <string name="setting_current_song">Unknown - Unknown</string>
     <string name="setting_autoplay">Play on startup</string>
@@ -27,8 +27,13 @@
     <string name="setting_app_author">Premium Binary 2016</string>
 
     <!-- RADIO FRAGMENT -->
-    <string name="author">Izvođač</string>
-    <string name="song">Pjesma</string>
+    <string name="author">Author</string>
+    <string name="song">Song</string>
+    <string name="tutorial">Tutorial</string>
+
+    <string name="title_activity_tutorial">Tutorial Activity</string>
+    <string name="skip">Skip</string>
+    <string name="language">Language</string>
 
 
 </resources>
