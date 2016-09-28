@@ -34,6 +34,10 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3c0c9b036e18eedcf8f080a3ca424277eaeb1c56" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="1739100849694117" />
+
 
         <service android:name=".service.RadioService" />
 

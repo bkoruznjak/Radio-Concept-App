@@ -14,9 +14,9 @@ import com.squareup.leakcanary.LeakCanary;
 import java.util.Locale;
 
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
+import bkoruznjak.from.hr.antenazagreb.constants.AntenaConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
-import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.util.FontsOverrideUtils;
 import bkoruznjak.from.hr.antenazagreb.util.NetworkUtils;
@@ -31,6 +31,7 @@ public class RadioApplication extends Application {
     private static RadioStateModel myStateModel;
     private int radioVolume;
     private int radioNotificationIcon;
+    private Locale locale = null;
 
     public static RadioApplication getInstance() {
         return instance;
@@ -46,7 +47,9 @@ public class RadioApplication extends Application {
         super.onCreate();
         LeakCanary.install(this);
         NetworkUtils.registerLoganSquareTypeConverters();
+//        TwitterAuthConfig authConfig =  new TwitterAuthConfig(SocialNetworksConstants.TWITTER_CONSUMER_KEY, SocialNetworksConstants.TWITTER_CONSUMER_SECRET);
         Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics(),new TwitterCore(authConfig),new TweetUi(),new TweetComposer());
 
         FontsOverrideUtils.setDefaultFont(this, "DEFAULT", "avenir_book.ttf");
         FontsOverrideUtils.setDefaultFont(this, "MONOSPACE", "avenir_light.ttf");
@@ -64,7 +67,7 @@ public class RadioApplication extends Application {
             preferences.edit().putString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.ANTENA_MAIN).commit();
         }
         if (!preferences.contains(PreferenceKeyConstants.KEY_STORE_ARTICLES)) {
-            Log.d("BBB", "SETTING STRE ARTICLES FOR FIRST TIME TO FALSE");
+            Log.d("BBB", "SETTING STORE ARTICLES FOR FIRST TIME TO FALSE");
             preferences.edit().putBoolean(PreferenceKeyConstants.KEY_STORE_ARTICLES, false).commit();
         }
         if (!preferences.contains(PreferenceKeyConstants.KEY_VOLUME)) {
@@ -72,17 +75,20 @@ public class RadioApplication extends Application {
             preferences.edit().putInt(PreferenceKeyConstants.KEY_VOLUME, 5).commit();
         }
 
+        String defaultLocaleLanguage = AntenaConstants.DEFAULT_LOCALE;
         if (!preferences.contains(PreferenceKeyConstants.KEY_LANGUAGE)) {
             Log.d("BBB", "SETTING LANGUAGE FOR THE FIRST TIME TO HR");
-            String defaultLanguage = LanguagesEnum.hr.toString();
-            preferences.edit().putString(PreferenceKeyConstants.KEY_LANGUAGE, defaultLanguage).commit();
-            Locale defaultLocale = new Locale(defaultLanguage);
-            Resources res = getResources();
-            DisplayMetrics dm = res.getDisplayMetrics();
-            Configuration conf = res.getConfiguration();
-            conf.locale = defaultLocale;
-            res.updateConfiguration(conf, dm);
+            preferences.edit().putString(PreferenceKeyConstants.KEY_LANGUAGE, defaultLocaleLanguage).commit();
+        } else {
+            defaultLocaleLanguage = preferences.getString(PreferenceKeyConstants.KEY_LANGUAGE, AntenaConstants.DEFAULT_LOCALE);
         }
+        Locale defaultLocale = new Locale(defaultLocaleLanguage);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = defaultLocale;
+        res.updateConfiguration(conf, dm);
+
         radioVolume = preferences.getInt(PreferenceKeyConstants.KEY_VOLUME, 5);
 
         boolean useVector = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
@@ -96,8 +102,8 @@ public class RadioApplication extends Application {
         return myBus;
     }
 
-    public RadioStateModel getRadioStateModel(){
-        if(myStateModel == null){
+    public RadioStateModel getRadioStateModel() {
+        if (myStateModel == null) {
             myStateModel = new RadioStateModel();
             myStateModel.setStreamUri(StreamUriConstants.ANTENA_MAIN);
         }

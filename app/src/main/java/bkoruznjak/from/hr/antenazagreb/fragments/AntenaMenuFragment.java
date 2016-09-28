@@ -3,6 +3,7 @@ package bkoruznjak.from.hr.antenazagreb.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -26,6 +27,7 @@ import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.activity.TutorialActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
+import bkoruznjak.from.hr.antenazagreb.constants.AntenaConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
@@ -135,14 +137,12 @@ public class AntenaMenuFragment extends MenuFragment {
         buttonAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bbb", "idem na about");
                 Toast.makeText(getActivity(), "about clicked", Toast.LENGTH_SHORT).show();
             }
         });
         buttonTutorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bbb", "idem na tutorial");
                 Intent tutorialIntent = new Intent(getActivity(), TutorialActivity.class);
                 startActivity(tutorialIntent);
             }
@@ -150,8 +150,22 @@ public class AntenaMenuFragment extends MenuFragment {
         buttonFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bbb", "idem na feedback");
-                Toast.makeText(getActivity(), "feedback clicked", Toast.LENGTH_SHORT).show();
+                Intent sendFeedbackIntent = new Intent(Intent.ACTION_SEND);
+                sendFeedbackIntent.setData(Uri.parse("mailto:"));
+                sendFeedbackIntent.setType("text/plain");
+                String subject = getActivity().getResources().getString(R.string.setting_subject);
+                String message = getActivity().getResources().getString(R.string.setting_message);
+                String description = getActivity().getResources().getString(R.string.setting_feedback_description);
+                String noClient = getActivity().getResources().getString(R.string.setting_no_mail_client);
+                sendFeedbackIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{AntenaConstants.SUPPORT_EMAIL});
+                sendFeedbackIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                sendFeedbackIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+                try {
+                    startActivity(Intent.createChooser(sendFeedbackIntent, description));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getActivity(), noClient, Toast.LENGTH_SHORT).show();
+                }
             }
         });
         buttonThirdParty.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +176,8 @@ public class AntenaMenuFragment extends MenuFragment {
             }
         });
 
-        materialLanguageSpinner.setItems("English", "Hrvatski");
-        final String language = mPreferences.getString(PreferenceKeyConstants.KEY_LANGUAGE, "hr");
+        materialLanguageSpinner.setItems(AntenaConstants.LANGUAGE_ARRAY[0], AntenaConstants.LANGUAGE_ARRAY[1]);
+        final String language = mPreferences.getString(PreferenceKeyConstants.KEY_LANGUAGE, AntenaConstants.DEFAULT_LOCALE);
         if (LanguagesEnum.hr.toString().equals(language)) {
             materialLanguageSpinner.setSelectedIndex(1);
         } else {

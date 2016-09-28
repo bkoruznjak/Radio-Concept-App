@@ -50,6 +50,7 @@ dependencies {
     //tests
     testCompile 'junit:junit:4.12'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    debugCompile 'com.squareup.haha:haha:2.0.3'
 
     //network
 
@@ -70,4 +71,18 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
+
+    //twitter
+    compile('com.twitter.sdk.android:twitter-core:2.0.0@aar') {
+        transitive = true;
+    }
+    compile('com.twitter.sdk.android:tweet-ui:2.0.0@aar') {
+        transitive = true;
+    }
+    compile('com.twitter.sdk.android:tweet-composer:2.0.0@aar') {
+        transitive = true;
+    }
+
+    //facebook
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
