@@ -21,7 +21,11 @@
     <string name="setting_keep_articles">Sačuvaj članke</string>
     <string name="setting_about">O aplikaciji</string>
     <string name="setting_feedback">Podrška</string>
-    <string name="setting_third_party">3rd party license</string>
+    <string name="setting_subject">Podrška</string>
+    <string name="setting_message">Bok Antena Zagreb!\n</string>
+    <string name="setting_feedback_description">Pošalji mail...</string>
+    <string name="setting_no_mail_client">Nemaš instaliranu email aplikaciju!</string>
+    <string name="setting_third_party">Licence</string>
 
     <string name="setting_app_version">Antena Radio v1.0.0</string>
     <string name="setting_app_author">Premium Binary 2016</string>

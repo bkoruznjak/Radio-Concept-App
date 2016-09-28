@@ -205,7 +205,7 @@ public class VolumeSlider extends View {
         mVolumeTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mVolumeTextPaint.setStrokeWidth(1.0f);
         mVolumeTextPaint.setAntiAlias(true);
-        mVolumeTextPaint.setTextSize(50.0f);
+        mVolumeTextPaint.setTextSize(25.0f);
         mVolumeTextPaint.setTextAlign(Paint.Align.CENTER);
 
         canvas.drawCircle(mCircleCenterX, mCircleCenterY, mCircleRadius, mPaint);

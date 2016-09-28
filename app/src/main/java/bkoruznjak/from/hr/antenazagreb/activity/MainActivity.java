@@ -97,9 +97,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        handleAutoPlay(mPreferences.getBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true));
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
+
 
     private void handleAutoPlay(boolean isAutoplayOn) {
         if (isAutoplayOn && !mRadioStateModel.isServiceUp()) {
@@ -119,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
+        handleAutoPlay(mPreferences.getBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true));
 
     }
 
@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         ButterKnife.bind(this);
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mPreferences = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
         myBus = ((RadioApplication) getApplication()).getBus();
         mRadioStateModel = ((RadioApplication) getApplication()).getRadioStateModel();
