@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +34,7 @@ import com.mxn.soul.flowingdrawer_core.FlowingView;
 import com.mxn.soul.flowingdrawer_core.LeftDrawerLayout;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import bkoruznjak.from.hr.antenazagreb.R;
@@ -45,6 +49,8 @@ import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.fragments.AntenaMenuFragment;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioVolumeModel;
+import bkoruznjak.from.hr.antenazagreb.model.network.ArticleModel;
+import bkoruznjak.from.hr.antenazagreb.model.network.SocialModel;
 import bkoruznjak.from.hr.antenazagreb.service.RadioService;
 import bkoruznjak.from.hr.antenazagreb.views.AntenaTabFactory;
 import butterknife.BindView;
@@ -56,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+    private final int mBitmapWidth = 300;
+    private final int mBitmapHeight = 399;
     @BindView(R.id.antenaTabLayout)
     TabLayout antenaTabLayout;
     @BindView(R.id.antenaToolbar)
@@ -74,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton mBtnRockStream;
     @BindView(R.id.fab_80_stream)
     FloatingActionButton mBtn80Stream;
-
     Animation infiniteRotateAnim;
     Animation rotateFrom0to90Animation;
     Animation rotateFrom90to0Animation;
@@ -91,10 +98,15 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences mPreferences;
     private AudioManager mAudioManager;
     private RadioVolumeModel mRadioVolume;
+    private BitmapDrawable mBackgroundBitmap;
+    private ArrayList<SocialModel> socialData;
+    private ArrayList<ArticleModel> articleData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPreferences = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
+        handleLocale();
         setContentView(R.layout.activity_main);
         init();
     }
@@ -108,16 +120,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        myBus.register(this);
+    private void handleLocale() {
         Locale locale = new Locale(mPreferences.getString(PreferenceKeyConstants.KEY_LANGUAGE, "hr"));
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        myBus.register(this);
         handleAutoPlay(mPreferences.getBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true));
 
     }
@@ -142,8 +157,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         ButterKnife.bind(this);
+        mBackgroundBitmap = new BitmapDrawable(decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, mBitmapWidth, mBitmapHeight));
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        mPreferences = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
         myBus = ((RadioApplication) getApplication()).getBus();
         mRadioStateModel = ((RadioApplication) getApplication()).getRadioStateModel();
         setupAnimations();
@@ -458,9 +473,19 @@ public class MainActivity extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, MainActivity.class);
+        onConfigurationChanged(conf);
+        Intent refresh = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(refresh);
         finish();
+    }
+
+    @Subscribe
+    public void handleData(final ArrayList data) {
+        if (data.get(0) instanceof ArticleModel) {
+            this.articleData = data;
+        } else if (data.get(0) instanceof SocialModel) {
+            this.socialData = data;
+        }
     }
 
     private void refreshControlButtonDrawable(RadioStateModel stateModel, Animation animation) {
@@ -515,5 +540,66 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mRadioStateModel.setStreamUri(streamURI);
         }
+    }
+
+    private Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                   int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    private int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+    public BitmapDrawable getBackgroundBitmap() {
+        if (mBackgroundBitmap == null) {
+            mBackgroundBitmap = new BitmapDrawable(decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, mBitmapWidth, mBitmapHeight));
+        }
+        return mBackgroundBitmap;
+    }
+
+    public ArrayList<SocialModel> getSocialData() {
+        return socialData;
+    }
+
+    public void setSocialData(ArrayList<SocialModel> socialData) {
+        this.socialData = socialData;
+    }
+
+    public ArrayList<ArticleModel> getArticleData() {
+        return articleData;
+    }
+
+    public void setArticleData(ArrayList<ArticleModel> articleData) {
+        this.articleData = articleData;
     }
 }

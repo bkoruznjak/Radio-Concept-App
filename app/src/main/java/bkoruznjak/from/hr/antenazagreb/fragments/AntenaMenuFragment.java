@@ -180,7 +180,7 @@ public class AntenaMenuFragment extends MenuFragment {
         final String language = mPreferences.getString(PreferenceKeyConstants.KEY_LANGUAGE, AntenaConstants.DEFAULT_LOCALE);
         if (LanguagesEnum.hr.toString().equals(language)) {
             materialLanguageSpinner.setSelectedIndex(0);
-        } else {
+        } else if (LanguagesEnum.en.toString().equals(language)) {
             materialLanguageSpinner.setSelectedIndex(1);
         }
         materialLanguageSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
@@ -188,10 +188,10 @@ public class AntenaMenuFragment extends MenuFragment {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
 
-                if (position == 0 && !LanguagesEnum.en.toString().equals(language)) {
+                if (position == 1 && !LanguagesEnum.en.toString().equals(language)) {
                     mPreferences.edit().putString(PreferenceKeyConstants.KEY_LANGUAGE, LanguagesEnum.en.toString()).commit();
                     myBus.post(LanguagesEnum.en);
-                } else if (position == 1 && !LanguagesEnum.hr.toString().equals(language)) {
+                } else if (position == 0 && !LanguagesEnum.hr.toString().equals(language)) {
                     mPreferences.edit().putString(PreferenceKeyConstants.KEY_LANGUAGE, LanguagesEnum.hr.toString()).commit();
                     myBus.post(LanguagesEnum.hr);
                 }

@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.squareup.otto.Subscribe;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
+import bkoruznjak.from.hr.antenazagreb.activity.MainActivity;
 import bkoruznjak.from.hr.antenazagreb.activity.SingleArticleActivity;
 import bkoruznjak.from.hr.antenazagreb.adapters.ArticleRecycleAdapter;
 import bkoruznjak.from.hr.antenazagreb.articles.ArticleStore;
@@ -42,6 +42,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View newsFragmentView = inflater.inflate(R.layout.fragment_news, container, false);
+        newsFragmentView.setBackground(((MainActivity) getActivity()).getBackgroundBitmap());
         init(newsFragmentView);
         return newsFragmentView;
 
@@ -79,36 +80,40 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         newsRecyclerView.setLayoutManager(layoutManager);
         newsRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        new ArticleStore().fetchAllArticles();
+        ArrayList<ArticleModel> articleData = ((MainActivity) getActivity()).getArticleData();
+        if (articleData == null) {
+            new ArticleStore().fetchAllArticles();
+        } else {
+            handleArticleData(articleData);
+        }
     }
 
     @Subscribe
     public void handleArticleData(final ArrayList<ArticleModel> articleData) {
-        newsRecycleAdapter = new ArticleRecycleAdapter(articleData);
-        if (newsRecyclerView != null) {
-            newsRecyclerView.setAdapter(newsRecycleAdapter);
-            newsRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity().getApplicationContext(), newsRecyclerView, new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    Toast.makeText(getActivity().getApplicationContext(), "clicked item:" + position, Toast.LENGTH_SHORT).show();
+        if (articleData.get(0) instanceof ArticleModel) {
+            newsRecycleAdapter = new ArticleRecycleAdapter(articleData);
+            if (newsRecyclerView != null) {
+                newsRecyclerView.setAdapter(newsRecycleAdapter);
+                newsRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity().getApplicationContext(), newsRecyclerView, new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        final Intent openArticleIntent = new Intent(getActivity(), SingleArticleActivity.class);
+                        String jsonArticle = "";
+                        try {
+                            jsonArticle = LoganSquare.serialize(articleData.get(position));
+                        } catch (IOException IOex) {
 
-                    final Intent openArticleIntent = new Intent(getActivity(), SingleArticleActivity.class);
-                    String jsonArticle = "";
-                    try {
-                        jsonArticle = LoganSquare.serialize(articleData.get(position));
-                    } catch (IOException IOex) {
-
+                        }
+                        openArticleIntent.putExtra("ARTICLE", jsonArticle);
+                        //ActivityTransitionLauncher.with(getActivity()).from(view).launch(openArticleIntent);
+                        startActivity(openArticleIntent);
                     }
-                    openArticleIntent.putExtra("ARTICLE", jsonArticle);
-                    //ActivityTransitionLauncher.with(getActivity()).from(view).launch(openArticleIntent);
-                    startActivity(openArticleIntent);
-                }
 
-                @Override
-                public void onItemLongClick(View view, int position) {
-                    Toast.makeText(getActivity().getApplicationContext(), "long clicked item:" + position, Toast.LENGTH_SHORT).show();
-                }
-            }));
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                    }
+                }));
+            }
         }
     }
 }

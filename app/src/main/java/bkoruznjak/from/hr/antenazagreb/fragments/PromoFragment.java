@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import bkoruznjak.from.hr.antenazagreb.R;
+import bkoruznjak.from.hr.antenazagreb.activity.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +65,9 @@ public class PromoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_promo, container, false);
+        View promoView = inflater.inflate(R.layout.fragment_promo, container, false);
+        promoView.setBackground(((MainActivity) getActivity()).getBackgroundBitmap());
+        return promoView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

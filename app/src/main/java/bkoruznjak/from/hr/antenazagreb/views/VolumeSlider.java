@@ -10,6 +10,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -40,6 +41,7 @@ public class VolumeSlider extends View {
     private int mCircleCenterY;
     private int mCircleRadius;
     private Drawable mThumbImage;
+    private RectF mVolumeBoundariesRectangle;
     private int mPadding;
     private int mThumbSize;
     private int mThumbColor;
@@ -47,9 +49,12 @@ public class VolumeSlider extends View {
     private int mBorderThickness;
     private double mStartAngle;
     private double mAngle = mStartAngle;
+    private float mThumbAngle = 1;
+    private float mVolumeArcAngle = 1;
     private boolean mIsThumbSelected = false;
     private Paint mPaint = new Paint();
-    private Paint mVolumeTextPaint = new Paint();
+    private Paint mVolumePaint = new Paint();
+    //    private Paint mVolumeTextPaint = new Paint();
     private OnSliderMovedListener mListener;
     private OnSectorChangedListener mSectorListener;
     //SECTORS
@@ -73,6 +78,7 @@ public class VolumeSlider extends View {
             false,
             false,
     };
+
     public VolumeSlider(Context context) {
         this(context, null);
     }
@@ -115,6 +121,11 @@ public class VolumeSlider extends View {
         setThumbImage(thumbImage);
         setThumbColor(thumbColor);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            setLayerType(LAYER_TYPE_SOFTWARE, mPaint);
+            setLayerType(LAYER_TYPE_SOFTWARE, mVolumePaint);
+        }
+
         // assign padding - check for version because of RTL layout compatibility
         int padding;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -144,7 +155,16 @@ public class VolumeSlider extends View {
     }
 
     public void setAngle(double angle) {
+        Log.d("bbb", "angle:" + angle);
         mAngle = angle;
+        if (angle < 0) {
+            mThumbAngle = (float) ((mAngle * 180) / Math.PI);
+            mThumbAngle = 45 - 180 - (180 + mThumbAngle);
+            mVolumeArcAngle = -180 - ((float) (((Math.PI + mAngle) * 180) / Math.PI));
+        } else {
+            mThumbAngle = 45 - (float) ((mAngle * 180) / Math.PI);
+            mVolumeArcAngle = -((float) ((mAngle * 180) / Math.PI));
+        }
     }
 
     public void setThumbSize(int thumbSize) {
@@ -187,6 +207,10 @@ public class VolumeSlider extends View {
         mCircleCenterY = largestCenteredSquareBottom / 2 + (h - largestCenteredSquareBottom) / 2;
         mCircleRadius = smallerDim / 2 - mBorderThickness / 2 - mPadding;
 
+        mVolumeBoundariesRectangle = new RectF();
+        mVolumeBoundariesRectangle.set(mCircleCenterX - mCircleRadius, mCircleCenterY - mCircleRadius, mCircleCenterX + mCircleRadius, mCircleCenterY + mCircleRadius);
+
+
         // works well for now, should we call something else here?
         super.onSizeChanged(w, h, oldw, oldh);
     }
@@ -200,15 +224,23 @@ public class VolumeSlider extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(mBorderThickness);
         mPaint.setAntiAlias(true);
+        mPaint.setShadowLayer(10f, 0f, 0f, Color.parseColor("#42000000"));
 
-        mVolumeTextPaint.setColor(Color.WHITE);
-        mVolumeTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mVolumeTextPaint.setStrokeWidth(1.0f);
-        mVolumeTextPaint.setAntiAlias(true);
-        mVolumeTextPaint.setTextSize(25.0f);
-        mVolumeTextPaint.setTextAlign(Paint.Align.CENTER);
+        mVolumePaint.setColor(Color.parseColor("#FF5722"));
+        mVolumePaint.setStyle(Paint.Style.STROKE);
+        mVolumePaint.setStrokeWidth(mBorderThickness);
+        mVolumePaint.setStrokeCap(Paint.Cap.ROUND);
+        mVolumePaint.setAntiAlias(true);
+
+//        mVolumeTextPaint.setColor(Color.WHITE);
+//        mVolumeTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+//        mVolumeTextPaint.setStrokeWidth(1.0f);
+//        mVolumeTextPaint.setAntiAlias(true);
+//        mVolumeTextPaint.setTextSize(25.0f);
+//        mVolumeTextPaint.setTextAlign(Paint.Align.CENTER);
 
         canvas.drawCircle(mCircleCenterX, mCircleCenterY, mCircleRadius, mPaint);
+        canvas.drawArc(mVolumeBoundariesRectangle, 0, mVolumeArcAngle, false, mVolumePaint);
 
         // find thumb position
         mThumbX = (int) (mCircleCenterX + mCircleRadius * Math.cos(mAngle));
@@ -217,15 +249,18 @@ public class VolumeSlider extends View {
 
         if (mThumbImage != null) {
             // draw png
+            canvas.save();
+            canvas.rotate(mThumbAngle, mThumbX, mThumbY);
             mThumbImage.setBounds(mThumbX - mThumbSize / 2, mThumbY - mThumbSize / 2, mThumbX + mThumbSize / 2, mThumbY + mThumbSize / 2);
             mThumbImage.draw(canvas);
-            canvas.drawText("" + sectorID, mThumbX + 15f, mThumbY, mVolumeTextPaint);
+            canvas.restore();
+//            canvas.drawText("" + sectorID, mThumbX + 15f, mThumbY, mVolumeTextPaint);
         } else {
             // draw colored circle
             mPaint.setColor(mThumbColor);
             mPaint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(mThumbX, mThumbY, mThumbSize, mPaint);
-            canvas.drawText("" + sectorID, mThumbX, mThumbY + 15f, mVolumeTextPaint);
+//            canvas.drawText("" + sectorID, mThumbX, mThumbY + 15f, mVolumeTextPaint);
         }
     }
 
@@ -258,10 +293,14 @@ public class VolumeSlider extends View {
         double c = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
         mAngle = Math.acos(distanceX / c);
         boolean isTopSide = true;
+        float tempThumpAngle = -(float) ((mAngle * 180) / Math.PI);
         if (distanceY < 0) {
             mAngle = -mAngle;
+            tempThumpAngle = -180 - (180 + tempThumpAngle);
             isTopSide = false;
         }
+        mVolumeArcAngle = tempThumpAngle;
+        mThumbAngle = mVolumeArcAngle + 45;
 
         if (isTopSide) {
             if (!sectorLocatorArray[0] && mAngle < SECTOR_ANGLES[1] && mAngle > SECTOR_ANGLES[0]) {

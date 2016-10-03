@@ -101,6 +101,7 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
         ButterKnife.bind(this, view);
         mPreferences = getActivity().getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         rippleBackground = (RippleBackground) view.findViewById(R.id.content);
+        rippleBackground.setBackground(((MainActivity) getActivity()).getBackgroundBitmap());
         infiniteRotateAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.inf_rotate);
         myBus = ((RadioApplication) getActivity().getApplication()).getBus();
         RadioApplication antenaApp = ((RadioApplication) getActivity().getApplication());
