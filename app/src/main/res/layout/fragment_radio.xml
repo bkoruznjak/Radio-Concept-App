@@ -16,6 +16,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            circular:srcCompat="@drawable/antenna" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <bkoruznjak.from.hr.antenazagreb.views.VolumeSlider
+                android:id="@+id/volumeControl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:padding="40dp"
+                circular:angle="3.14"
+                circular:border_color="@color/antena_beige"
+                circular:border_thickness="14dp"
+                circular:thumb_image="@drawable/volume_control_icon"
+                circular:thumb_size="48dp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,34 +81,6 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
-        </LinearLayout>
-
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            circular:srcCompat="@drawable/antenna" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="vertical"
-            android:weightSum="2">
-
-            <bkoruznjak.from.hr.antenazagreb.views.VolumeSlider
-                android:id="@+id/volumeControl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:padding="40dp"
-                circular:angle="3.14"
-                circular:border_color="@color/antena_beige"
-                circular:border_thickness="14dp"
-                circular:thumb_image="@drawable/volume_control_icon"
-                circular:thumb_size="48dp" />
         </LinearLayout>
     </FrameLayout>
 </bkoruznjak.from.hr.antenazagreb.views.RippleBackground>
