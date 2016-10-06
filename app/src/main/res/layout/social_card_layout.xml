@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/socialCardLayout"
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="wrap_content"
         card_view:cardBackgroundColor="@color/antena_beige"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="5dp"
@@ -17,51 +17,66 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <ImageView
-                android:id="@+id/socialCardImageView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img_placeholder"
-                android:tag="image_tag" />
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/socialCardTopTextView"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Android Name"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/colorSecondaryText" />
+                    android:layout_height="wrap_content">
 
-                <TextView
+                    <TextView
+                        android:id="@+id/socialCardTopTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Android Name"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/colorSecondaryText" />
+
+                    <ImageView
+                        android:id="@+id/socialNetworkIcon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp" />
+
+                </RelativeLayout>
+
+
+                <bkoruznjak.from.hr.antenazagreb.views.JustifyTextView
                     android:id="@+id/socialCardBottomTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:maxLines="3"
+                    android:lineSpacingMultiplier="1.5"
+                    android:paddingBottom="10dp"
                     android:text="Android title"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/colorAccent" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/socialCardImageView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:tag="image_tag" />
         </LinearLayout>
+
 
     </android.support.v7.widget.CardView>
 

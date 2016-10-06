@@ -52,10 +52,23 @@ public class SocialRecycleAdapter extends RecyclerView.Adapter<SocialRecycleAdap
         TextView textViewDate = holder.textViewDate;
         TextView textViewTitle = holder.textViewTitle;
         ImageView imageView = holder.imageViewIcon;
+        ImageView socialNetworkLogoView = holder.imageSocialLogoIcon;
+
+        switch (dataSet.get(listPosition).type) {
+            case "FACEBOOK":
+                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_logo_facebook));
+                break;
+            case "TWITTER":
+                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_logo_twitter));
+                break;
+            case "INSTAGRAM":
+                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_logo_instagram));
+                break;
+        }
 
         textViewDate.setText(dataSet.get(listPosition).postedAt);
         textViewTitle.setText(dataSet.get(listPosition).text);
-        Picasso.with(RadioApplication.getContext()).load(dataSet.get(listPosition).pictureThumbLink).resize(imageHeight, imageWidth).centerCrop().into(imageView);
+        Picasso.with(RadioApplication.getContext()).load(dataSet.get(listPosition).pictureFullLink).resize(imageHeight, imageWidth).centerCrop().into(imageView);
         setScaleAnimation(holder.itemView);
     }
 
@@ -86,6 +99,7 @@ public class SocialRecycleAdapter extends RecyclerView.Adapter<SocialRecycleAdap
         TextView textViewDate;
         TextView textViewTitle;
         ImageView imageViewIcon;
+        ImageView imageSocialLogoIcon;
         View mItemView;
 
         public SocialViewHolder(View itemView) {
@@ -94,6 +108,7 @@ public class SocialRecycleAdapter extends RecyclerView.Adapter<SocialRecycleAdap
             this.textViewDate = (TextView) itemView.findViewById(R.id.socialCardTopTextView);
             this.textViewTitle = (TextView) itemView.findViewById(R.id.socialCardBottomTextView);
             this.imageViewIcon = (ImageView) itemView.findViewById(R.id.socialCardImageView);
+            this.imageSocialLogoIcon = (ImageView) itemView.findViewById(R.id.socialNetworkIcon);
         }
 
         public void clearAnimation() {

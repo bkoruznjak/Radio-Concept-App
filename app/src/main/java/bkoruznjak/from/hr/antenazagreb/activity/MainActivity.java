@@ -436,6 +436,8 @@ public class MainActivity extends AppCompatActivity {
         switch (streamState) {
             case BUFFERING:
                 mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
+                Log.d("bbb", "starting infinite animation buffering");
+                mBtnMainController.clearAnimation();
                 mBtnMainController.startAnimation(infiniteRotateAnim);
                 break;
             case ENDED:
@@ -448,6 +450,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case PREPARING:
                 mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
+                Log.d("bbb", "starting infinite animation preparing");
+                mBtnMainController.clearAnimation();
                 mBtnMainController.startAnimation(infiniteRotateAnim);
                 break;
             case READY:
@@ -492,6 +496,7 @@ public class MainActivity extends AppCompatActivity {
         //ovo ojačaj kod jer treba maknut rucno dodavanje na gumb animacije i sranja.
         if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.PREPARING) {
             mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
+            Log.d("bbb", "starting infinite refresh");
             mBtnMainController.startAnimation(infiniteRotateAnim);
         } else if (stateModel.isMusicPlaying() && !stateModel.isStreamInterrupted()) {
             mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_white_24dp));

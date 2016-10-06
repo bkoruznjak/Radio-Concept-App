@@ -39,4 +39,6 @@
     <string name="skip">Preskoči</string>
     <string name="language">Jezik</string>
 
+    <!-- RADIO SERVICE -->
+    <string name="error_radio">Dogodila se greška, provjerite internet vezu!</string>
 </resources>

@@ -29,6 +29,7 @@ import com.google.android.exoplayer.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 import com.squareup.otto.Subscribe;
 
+import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.activity.MainActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
@@ -51,6 +52,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
     private IcyMetadataHandler icyMetadataHandler;
     private MediaCodecAudioTrackRenderer mAudioTrackRenderer;
     private int mNotificationIcon;
+    private boolean isProblemEncountered;
 
     @Nullable
     @Override
@@ -161,9 +163,10 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
+        isProblemEncountered = true;
         int duration = Toast.LENGTH_SHORT;
         Crashlytics.log(Log.ERROR, "AntenaZagreb", "Exo Error:" + error);
-        Toast toast = Toast.makeText(this, "Selected stream appears to be down...", duration);
+        Toast toast = Toast.makeText(this, getResources().getString(R.string.error_radio), duration);
         toast.show();
         stop();
         radioState.setStateEnum(RadioStateEnum.ENDED);
@@ -231,6 +234,14 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
     public void radioControlHandler(RadioCommandEnum command) {
         switch (command) {
             case PLAY:
+                if (isProblemEncountered) {
+                    if (radioState.isMusicPlaying()) {
+                        prepareRadioStream(radioState.getStreamUri(), true);
+                    } else {
+                        prepareRadioStream(radioState.getStreamUri(), false);
+                    }
+                    isProblemEncountered = false;
+                }
                 play();
                 break;
             case PAUSE:

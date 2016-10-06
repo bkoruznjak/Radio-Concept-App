@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/singleArticleContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/antena_beige"
+    tools:context=".activity.SingleArticleActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/articleCardImageViewBig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_placeholder" />
+
+
+        <TextView
+            android:id="@+id/articleCardTitleTextViewBig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/articleCardImageViewBig"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="left"
+            android:text="ovo je naslov"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/articleCardTopTextViewBig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/articleCardTitleTextViewBig"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="left"
+            android:text="ovo je datum"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="10sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/articleCardTopTextViewBig"
+            android:layout_margin="16dp">
+
+            <bkoruznjak.from.hr.antenazagreb.views.JustifyTextView
+                android:id="@+id/articleCardBottomTextViewBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingMultiplier="1.5"
+                android:text="ovo je tekstasdasdasdasdasdasdasdasdasdasdasdasd"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="12sp" />
+        </ScrollView>
+    </RelativeLayout>
+
+</RelativeLayout>

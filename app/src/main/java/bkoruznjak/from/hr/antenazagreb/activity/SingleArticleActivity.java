@@ -37,7 +37,7 @@ public class SingleArticleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_article);
+        setContentView(R.layout.activity_news_article);
         overridePendingTransition(R.anim.article_enter_in, R.anim.article_enter_out);
         ButterKnife.bind(this);
         //exitTransition = ActivityTransition.with(getIntent()).to(findViewById(R.id.singleArticleContainer)).start(savedInstanceState);

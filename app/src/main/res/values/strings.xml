@@ -40,5 +40,8 @@
     <string name="skip">Skip</string>
     <string name="language">Language</string>
 
+    <!-- RADIO SERVICE -->
+    <string name="error_radio">There was a problem, check your internet connection!</string>
+
 
 </resources>
