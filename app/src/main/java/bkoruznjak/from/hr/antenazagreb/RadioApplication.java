@@ -51,14 +51,12 @@ public class RadioApplication extends Application {
         super.onCreate();
         LeakCanary.install(this);
         NetworkUtils.registerLoganSquareTypeConverters();
-//        TwitterAuthConfig authConfig =  new TwitterAuthConfig(SocialNetworksConstants.TWITTER_CONSUMER_KEY, SocialNetworksConstants.TWITTER_CONSUMER_SECRET);
         Fabric.with(this, new Crashlytics());
-//        Fabric.with(this, new Crashlytics(),new TwitterCore(authConfig),new TweetUi(),new TweetComposer());
 
         FontsOverrideUtils.setDefaultFont(this, "DEFAULT", "avenir_book.ttf");
         FontsOverrideUtils.setDefaultFont(this, "MONOSPACE", "avenir_light.ttf");
-        FontsOverrideUtils.setDefaultFont(this, "SERIF", "roboto_regular.ttf");
-        FontsOverrideUtils.setDefaultFont(this, "SANS_SERIF", "nunito_regular.ttf");
+        FontsOverrideUtils.setDefaultFont(this, "SERIF", "nunito_regular.ttf");
+        FontsOverrideUtils.setDefaultFont(this, "SANS_SERIF", "roboto_regular.ttf");
 
 
         SharedPreferences preferences = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);

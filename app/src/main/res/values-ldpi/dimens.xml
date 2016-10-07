@@ -16,17 +16,17 @@
     <dimen name="margin_top">24dp</dimen>
 
     <!-- CONCERNING RIPPLE ANIMATION -->
-    <dimen name="ripple_radius">30dp</dimen>
+    <dimen name="ripple_radius">16dp</dimen>
 
     <!-- CONCERNING RADIO FRAGMENT -->
     <dimen name="song_text_margins">16dp</dimen>
-    <dimen name="text_song_title">22dp</dimen>
-    <dimen name="text_song_author">18dp</dimen>
+    <dimen name="text_song_title">18dp</dimen>
+    <dimen name="text_song_author">14dp</dimen>
 
     <!-- CONCERNING VOLUME SLIDER -->
     <dimen name="central_logo_width">100dp</dimen>
     <dimen name="central_logo_height">100dp</dimen>
-    <dimen name="slider_padding">40dp</dimen>
+    <dimen name="slider_padding">80dp</dimen>
     <dimen name="slider_thumb_size">48dp</dimen>
     <dimen name="slider_border_thickness">14dp</dimen>
 

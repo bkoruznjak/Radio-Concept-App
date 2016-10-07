@@ -37,8 +37,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="10dp"
                         android:text="Android Name"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/text_social_title" />
 
                     <ImageView
                         android:id="@+id/socialNetworkIcon"
@@ -59,15 +59,16 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:lineSpacingMultiplier="1.5"
+                    android:lineSpacingExtra="5dp"
+                    android:lineSpacingMultiplier="1.0"
                     android:paddingBottom="10dp"
                     android:text="Android title"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/colorSecondaryText" />
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_social_text" />
 
             </LinearLayout>
 
-            <ImageView
+            <bkoruznjak.from.hr.antenazagreb.views.AdjustableImageView
                 android:id="@+id/socialCardImageView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

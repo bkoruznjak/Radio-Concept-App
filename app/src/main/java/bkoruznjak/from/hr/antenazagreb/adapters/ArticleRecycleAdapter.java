@@ -54,7 +54,7 @@ public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAd
         TextView textViewTitle = holder.textViewTitle;
         ImageView imageView = holder.imageViewIcon;
 
-        textViewDate.setText(dataSet.get(listPosition).published_at.toString());
+        textViewDate.setText(dataSet.get(listPosition).published_at);
         textViewTitle.setText(dataSet.get(listPosition).title);
         ArrayList<ArticleModel.Image> articleImagesList = (ArrayList<ArticleModel.Image>) dataSet.get(listPosition).images;
         for (ArticleModel.Image articleImage : articleImagesList) {

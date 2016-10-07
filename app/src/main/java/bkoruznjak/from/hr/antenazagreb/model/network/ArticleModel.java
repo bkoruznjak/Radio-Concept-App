@@ -16,7 +16,7 @@ public class ArticleModel implements Serializable {
     public int user_id;
     public String title;
     public String body;
-    public Date published_at;
+    public String published_at;
     public Date created_at;
     public Date updated_at;
 
