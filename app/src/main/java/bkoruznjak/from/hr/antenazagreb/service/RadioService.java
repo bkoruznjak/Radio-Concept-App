@@ -73,7 +73,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
             mExoPlayer.addListener(this);
         }
         myBus.register(this);
-        icyMetadataHandler = new IcyMetadataHandler(45000, radioState, myBus);
+        icyMetadataHandler = new IcyMetadataHandler(10000, radioState, myBus);
         icyMetadataHandler.fetchMetaData();
         Log.d("BBB", "service CREATED");
     }

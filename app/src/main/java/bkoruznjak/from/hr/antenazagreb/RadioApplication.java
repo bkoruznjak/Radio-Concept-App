@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -31,6 +32,9 @@ public class RadioApplication extends Application {
     private static RadioStateModel myStateModel;
     private int radioVolume;
     private int radioNotificationIcon;
+    private Drawable mSocialIconFacebook;
+    private Drawable mSocialIconTwitter;
+    private Drawable mSocialIconInstagram;
     private Locale locale = null;
 
     public static RadioApplication getInstance() {
@@ -93,6 +97,9 @@ public class RadioApplication extends Application {
 
         boolean useVector = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
         radioNotificationIcon = useVector ? R.drawable.antena_icon_vector : R.drawable.antena_icon;
+        mSocialIconFacebook = getResources().getDrawable(useVector ? R.drawable.icon_logo_facebook : R.drawable.icon_png_facebook);
+        mSocialIconTwitter = getResources().getDrawable(useVector ? R.drawable.icon_logo_twitter : R.drawable.icon_png_twitter);
+        mSocialIconInstagram = getResources().getDrawable(useVector ? R.drawable.icon_logo_instagram : R.drawable.icon_png_instagram);
     }
 
     public RadioBus getBus() {
@@ -120,5 +127,17 @@ public class RadioApplication extends Application {
 
     public int getRadioNotificationIcon() {
         return this.radioNotificationIcon;
+    }
+
+    public Drawable getSocialIconFacebook() {
+        return this.mSocialIconFacebook;
+    }
+
+    public Drawable getSocialIconTwitter() {
+        return this.mSocialIconTwitter;
+    }
+
+    public Drawable getSocialIconInstagram() {
+        return this.mSocialIconInstagram;
     }
 }
