@@ -45,7 +45,7 @@
                     android:layout_marginTop="10dp"
                     android:text="Android Name"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/colorSecondaryText" />
+                    android:textColor="@color/colorAccent" />
 
                 <TextView
                     android:id="@+id/articleCardBottomTextView"
@@ -58,7 +58,7 @@
                     android:maxLines="3"
                     android:text="Android title"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorSecondaryText" />
 
             </LinearLayout>
         </LinearLayout>

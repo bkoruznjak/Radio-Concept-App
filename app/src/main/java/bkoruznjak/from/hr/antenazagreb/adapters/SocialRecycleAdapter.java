@@ -56,13 +56,13 @@ public class SocialRecycleAdapter extends RecyclerView.Adapter<SocialRecycleAdap
 
         switch (dataSet.get(listPosition).type) {
             case "FACEBOOK":
-                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_logo_facebook));
+                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_png_facebook));
                 break;
             case "TWITTER":
-                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_logo_twitter));
+                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_png_twitter));
                 break;
             case "INSTAGRAM":
-                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_logo_instagram));
+                socialNetworkLogoView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.icon_png_instagram));
                 break;
         }
 
