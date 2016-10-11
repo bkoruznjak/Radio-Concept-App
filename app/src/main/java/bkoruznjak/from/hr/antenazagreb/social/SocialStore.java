@@ -35,7 +35,7 @@ public class SocialStore {
 
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url(NetworkConstants.SOCIAL_API_URI.concat(NetworkConstants.API_KEY))
+                        .url(NetworkConstants.API_SOCIAL_URI.concat(NetworkConstants.API_KEY))
                         .build();
                 try {
                     Response response = client.newCall(request).execute();

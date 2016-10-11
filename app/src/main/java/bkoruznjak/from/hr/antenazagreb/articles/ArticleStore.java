@@ -34,7 +34,7 @@ public class ArticleStore {
 
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url(NetworkConstants.API_URI.concat(NetworkConstants.API_KEY))
+                        .url(NetworkConstants.API_NEWS_URI.concat(NetworkConstants.API_KEY))
                         .build();
                 try {
                     Response response = client.newCall(request).execute();

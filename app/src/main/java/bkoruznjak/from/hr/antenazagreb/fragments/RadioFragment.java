@@ -11,7 +11,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +116,6 @@ public class RadioFragment extends Fragment implements VolumeSlider.OnSectorChan
     }
 
     private void updateViewsByRadioState(RadioStateModel stateModel) {
-        Log.d("BBB", "updating views with state model:" + stateModel.toString());
         txtAuthorName.setText(stateModel.getSongAuthor().trim());
         txtSongName.setText(stateModel.getSongTitle().trim());
         txtSongName.setSelected(true);

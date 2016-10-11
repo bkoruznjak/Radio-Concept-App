@@ -11,7 +11,7 @@ public class SongModel implements Serializable {
     private String mAuthor;
 
     public SongModel(){
-        this("unknown", "Unknown");
+        this("Unknown", "Unknown");
     }
 
     public SongModel(String title, String author){
@@ -24,12 +24,12 @@ public class SongModel implements Serializable {
         return mAuthor.concat(" - ").concat(mTitle);
     }
 
-    public void setTitle(String title){
-        this.mTitle = title;
-    }
-
     public String getTitle() {
         return mTitle;
+    }
+
+    public void setTitle(String title) {
+        this.mTitle = title;
     }
 
     public void setAuthor(String author){

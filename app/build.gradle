@@ -53,7 +53,8 @@ dependencies {
     debugCompile 'com.squareup.haha:haha:2.0.3'
 
     //network
-
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
 
@@ -66,23 +67,10 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.cleveroad:splittransformation:0.9.0'
     compile 'com.jaredrummler:material-spinner:1.1.0'
+    compile 'com.karumi:expandableselector:1.0.0'
 
     //analytics
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
-
-    //twitter
-    compile('com.twitter.sdk.android:twitter-core:2.0.0@aar') {
-        transitive = true;
-    }
-    compile('com.twitter.sdk.android:tweet-ui:2.0.0@aar') {
-        transitive = true;
-    }
-    compile('com.twitter.sdk.android:tweet-composer:2.0.0@aar') {
-        transitive = true;
-    }
-
-    //facebook
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }

@@ -8,6 +8,7 @@
         <item name="colorPrimaryDark">@color/md_deep_orange_900</item>
         <item name="colorAccent">@color/md_deep_orange_500</item>
         <item name="android:typeface">sans</item>
+        <item name="expandableItemStyle">@style/ExpandableItemStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -27,6 +28,15 @@
     <style name="AntenaButtonStyleColored" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/md_deep_orange_500</item>
         <item name="android:textColor">@color/antena_beige</item>
+    </style>
+
+    <style name="ExpandableItemStyle">
+        <item name="android:layout_height">@dimen/item_size</item>
+        <item name="android:layout_width">@dimen/item_size</item>
+        <item name="android:background">@drawable/bg_item_with_title</item>
+        <item name="android:layout_margin">@dimen/item_margin</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/item_text_size</item>
     </style>
 
 </resources>

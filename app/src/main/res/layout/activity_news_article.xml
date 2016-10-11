@@ -62,10 +62,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingMultiplier="1.5"
-                android:text="ovo je tekstasdasdasdasdasdasdasdasdasdasdasdasd"
+                android:paddingBottom="5dp"
+                android:text="ovo je tekst"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="12sp" />
         </ScrollView>
     </RelativeLayout>
-
 </RelativeLayout>

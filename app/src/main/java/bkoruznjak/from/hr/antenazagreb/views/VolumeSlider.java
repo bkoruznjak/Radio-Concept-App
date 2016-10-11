@@ -14,7 +14,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -155,7 +154,6 @@ public class VolumeSlider extends View {
     }
 
     public void setAngle(double angle) {
-        Log.d("bbb", "angle:" + angle);
         mAngle = angle;
         if (angle < 0) {
             mThumbAngle = (float) ((mAngle * 180) / Math.PI);
@@ -265,7 +263,6 @@ public class VolumeSlider extends View {
     }
 
     public void updateSliderWithSectorID(int sectorID) {
-        Log.d("bbb", "updating slider angle with sector id:" + sectorID);
         updateSectorPosition(sectorID);
         changeSector(sectorID);
         double sectorPICoef = Math.PI / numberOfSectorsPerPI;

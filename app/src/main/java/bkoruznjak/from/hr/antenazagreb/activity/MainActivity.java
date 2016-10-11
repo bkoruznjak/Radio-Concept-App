@@ -1,11 +1,8 @@
 package bkoruznjak.from.hr.antenazagreb.activity;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -13,7 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -27,6 +24,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
@@ -49,10 +48,16 @@ import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.fragments.AntenaMenuFragment;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioVolumeModel;
+import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.ArticleModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.SocialModel;
+import bkoruznjak.from.hr.antenazagreb.model.network.StreamModel;
 import bkoruznjak.from.hr.antenazagreb.service.RadioService;
+import bkoruznjak.from.hr.antenazagreb.util.ResourceUtils;
 import bkoruznjak.from.hr.antenazagreb.views.AntenaTabFactory;
+import bkoruznjak.from.hr.antenazagreb.views.fab.CustomFloatingActionButton;
+import bkoruznjak.from.hr.antenazagreb.views.fab.FloatingActionMenu;
+import bkoruznjak.from.hr.antenazagreb.views.fab.SubActionButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -64,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
     private final int mBitmapWidth = 300;
     private final int mBitmapHeight = 399;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.antenaTabLayout)
     TabLayout antenaTabLayout;
     @BindView(R.id.antenaToolbar)
@@ -72,27 +79,10 @@ public class MainActivity extends AppCompatActivity {
     LeftDrawerLayout drawerLayout;
     @BindView(R.id.floatingDrawer)
     FlowingView mFlowingView;
-    @BindView(R.id.btnAntenaMainController)
-    FloatingActionButton mBtnMainController;
-    @BindView(R.id.fabUnderlay)
-    ImageView fabUnderlayVector;
-    @BindView(R.id.fab_main_stream)
-    FloatingActionButton mBtnMainStream;
-    @BindView(R.id.fab_rock_stream)
-    FloatingActionButton mBtnRockStream;
-    @BindView(R.id.fab_80_stream)
-    FloatingActionButton mBtn80Stream;
     Animation infiniteRotateAnim;
-    Animation rotateFrom0to90Animation;
-    Animation rotateFrom90to0Animation;
+    Animation realInfiniteRotateAnim;
     RadioStateModel mRadioStateModel;
     float densityPixelCoef;
-    AnimatorSet moveMainStreamIcon;
-    AnimatorSet moveRockStreamIcon;
-    AnimatorSet move80sStreamIcon;
-    AnimatorSet returnMainStreamIcon;
-    AnimatorSet returnRockStreamIcon;
-    AnimatorSet return80sStreamIcon;
     private RadioBus myBus;
     private boolean isRadioStationPickerShown = false;
     private SharedPreferences mPreferences;
@@ -101,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
     private BitmapDrawable mBackgroundBitmap;
     private ArrayList<SocialModel> socialData;
     private ArrayList<ArticleModel> articleData;
+    private FloatingActionMenu rightLowerMenu;
+    private ImageView mRadioMainControlImage;
+    private ArrayList<StreamModel> mStreamList;
+    private ArrayList<SubActionButton> mStreamButtonsList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,16 +151,55 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         ButterKnife.bind(this);
+        mRadioMainControlImage = new ImageView(this);
         mBackgroundBitmap = new BitmapDrawable(decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, mBitmapWidth, mBitmapHeight));
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         myBus = ((RadioApplication) getApplication()).getBus();
         mRadioStateModel = ((RadioApplication) getApplication()).getRadioStateModel();
+        handleStreams();
         setupAnimations();
         setupActionBar();
         setupTabBar();
+        initFabButtons();
         setupDrawer();
-        setupFab();
         updateViewsByRadioState(mRadioStateModel);
+    }
+
+    /**
+     * Method handles fetching streams from the web service and returns them to the device
+     * in case no internet or error, local constants will be used
+     * <p>
+     * THIS IS A MOCK METHOD FOR NOW
+     */
+    private void handleStreams() {
+        mStreamList = new ArrayList<>();
+        StreamModel model1 = new StreamModel();
+        model1.id = "1";
+        model1.name = "Antena Default";
+        model1.url = StreamUriConstants.ANTENA_MAIN;
+        model1.streamIconName = "ic_live_stream_icon_beige";
+        mStreamList.add(model1);
+
+        StreamModel model2 = new StreamModel();
+        model2.id = "2";
+        model2.name = "Antena Hit";
+        model2.url = StreamUriConstants.ANTENA_HIT;
+        model2.streamIconName = "ic_live_stream_icon_beige";
+        mStreamList.add(model2);
+
+        StreamModel model3 = new StreamModel();
+        model3.id = "3";
+        model3.name = "Antena Rock";
+        model3.url = StreamUriConstants.ANTENA_ROCK;
+        model3.streamIconName = "ic_rock_stream_icon_beige";
+        mStreamList.add(model3);
+
+        StreamModel model4 = new StreamModel();
+        model4.id = "4";
+        model4.name = "Antena 80s";
+        model4.url = StreamUriConstants.ANTENA_80;
+        model4.streamIconName = "ic_80_stream_icon_beige";
+        mStreamList.add(model4);
     }
 
     /**
@@ -178,12 +211,14 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN && drawerLayout.isShownMenu()) {
-            float floatingDrawerWidth = mFlowingView.getWidth();
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
             float touchX = event.getX();
-            if (touchX > floatingDrawerWidth) {
-                drawerLayout.closeDrawer();
-                return false;
+            if (drawerLayout.isShownMenu()) {
+                float floatingDrawerWidth = mFlowingView.getWidth();
+                if (touchX > floatingDrawerWidth) {
+                    drawerLayout.closeDrawer();
+                    return false;
+                }
             }
         }
         return super.dispatchTouchEvent(event);
@@ -237,57 +272,11 @@ public class MainActivity extends AppCompatActivity {
         densityPixelCoef = getResources().getDisplayMetrics().widthPixels / 100;
         //animation for main control fab
         infiniteRotateAnim = AnimationUtils.loadAnimation(this, R.anim.inf_rotate);
-        //animation for vector under main control fab
-        rotateFrom0to90Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_0_90);
-        rotateFrom90to0Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_90_0);
-        //animations for radio station fab's
-        fabUnderlayVector.startAnimation(rotateFrom0to90Animation);
-        //custom animation
-        float mainTranslationX = -densityPixelCoef * 20f;
-        float rockTranslationX = -densityPixelCoef * 14f;
-        float rockTranslationY = -densityPixelCoef * 14f;
-        float s80sTranslationY = -densityPixelCoef * 20f;
-
-        //main stream animators
-        ObjectAnimator moveXMain = ObjectAnimator.ofFloat(mBtnMainStream, View.TRANSLATION_X, mainTranslationX);
-        ObjectAnimator revealMain = ObjectAnimator.ofFloat(mBtnMainStream, View.ALPHA, 1);
-        ObjectAnimator returnMain = ObjectAnimator.ofFloat(mBtnMainStream, View.TRANSLATION_X, 0f);
-        ObjectAnimator hideMain = ObjectAnimator.ofFloat(mBtnMainStream, View.ALPHA, 0);
-
-        moveMainStreamIcon = new AnimatorSet();
-        moveMainStreamIcon.play(moveXMain).with(revealMain);
-        moveMainStreamIcon.setDuration(800);
-        returnMainStreamIcon = new AnimatorSet();
-        returnMainStreamIcon.play(returnMain).with(hideMain);
-        returnMainStreamIcon.setDuration(1000);
-
-        //rock stream animators
-        ObjectAnimator moveXRock = ObjectAnimator.ofFloat(mBtnRockStream, View.TRANSLATION_X, rockTranslationX);
-        ObjectAnimator moveYRock = ObjectAnimator.ofFloat(mBtnRockStream, View.TRANSLATION_Y, rockTranslationY);
-        ObjectAnimator revealRock = ObjectAnimator.ofFloat(mBtnRockStream, View.ALPHA, 1);
-        ObjectAnimator returnXRock = ObjectAnimator.ofFloat(mBtnRockStream, View.TRANSLATION_X, 0f);
-        ObjectAnimator returnYRock = ObjectAnimator.ofFloat(mBtnRockStream, View.TRANSLATION_Y, 0f);
-        ObjectAnimator hideRock = ObjectAnimator.ofFloat(mBtnRockStream, View.ALPHA, 0);
-
-        moveRockStreamIcon = new AnimatorSet();
-        moveRockStreamIcon.play(moveXRock).with(moveYRock).with(revealRock);
-        moveRockStreamIcon.setDuration(1100);
-        returnRockStreamIcon = new AnimatorSet();
-        returnRockStreamIcon.play(returnXRock).with(returnYRock).with(hideRock);
-        returnRockStreamIcon.setDuration(800);
-
-        //80s stream animators
-        ObjectAnimator moveY80s = ObjectAnimator.ofFloat(mBtn80Stream, View.TRANSLATION_Y, s80sTranslationY);
-        ObjectAnimator reveal80s = ObjectAnimator.ofFloat(mBtn80Stream, View.ALPHA, 1);
-        ObjectAnimator returnY80s = ObjectAnimator.ofFloat(mBtn80Stream, View.TRANSLATION_Y, 0f);
-        ObjectAnimator hide80s = ObjectAnimator.ofFloat(mBtn80Stream, View.ALPHA, 0);
-
-        move80sStreamIcon = new AnimatorSet();
-        move80sStreamIcon.play(moveY80s).with(reveal80s);
-        move80sStreamIcon.setDuration(1200);
-        return80sStreamIcon = new AnimatorSet();
-        return80sStreamIcon.play(returnY80s).with(hide80s);
-        return80sStreamIcon.setDuration(600);
+        realInfiniteRotateAnim = new RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        //Setup anim with desired properties
+        realInfiniteRotateAnim.setInterpolator(new LinearInterpolator());
+        realInfiniteRotateAnim.setRepeatCount(Animation.INFINITE); //Repeat animation indefinitely
+        realInfiniteRotateAnim.setDuration(700); //Put desired duration per anim cycle here, in milliseconds
     }
 
     private void setupDrawer() {
@@ -298,6 +287,16 @@ public class MainActivity extends AppCompatActivity {
         }
         drawerLayout.setFluidView(mFlowingView);
         drawerLayout.setMenuFragment(mMenuFragment);
+        //todo UNTIL YOU FIGURE OUT HOW TO SET VIEW HIERARCHY OF THE rightLowerMenu SO IT IS BEHING THE DRAWER THIS IS HOW WE WILL HIDE IT
+        drawerLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (rightLowerMenu != null && event.getAction() == 2 && rightLowerMenu.isOpen()) {
+                    rightLowerMenu.close(true);
+                }
+                return false;
+            }
+        });
     }
 
     private void setupActionBar() {
@@ -309,83 +308,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 drawerLayout.toggle();
-            }
-        });
-    }
-
-    private void setupFab() {
-        mBtnMainController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("bbb", "FAB CLICKED");
-                if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
-                    myBus.post(RadioCommandEnum.PAUSE);
-                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
-                    mBtnMainController.clearAnimation();
-                } else if (mRadioStateModel.getStateEnum() == RadioStateEnum.BUFFERING) {
-                    //todo ovo treba malo doradit, stavio sam tu samo da mozes prekinut buffeering na naglo
-                    myBus.post(RadioCommandEnum.PAUSE);
-                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
-                    mBtnMainController.clearAnimation();
-                } else if (mRadioStateModel.isServiceUp()) {
-                    myBus.post(RadioCommandEnum.PLAY);
-                } else {
-                    Log.d("BBB", "starting service anew");
-                    Intent startRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
-                    startService(startRadioServiceIntent);
-                }
-            }
-        });
-
-        mBtnMainController.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Log.d("bbb", "FAB LONG CLICKED");
-                //todo stream choser
-                if (isRadioStationPickerShown) {
-                    //hide the cloud vector
-                    fabUnderlayVector.startAnimation(rotateFrom0to90Animation);
-                    returnMainStreamIcon.start();
-                    return80sStreamIcon.start();
-                    returnRockStreamIcon.start();
-                    isRadioStationPickerShown = false;
-                } else {
-                    //show the cloud vector
-                    fabUnderlayVector.startAnimation(rotateFrom90to0Animation);
-                    moveMainStreamIcon.start();
-                    moveRockStreamIcon.start();
-                    move80sStreamIcon.start();
-                    isRadioStationPickerShown = true;
-                }
-
-                return true;
-            }
-        });
-
-        mBtnMainStream.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("bbb", "main stream pressed");
-                handleStreamURI(StreamUriConstants.ANTENA_MAIN);
-                refreshStreamButtons(StreamUriConstants.ANTENA_MAIN);
-            }
-        });
-
-        mBtnRockStream.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("bbb", "rock stream pressed");
-                handleStreamURI(StreamUriConstants.ANTENA_ROCK);
-                refreshStreamButtons(StreamUriConstants.ANTENA_ROCK);
-            }
-        });
-
-        mBtn80Stream.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("bbb", "80's stream pressed");
-                handleStreamURI(StreamUriConstants.ANTENA_80);
-                refreshStreamButtons(StreamUriConstants.ANTENA_80);
             }
         });
     }
@@ -435,32 +357,32 @@ public class MainActivity extends AppCompatActivity {
     public void handleStreamStateChange(RadioStateEnum streamState) {
         switch (streamState) {
             case BUFFERING:
-                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
+                mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
                 Log.d("bbb", "starting infinite animation buffering");
-                mBtnMainController.clearAnimation();
-                mBtnMainController.startAnimation(infiniteRotateAnim);
+                mRadioMainControlImage.clearAnimation();
+                mRadioMainControlImage.startAnimation(realInfiniteRotateAnim);
                 break;
             case ENDED:
-                mBtnMainController.clearAnimation();
-                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                mRadioMainControlImage.clearAnimation();
+                mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                 break;
             case IDLE:
-                mBtnMainController.clearAnimation();
-                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                mRadioMainControlImage.clearAnimation();
+                mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                 break;
             case PREPARING:
-                mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
+                mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
                 Log.d("bbb", "starting infinite animation preparing");
-                mBtnMainController.clearAnimation();
-                mBtnMainController.startAnimation(infiniteRotateAnim);
+                mRadioMainControlImage.clearAnimation();
+                mRadioMainControlImage.startAnimation(realInfiniteRotateAnim);
                 break;
             case READY:
                 //stop buffering animation if it exists
-                mBtnMainController.clearAnimation();
+                mRadioMainControlImage.clearAnimation();
                 if (mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
-                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+                    mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
                 } else {
-                    mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
                 }
                 break;
             case UNKNOWN:
@@ -495,36 +417,21 @@ public class MainActivity extends AppCompatActivity {
     private void refreshControlButtonDrawable(RadioStateModel stateModel, Animation animation) {
         //ovo ojačaj kod jer treba maknut rucno dodavanje na gumb animacije i sranja.
         if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.PREPARING) {
-            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
+            mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
             Log.d("bbb", "starting infinite refresh");
-            mBtnMainController.startAnimation(infiniteRotateAnim);
+            mRadioMainControlImage.startAnimation(realInfiniteRotateAnim);
         } else if (stateModel.isMusicPlaying() && !stateModel.isStreamInterrupted()) {
-            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
+            mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
         } else {
-            mBtnMainController.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+            mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
         }
     }
 
     private void refreshStreamButtons(String radioStreamUri) {
-        mBtnMainStream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.md_deep_orange_500)));
-        mBtnMainStream.setImageDrawable(getResources().getDrawable(R.drawable.ic_live_stream_icon_beige));
-        mBtn80Stream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.md_deep_orange_500)));
-        mBtn80Stream.setImageDrawable(getResources().getDrawable(R.drawable.ic_80_stream_icon_beige));
-        mBtnRockStream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.md_deep_orange_500)));
-        mBtnRockStream.setImageDrawable(getResources().getDrawable(R.drawable.ic_rock_stream_icon_beige));
-        switch (radioStreamUri) {
-            case StreamUriConstants.ANTENA_MAIN:
-                mBtnMainStream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.antena_beige)));
-                mBtnMainStream.setImageDrawable(getResources().getDrawable(R.drawable.ic_live_stream_icon_orange));
-                break;
-            case StreamUriConstants.ANTENA_ROCK:
-                mBtnRockStream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.antena_beige)));
-                mBtnRockStream.setImageDrawable(getResources().getDrawable(R.drawable.ic_rock_stream_icon_orange));
-                break;
-            case StreamUriConstants.ANTENA_80:
-                mBtn80Stream.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.antena_beige)));
-                mBtn80Stream.setImageDrawable(getResources().getDrawable(R.drawable.ic_80_stream_icon_orange));
-                break;
+        if (mStreamButtonsList != null) {
+            for (SubActionButton button : mStreamButtonsList) {
+                button.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_orange_selector));
+            }
         }
     }
 
@@ -606,5 +513,62 @@ public class MainActivity extends AppCompatActivity {
 
     public void setArticleData(ArrayList<ArticleModel> articleData) {
         this.articleData = articleData;
+    }
+
+    private void initFabButtons() {
+        mStreamButtonsList = new ArrayList<>();
+        // Set up the orange button on the lower right corner
+        // more or less with default parameter
+        mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+        final CustomFloatingActionButton rightLowerButton = new CustomFloatingActionButton.Builder(this)
+                .setContentView(mRadioMainControlImage)
+                .build();
+
+        FloatingActionMenu.Builder streamButtonBuilder = new FloatingActionMenu.Builder(this);
+        SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(this);
+        if (mStreamList != null) {
+            for (final StreamModel stream : mStreamList) {
+                ImageView streamIcon = new ImageView(this);
+                int iconId = ResourceUtils.imgResIdFromName(getApplicationContext(), stream.streamIconName);
+                streamIcon.setImageDrawable(getResources().getDrawable(iconId));
+                SubActionButton streamButton = rLSubBuilder.setContentView(streamIcon).build();
+                streamButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("bbb", "" + stream.url + "pressed");
+                        handleStreamURI(stream.url);
+                        refreshStreamButtons(stream.url);
+                        myBus.post(new SongModel(mRadioStateModel.getSongTitle(), mRadioStateModel.getSongAuthor()));
+                    }
+                });
+                mStreamButtonsList.add(streamButton);
+                streamButtonBuilder.addSubActionView(streamButton);
+            }
+        }
+
+        rightLowerMenu = streamButtonBuilder.attachTo(rightLowerButton).build();
+
+        rightLowerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("bbb", "kliknuo sam kontroller");
+                if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
+                    myBus.post(RadioCommandEnum.PAUSE);
+                    mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    mRadioMainControlImage.clearAnimation();
+                } else if (mRadioStateModel.getStateEnum() == RadioStateEnum.BUFFERING) {
+                    //todo ovo treba malo doradit, stavio sam tu samo da mozes prekinut buffeering na naglo
+                    myBus.post(RadioCommandEnum.PAUSE);
+                    mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
+                    mRadioMainControlImage.clearAnimation();
+                } else if (mRadioStateModel.isServiceUp()) {
+                    myBus.post(RadioCommandEnum.PLAY);
+                } else {
+                    Log.d("BBB", "starting service anew");
+                    Intent startRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
+                    startService(startRadioServiceIntent);
+                }
+            }
+        });
     }
 }

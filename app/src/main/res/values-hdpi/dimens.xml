@@ -30,6 +30,15 @@
     <dimen name="slider_thumb_size">48dp</dimen>
     <dimen name="slider_border_thickness">14dp</dimen>
 
+    <!-- CONCERNING RADIO CONTROLLER -->
+    <dimen name="action_button_size">72dp</dimen>
+    <dimen name="action_button_content_margin">16dp</dimen>
+    <dimen name="action_button_margin">12dp</dimen>
+    <dimen name="action_menu_radius">96dp</dimen>
+
+    <dimen name="sub_action_button_size">42dp</dimen>
+    <dimen name="sub_action_button_content_margin">6dp</dimen>
+
     <!-- CONCERNING TEXT -->
     <dimen name="text_social_title">12dp</dimen>
     <dimen name="text_social_text">12dp</dimen>

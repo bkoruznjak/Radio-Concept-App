@@ -30,6 +30,15 @@
     <dimen name="slider_thumb_size">48dp</dimen>
     <dimen name="slider_border_thickness">14dp</dimen>
 
+    <!-- CONCERNING RADIO CONTROLLER -->
+    <dimen name="action_button_size">72dp</dimen>
+    <dimen name="action_button_content_margin">16dp</dimen>
+    <dimen name="action_button_margin">12dp</dimen>
+    <dimen name="action_menu_radius">96dp</dimen>
+
+    <dimen name="sub_action_button_size">42dp</dimen>
+    <dimen name="sub_action_button_content_margin">6dp</dimen>
+
     <!-- CONCERNING TEXT -->
     <dimen name="text_social_title">12dp</dimen>
     <dimen name="text_social_text">12dp</dimen>
@@ -37,4 +46,12 @@
     <dimen name="text_title_size">24sp</dimen>
     <dimen name="text_article_size">12sp</dimen>
     <dimen name="text_date_size">10sp</dimen>
+
+
+    <dimen name="item_size">60dp</dimen>
+    <dimen name="item_margin">4dp</dimen>
+    <dimen name="item_text_size">18sp</dimen>
+    <dimen name="item_text_size_small">9sp</dimen>
+    <dimen name="expandable_selector_margin">10dp</dimen>
+    <dimen name="background_radius">100dp</dimen>
 </resources>
