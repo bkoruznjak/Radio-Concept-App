@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
+import bkoruznjak.from.hr.antenazagreb.activity.ExtendActivity;
 import bkoruznjak.from.hr.antenazagreb.activity.TutorialActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.AntenaConstants;
@@ -171,8 +172,8 @@ public class AntenaMenuFragment extends MenuFragment {
         buttonThirdParty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bbb", "idem na third party");
-                Toast.makeText(getActivity(), "third party clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ExtendActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -23,3 +23,8 @@
 -keep class org.eclipse.mat.** { *; }
 -keep class com.squareup.leakcanary.** { *; }
 -dontwarn com.squareup.leakcanary.**
+# AboutLibs
+-keep class .R
+-keep class **.R$* {
+    <fields>;
+}
