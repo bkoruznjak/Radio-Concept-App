@@ -14,7 +14,7 @@ import bkoruznjak.from.hr.antenazagreb.R;
 public class ExtendActivity extends LibsActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setIntent(new LibsBuilder().withLibraries("exoplayer", "logansquare", "ripplebackground", "flowingdrawer", "splittransformation", "circular-slider-android").withExcludedLibraries("aboutlibraries", "androidiconics", "fastadapter").withActivityTheme(R.style.AppTheme_NoActionBar).intent(this));
+        setIntent(new LibsBuilder().withLibraries("exoplayer", "logansquare", "ripplebackground", "flowingdrawer", "skyfishjy", "cleveroad", "materialspinner").withActivityTheme(R.style.AppTheme_NoActionBar).intent(this));
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.drawer_enter_in, R.anim.drawer_enter_out);
     }

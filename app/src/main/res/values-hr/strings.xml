@@ -41,4 +41,78 @@
 
     <!-- RADIO SERVICE -->
     <string name="error_radio">Dogodila se greška, provjerite internet vezu!</string>
+
+    <!-- THIRD PARTY -->
+    <string name="define_int_exoplayer"></string>
+    <string name="library_exoplayer_author">Google Inc.</string>
+    <string name="library_exoplayer_authorWebsite">https://developer.android.com/</string>
+    <string name="library_exoplayer_libraryName">Exo Player</string>
+    <string name="library_exoplayer_libraryDescription">ExoPlayer supports features not currently provided by MediaPlayer, including Dynamic adaptive streaming over HTTP (DASH), SmoothStreaming and Common Encryption. It\'s designed to be easy to customize and extend, allowing many components to be replaced with custom implementations. Because ExoPlayer is a library that you include in your application, it can be easily updated along with your app.</string>
+    <string name="library_exoplayer_libraryWebsite">https://developer.android.com/guide/topics/media/exoplayer.html</string>
+    <string name="library_exoplayer_libraryVersion">2.0.2</string>
+    <string name="library_exoplayer_isOpenSource">true</string>
+    <string name="library_exoplayer_repositoryLink">https://github.com/google/ExoPlayer</string>
+    <string name="library_exoplayer_classPath"></string>
+    <string name="library_exoplayer_licenseId">apache_2_0</string>
+
+
+    <string name="define_int_circularslider"></string>
+    <string name="library_circularslider_author">Milos Marinkovic</string>
+    <string name="library_circularslider_authorWebsite">http://angrybyte.me/</string>
+    <string name="library_circularslider_libraryName">Circular Slider</string>
+    <string name="library_circularslider_libraryDescription">Circular Slider is a custom-built Android View used for choosing numbers. It works similarly to the regular slider control (SeekBar), just goes around in a circular fashion - simple enough. Note that the thumb scroller (the thing you drag around) can be either a solid-color circle or a custom drawable (like a PNG image).</string>
+    <string name="library_circularslider_libraryWebsite">https://android-arsenal.com/details/1/3417</string>
+    <string name="library_circularslider_libraryVersion">1.3.0</string>
+    <string name="library_circularslider_isOpenSource">true</string>
+    <string name="library_circularslider_repositoryLink">https://github.com/milosmns/circular-slider-android</string>
+    <string name="library_circularslider_classPath"></string>
+    <string name="library_circularslider_licenseId">apache_2_0</string>
+
+    <string name="define_int_flowingdrawer"></string>
+    <string name="library_flowingdrawer_author">Mxn</string>
+    <string name="library_flowingdrawer_authorWebsite">http://souly.cn/</string>
+    <string name="library_flowingdrawer_libraryName">Flowing Drawer</string>
+    <string name="library_flowingdrawer_libraryDescription">Swipe right to display drawer with flowing effects.</string>
+    <string name="library_flowingdrawer_libraryWebsite">https://android-arsenal.com/details/1/2658</string>
+    <string name="library_flowingdrawer_libraryVersion">1.2.5</string>
+    <string name="library_flowingdrawer_isOpenSource">true</string>
+    <string name="library_flowingdrawer_repositoryLink">https://github.com/mxn21/FlowingDrawer</string>
+    <string name="library_flowingdrawer_classPath"></string>
+    <string name="library_flowingdrawer_licenseId">apache_2_0</string>
+
+    <string name="define_int_skyfishjy"></string>
+    <string name="library_skyfishjy_author">Jason Yu</string>
+    <string name="library_skyfishjy_authorWebsite"></string>
+    <string name="library_skyfishjy_libraryName">Android Ripple Background</string>
+    <string name="library_skyfishjy_libraryDescription">A beautiful ripple animation for your app. You can easily change its color, speed of wave, one ripple or multiple ripples. See demo below.</string>
+    <string name="library_skyfishjy_libraryWebsite">https://android-arsenal.com/details/1/1107</string>
+    <string name="library_skyfishjy_libraryVersion">1.0.1</string>
+    <string name="library_skyfishjy_isOpenSource">true</string>
+    <string name="library_skyfishjy_repositoryLink">https://github.com/skyfishjy/android-ripple-background</string>
+    <string name="library_skyfishjy_classPath"></string>
+    <string name="library_skyfishjy_licenseId">apache_2_0</string>
+
+    <string name="define_int_cleveroad"></string>
+    <string name="library_cleveroad_author">Cleveroad Inc.</string>
+    <string name="library_cleveroad_authorWebsite">https://www.cleveroad.com</string>
+    <string name="library_cleveroad_libraryName">Bitutorial</string>
+    <string name="library_cleveroad_libraryDescription">An easy to use open-source library for the Android platform. The crumbling view of horizontal sliding creates elegant motion and all the elements (images, fonts) of the library are truly customizable, so it can fit an app of any kind.</string>
+    <string name="library_cleveroad_libraryWebsite">https://android-arsenal.com/details/1/4025</string>
+    <string name="library_cleveroad_libraryVersion">0.9.0</string>
+    <string name="library_cleveroad_isOpenSource">true</string>
+    <string name="library_cleveroad_repositoryLink">https://github.com/Cleveroad/Bitutorial</string>
+    <string name="library_cleveroad_classPath"></string>
+    <string name="library_cleveroad_licenseId">apache_2_0</string>
+
+    <string name="define_int_materialspinner"></string>
+    <string name="library_materialspinner_author">Jared Rummler</string>
+    <string name="library_materialspinner_authorWebsite">http://jaredrummler.com/</string>
+    <string name="library_materialspinner_libraryName">Material Spinner</string>
+    <string name="library_materialspinner_libraryDescription">A simple spinner for Android with Material Design.</string>
+    <string name="library_materialspinner_libraryWebsite">https://android-arsenal.com/details/1/3124</string>
+    <string name="library_materialspinner_libraryVersion">1.1.0</string>
+    <string name="library_materialspinner_isOpenSource">true</string>
+    <string name="library_materialspinner_repositoryLink">https://github.com/jaredrummler/Material-Spinner</string>
+    <string name="library_materialspinner_classPath"></string>
+    <string name="library_materialspinner_licenseId">apache_2_0</string>
 </resources>

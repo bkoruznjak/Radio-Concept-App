@@ -67,7 +67,6 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.cleveroad:splittransformation:0.9.0'
     compile 'com.jaredrummler:material-spinner:1.1.0'
-    compile 'com.karumi:expandableselector:1.0.0'
     compile('com.mikepenz:aboutlibraries:5.8.1@aar') {
         transitive = true
     }
