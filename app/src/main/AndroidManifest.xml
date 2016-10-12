@@ -31,8 +31,8 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.ExtendActivity"
-            android:label="@string/setting_third_party"
+            android:name=".activity.AboutActivity"
+            android:label="@string/setting_about"
             android:screenOrientation="portrait"
             android:theme="@style/AboutLibrariesTheme">
             <meta-data

@@ -43,6 +43,11 @@
     <!-- RADIO SERVICE -->
     <string name="error_radio">There was a problem, check your internet connection!</string>
 
+    <!-- ABOUT APP -->
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text">Place your description here :D</string>
+
     <!-- THIRD PARTY -->
     <string name="define_int_exoplayer"></string>
     <string name="library_exoplayer_author">Google</string>

@@ -25,7 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
-import bkoruznjak.from.hr.antenazagreb.activity.ExtendActivity;
+import bkoruznjak.from.hr.antenazagreb.activity.AboutActivity;
 import bkoruznjak.from.hr.antenazagreb.activity.TutorialActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.AntenaConstants;
@@ -60,8 +60,6 @@ public class AntenaMenuFragment extends MenuFragment {
     public Button buttonTutorial;
     @BindView(R.id.setting_feedback)
     public Button buttonFeedback;
-    @BindView(R.id.setting_third_party)
-    public Button buttonThirdParty;
     @BindView(R.id.material_language_spinner)
     public MaterialSpinner materialLanguageSpinner;
 
@@ -138,7 +136,8 @@ public class AntenaMenuFragment extends MenuFragment {
         buttonAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "about clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), AboutActivity.class);
+                startActivity(intent);
             }
         });
         buttonTutorial.setOnClickListener(new View.OnClickListener() {
@@ -167,13 +166,6 @@ public class AntenaMenuFragment extends MenuFragment {
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(getActivity(), noClient, Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-        buttonThirdParty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ExtendActivity.class);
-                startActivity(intent);
             }
         });
 

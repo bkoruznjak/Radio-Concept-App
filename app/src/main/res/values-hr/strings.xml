@@ -42,6 +42,11 @@
     <!-- RADIO SERVICE -->
     <string name="error_radio">Dogodila se greška, provjerite internet vezu!</string>
 
+    <!-- ABOUT APP -->
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text">Place your description here :D</string>
+
     <!-- THIRD PARTY -->
     <string name="define_int_exoplayer"></string>
     <string name="library_exoplayer_author">Google Inc.</string>
@@ -54,7 +59,6 @@
     <string name="library_exoplayer_repositoryLink">https://github.com/google/ExoPlayer</string>
     <string name="library_exoplayer_classPath"></string>
     <string name="library_exoplayer_licenseId">apache_2_0</string>
-
 
     <string name="define_int_circularslider"></string>
     <string name="library_circularslider_author">Milos Marinkovic</string>
