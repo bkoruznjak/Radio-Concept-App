@@ -85,17 +85,17 @@
     <string name="library_flowingdrawer_classPath"></string>
     <string name="library_flowingdrawer_licenseId">apache_2_0</string>
 
-    <string name="define_int_skyfishjy"></string>
-    <string name="library_skyfishjy_author">Jason Yu</string>
-    <string name="library_skyfishjy_authorWebsite"></string>
-    <string name="library_skyfishjy_libraryName">Android Ripple Background</string>
-    <string name="library_skyfishjy_libraryDescription">A beautiful ripple animation for your app. You can easily change its color, speed of wave, one ripple or multiple ripples. See demo below.</string>
-    <string name="library_skyfishjy_libraryWebsite">https://android-arsenal.com/details/1/1107</string>
-    <string name="library_skyfishjy_libraryVersion">1.0.1</string>
-    <string name="library_skyfishjy_isOpenSource">true</string>
-    <string name="library_skyfishjy_repositoryLink">https://github.com/skyfishjy/android-ripple-background</string>
-    <string name="library_skyfishjy_classPath"></string>
-    <string name="library_skyfishjy_licenseId">apache_2_0</string>
+    <string name="define_int_ripple"></string>
+    <string name="library_ripple_author">Jason Yu</string>
+    <string name="library_ripple_authorWebsite">https://github.com/skyfishjy</string>
+    <string name="library_ripple_libraryName">Android Ripple Background</string>
+    <string name="library_ripple_libraryDescription">A beautiful ripple animation for your app. You can easily change its color, speed of wave, one ripple or multiple ripples.</string>
+    <string name="library_ripple_libraryWebsite">https://android-arsenal.com/details/1/1107</string>
+    <string name="library_ripple_libraryVersion">1.0.1</string>
+    <string name="library_ripple_isOpenSource">true</string>
+    <string name="library_ripple_repositoryLink">https://github.com/skyfishjy/android-ripple-background</string>
+    <string name="library_ripple_classPath"></string>
+    <string name="library_ripple_licenseId">apache_2_0</string>
 
     <string name="define_int_cleveroad"></string>
     <string name="library_cleveroad_author">Cleveroad Inc.</string>
