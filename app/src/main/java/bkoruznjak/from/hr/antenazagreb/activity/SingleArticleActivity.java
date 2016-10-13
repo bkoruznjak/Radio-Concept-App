@@ -55,7 +55,7 @@ public class SingleArticleActivity extends AppCompatActivity {
     private void updateViewContainer(ArticleModel articleModel) {
         if (articleModel != null) {
             articleTitle.setText(articleModel.title);
-            articleTopText.setText("" + articleModel.published_at);
+            articleTopText.setText("" + articleModel.human_diff_time);
             articleBottomText.setText("" + articleModel.body);
             ArrayList<ArticleModel.Image> imageList = (ArrayList<ArticleModel.Image>) articleModel.images;
             for (ArticleModel.Image articleImage : imageList) {

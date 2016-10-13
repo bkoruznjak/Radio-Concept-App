@@ -46,8 +46,6 @@ public class AntenaMenuFragment extends MenuFragment {
 
     @BindView(R.id.setting_autoplay)
     public SwitchCompat settingAutoplay;
-    @BindView(R.id.setting_keep_articles)
-    public SwitchCompat settingKeepArticles;
     @BindView(R.id.ivMenuUserProfilePhoto)
     public ImageView drawerImage;
     @BindView(R.id.radioStationNameId)
@@ -68,7 +66,6 @@ public class AntenaMenuFragment extends MenuFragment {
     private SharedPreferences mPreferences;
 
     private boolean isAutoplayOn;
-    private boolean isStoringArticleData;
     private String defaultStation;
     private int volume;
 
@@ -80,7 +77,6 @@ public class AntenaMenuFragment extends MenuFragment {
         mPreferences = getActivity().getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         isAutoplayOn = mPreferences.getBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true);
-        isStoringArticleData = mPreferences.getBoolean(PreferenceKeyConstants.KEY_STORE_ARTICLES, false);
         defaultStation = mPreferences.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.ANTENA_MAIN);
         volume = mPreferences.getInt(PreferenceKeyConstants.KEY_VOLUME, 5);
     }
@@ -119,17 +115,6 @@ public class AntenaMenuFragment extends MenuFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mPreferences.edit().putBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, isChecked).commit();
-            }
-        });
-        if (isStoringArticleData) {
-            settingKeepArticles.setChecked(true);
-        } else {
-            settingKeepArticles.setChecked(false);
-        }
-        settingKeepArticles.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mPreferences.edit().putBoolean(PreferenceKeyConstants.KEY_STORE_ARTICLES, isChecked).commit();
             }
         });
         //other info department

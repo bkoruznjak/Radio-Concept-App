@@ -17,7 +17,7 @@
     <string name="setting_air_title">Trenutno svira:</string>
     <string name="setting_current_stream">Trenutno nemate odabranu stanicu</string>
     <string name="setting_current_song">Nepoznato - Nepoznato</string>
-    <string name="setting_autoplay">Samopokretanje</string>
+    <string name="setting_autoplay">Sviraj automatski</string>
     <string name="setting_keep_articles">Sačuvaj članke</string>
     <string name="setting_about">O aplikaciji</string>
     <string name="setting_feedback">Podrška</string>
