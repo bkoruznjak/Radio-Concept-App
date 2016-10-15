@@ -41,7 +41,6 @@ import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
-import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
@@ -108,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleAutoPlay(boolean isAutoplayOn) {
         if (isAutoplayOn && !mRadioStateModel.isServiceUp()) {
-            Log.d("BBB", "starting service anew due to autoplay");
             Intent startRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
             startService(startRadioServiceIntent);
         }
@@ -141,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (!mRadioStateModel.isMusicPlaying() && mRadioStateModel.isServiceUp()) {
-            Log.d("bbb", "app shutting down");
             myBus.post(RadioCommandEnum.STOP);
             Intent stopRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
             stopService(stopRadioServiceIntent);
@@ -172,34 +169,7 @@ public class MainActivity extends AppCompatActivity {
      * THIS IS A MOCK METHOD FOR NOW
      */
     private void handleStreams() {
-        mStreamList = new ArrayList<>();
-        StreamModel model1 = new StreamModel();
-        model1.id = "1";
-        model1.name = "Antena Default";
-        model1.url = StreamUriConstants.ANTENA_MAIN;
-        model1.streamIconName = "ic_live_stream_icon_beige";
-        mStreamList.add(model1);
-
-        StreamModel model2 = new StreamModel();
-        model2.id = "2";
-        model2.name = "Antena Hit";
-        model2.url = StreamUriConstants.ANTENA_HIT;
-        model2.streamIconName = "ic_live_stream_icon_beige";
-        mStreamList.add(model2);
-
-        StreamModel model3 = new StreamModel();
-        model3.id = "3";
-        model3.name = "Antena Rock";
-        model3.url = StreamUriConstants.ANTENA_ROCK;
-        model3.streamIconName = "ic_rock_stream_icon_beige";
-        mStreamList.add(model3);
-
-        StreamModel model4 = new StreamModel();
-        model4.id = "4";
-        model4.name = "Antena 80s";
-        model4.url = StreamUriConstants.ANTENA_80;
-        model4.streamIconName = "ic_80_stream_icon_beige";
-        mStreamList.add(model4);
+        mStreamList = RadioApplication.getInstance().getStreamList();
     }
 
     /**
@@ -358,7 +328,6 @@ public class MainActivity extends AppCompatActivity {
         switch (streamState) {
             case BUFFERING:
                 mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
-                Log.d("bbb", "starting infinite animation buffering");
                 mRadioMainControlImage.clearAnimation();
                 mRadioMainControlImage.startAnimation(realInfiniteRotateAnim);
                 break;
@@ -372,7 +341,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case PREPARING:
                 mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
-                Log.d("bbb", "starting infinite animation preparing");
                 mRadioMainControlImage.clearAnimation();
                 mRadioMainControlImage.startAnimation(realInfiniteRotateAnim);
                 break;
@@ -392,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void handleLanguageChange(LanguagesEnum languageEvent) {
-        Log.d("bbb", "mijenjam jezik na:" + languageEvent.toString());
         Locale myLocale = new Locale(languageEvent.toString());
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
@@ -418,7 +385,6 @@ public class MainActivity extends AppCompatActivity {
         //ovo ojačaj kod jer treba maknut rucno dodavanje na gumb animacije i sranja.
         if (stateModel.getStateEnum() == RadioStateEnum.BUFFERING || stateModel.getStateEnum() == RadioStateEnum.PREPARING) {
             mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white_24dp));
-            Log.d("bbb", "starting infinite refresh");
             mRadioMainControlImage.startAnimation(realInfiniteRotateAnim);
         } else if (stateModel.isMusicPlaying() && !stateModel.isStreamInterrupted()) {
             mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_white_24dp));
@@ -427,30 +393,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void refreshStreamButtons(String radioStreamUri) {
+    private void refreshStreamButtons(StreamModel streamModel) {
         if (mStreamButtonsList != null) {
             for (SubActionButton button : mStreamButtonsList) {
-                button.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_orange_selector));
+                if (button.getStreamName().equals(streamModel.name)) {
+                    button.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_dark_orange_selector));
+                } else {
+                    button.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_orange_selector));
+                }
             }
         }
     }
 
     private void updateViewsByRadioState(RadioStateModel stateModel) {
         refreshControlButtonDrawable(stateModel, infiniteRotateAnim);
-        refreshStreamButtons(stateModel.getStreamUri());
+        refreshStreamButtons(stateModel.getStreamModel());
     }
 
     /**
      * Insurance method in case the service is down, user is still able to change streams
      *
-     * @param streamURI
+     * @param streamModel
      */
-    private void handleStreamURI(String streamURI) {
-        Log.d("BBB", "StreamURI:" + streamURI);
+    private void handleStreamURI(StreamModel streamModel) {
+        Log.d("BBB", "StreamURI:" + streamModel.url);
         if (mRadioStateModel.isServiceUp()) {
-            myBus.post(streamURI);
+            myBus.post(streamModel.url);
         } else {
-            mRadioStateModel.setStreamUri(streamURI);
+            mRadioStateModel.setStreamUri(streamModel.url);
         }
     }
 
@@ -529,16 +499,18 @@ public class MainActivity extends AppCompatActivity {
         if (mStreamList != null) {
             for (final StreamModel stream : mStreamList) {
                 ImageView streamIcon = new ImageView(this);
-                int iconId = ResourceUtils.imgResIdFromName(getApplicationContext(), stream.streamIconName);
+                int iconId = ResourceUtils.imgResIdFromName(getApplicationContext(), stream.iconId);
                 streamIcon.setImageDrawable(getResources().getDrawable(iconId));
                 SubActionButton streamButton = rLSubBuilder.setContentView(streamIcon).build();
+                streamButton.setStreamName(stream.name);
                 streamButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("bbb", "" + stream.url + "pressed");
-                        handleStreamURI(stream.url);
-                        refreshStreamButtons(stream.url);
+                        mRadioStateModel.setStreamModel(stream);
+                        handleStreamURI(stream);
+                        refreshStreamButtons(stream);
                         myBus.post(new SongModel(mRadioStateModel.getSongTitle(), mRadioStateModel.getSongAuthor()));
+                        myBus.post(stream);
                     }
                 });
                 mStreamButtonsList.add(streamButton);
@@ -551,7 +523,6 @@ public class MainActivity extends AppCompatActivity {
         rightLowerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bbb", "kliknuo sam kontroller");
                 if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
                     myBus.post(RadioCommandEnum.PAUSE);
                     mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));

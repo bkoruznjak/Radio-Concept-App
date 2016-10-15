@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +33,12 @@ import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
+import bkoruznjak.from.hr.antenazagreb.model.network.StreamModel;
 import bkoruznjak.from.hr.antenazagreb.views.CircleTransformation;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static bkoruznjak.from.hr.antenazagreb.R.id.ivMenuUserProfilePhoto;
 
 /**
  * Created by bkoruznjak on 08/08/16.
@@ -46,7 +48,7 @@ public class AntenaMenuFragment extends MenuFragment {
 
     @BindView(R.id.setting_autoplay)
     public SwitchCompat settingAutoplay;
-    @BindView(R.id.ivMenuUserProfilePhoto)
+    @BindView(ivMenuUserProfilePhoto)
     public ImageView drawerImage;
     @BindView(R.id.radioStationNameId)
     public TextView radioStationText;
@@ -68,6 +70,8 @@ public class AntenaMenuFragment extends MenuFragment {
     private boolean isAutoplayOn;
     private String defaultStation;
     private int volume;
+    private int avatarSize;
+    private ImageView streamImageView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,9 +101,10 @@ public class AntenaMenuFragment extends MenuFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View drawerMenu = inflater.inflate(R.layout.fragment_drawer_menu, container, false);
         ButterKnife.bind(this, drawerMenu);
+        avatarSize = getResources().getDimensionPixelSize(R.dimen.item_height);
         final NavigationView naviView = (NavigationView) drawerMenu.findViewById(R.id.vNavigation);
-        ImageView drawerHeaderImage = (ImageView) drawerMenu.findViewById(R.id.ivMenuUserProfilePhoto);
-        setupHeader(drawerHeaderImage);
+        streamImageView = (ImageView) drawerMenu.findViewById(ivMenuUserProfilePhoto);
+        setupHeader();
 
         //radio and song information
         radioStationText.setText(mRadioStateModel.getRadioStationName());
@@ -182,34 +187,49 @@ public class AntenaMenuFragment extends MenuFragment {
 
     @Subscribe
     public void handleSongMetadata(SongModel song) {
-        radioStationText.setText(mRadioStateModel.getRadioStationName());
+//        radioStationText.setText(mRadioStateModel.getRadioStationName());
         currentlyPlayingText.setText(mRadioStateModel.getSongAuthor().concat(" - ").concat(mRadioStateModel.getSongTitle()));
         currentlyPlayingText.setSelected(true);
     }
 
-    /**
-     * Insurance method in case the service is down, user is still able to change streams
-     *
-     * @param streamURI
-     */
-    private void handleStreamURI(String streamURI) {
-        Log.d("BBB", "StreamURI:" + streamURI);
-        if (mRadioStateModel.isServiceUp()) {
-            myBus.post(streamURI);
-        } else {
-            mRadioStateModel.setStreamUri(streamURI);
+    @Subscribe
+    public void handleStreamModelChange(StreamModel streamEvent) {
+        if (!radioStationText.getText().equals(streamEvent.name)) {
+            radioStationText.setText(streamEvent.name);
+            if (streamEvent.imageUrl != null) {
+                Picasso.with(getActivity())
+                        .load(streamEvent.imageUrl)
+                        .placeholder(R.drawable.img_article_placeholder)
+                        .resize(avatarSize, avatarSize)
+                        .centerCrop()
+                        .transform(new CircleTransformation())
+                        .into(streamImageView);
+            }
+
         }
     }
 
-    private void setupHeader(ImageView ivMenuUserProfilePhoto) {
-        int avatarSize = getResources().getDimensionPixelSize(R.dimen.item_height);
-        Picasso.with(getActivity())
-                .load(R.drawable.random_background_image)
-                .placeholder(R.drawable.img_placeholder)
-                .resize(avatarSize, avatarSize)
-                .centerCrop()
-                .transform(new CircleTransformation())
-                .into(ivMenuUserProfilePhoto);
+    private void setupHeader() {
+        String streamImageUrl = mRadioStateModel.getStreamModel().imageUrl;
+        if (streamImageView != null) {
+            if (streamImageUrl != null) {
+                Picasso.with(getActivity())
+                        .load(streamImageUrl)
+                        .placeholder(R.drawable.img_article_placeholder)
+                        .resize(avatarSize, avatarSize)
+                        .centerCrop()
+                        .transform(new CircleTransformation())
+                        .into(streamImageView);
+            } else {
+                Picasso.with(getActivity())
+                        .load(R.drawable.random_background_image)
+                        .placeholder(R.drawable.img_article_placeholder)
+                        .resize(avatarSize, avatarSize)
+                        .centerCrop()
+                        .transform(new CircleTransformation())
+                        .into(streamImageView);
+            }
+        }
     }
 
     public void onOpenMenu() {

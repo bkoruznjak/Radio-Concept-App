@@ -57,8 +57,12 @@ public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAd
         textViewDate.setText(dataSet.get(listPosition).human_diff_time);
         textViewTitle.setText(dataSet.get(listPosition).title);
         ArrayList<ArticleModel.Image> articleImagesList = (ArrayList<ArticleModel.Image>) dataSet.get(listPosition).images;
-        for (ArticleModel.Image articleImage : articleImagesList) {
-            Picasso.with(RadioApplication.getContext()).load(articleImage.url).resize(imageHeight, imageWidth).centerCrop().into(imageView);
+        if (articleImagesList.size() == 0) {
+            Picasso.with(RadioApplication.getContext()).load(R.drawable.img_article_placeholder).resize(imageHeight, imageWidth).centerInside().into(imageView);
+        } else {
+            for (ArticleModel.Image articleImage : articleImagesList) {
+                Picasso.with(RadioApplication.getContext()).load(articleImage.url).resize(imageHeight, imageWidth).centerCrop().into(imageView);
+            }
         }
         setScaleAnimation(holder.itemView);
     }

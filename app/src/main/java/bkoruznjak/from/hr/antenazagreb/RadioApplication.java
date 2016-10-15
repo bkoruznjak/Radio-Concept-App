@@ -12,6 +12,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
@@ -19,6 +20,7 @@ import bkoruznjak.from.hr.antenazagreb.constants.AntenaConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
+import bkoruznjak.from.hr.antenazagreb.model.network.StreamModel;
 import bkoruznjak.from.hr.antenazagreb.util.FontsOverrideUtils;
 import bkoruznjak.from.hr.antenazagreb.util.NetworkUtils;
 import io.fabric.sdk.android.Fabric;
@@ -32,6 +34,7 @@ public class RadioApplication extends Application {
     private static RadioStateModel myStateModel;
     private int radioVolume;
     private int radioNotificationIcon;
+    private ArrayList<StreamModel> mStreamList;
     private Drawable mSocialIconFacebook;
     private Drawable mSocialIconTwitter;
     private Drawable mSocialIconInstagram;
@@ -98,6 +101,13 @@ public class RadioApplication extends Application {
         mSocialIconFacebook = getResources().getDrawable(useVector ? R.drawable.icon_logo_facebook : R.drawable.icon_png_facebook);
         mSocialIconTwitter = getResources().getDrawable(useVector ? R.drawable.icon_logo_twitter : R.drawable.icon_png_twitter);
         mSocialIconInstagram = getResources().getDrawable(useVector ? R.drawable.icon_logo_instagram : R.drawable.icon_png_instagram);
+        mStreamList = new ArrayList<>();
+        StreamModel model1 = new StreamModel();
+        model1.id = "1";
+        model1.name = "Antena Default";
+        model1.url = StreamUriConstants.ANTENA_MAIN;
+        model1.iconId = "ic_live_stream_icon_beige";
+        mStreamList.add(model1);
     }
 
     public RadioBus getBus() {
@@ -137,5 +147,13 @@ public class RadioApplication extends Application {
 
     public Drawable getSocialIconInstagram() {
         return this.mSocialIconInstagram;
+    }
+
+    public ArrayList<StreamModel> getStreamList() {
+        return this.mStreamList;
+    }
+
+    public void setStreamList(ArrayList<StreamModel> streamList) {
+        this.mStreamList = streamList;
     }
 }

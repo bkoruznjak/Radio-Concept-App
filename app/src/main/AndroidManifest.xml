@@ -14,13 +14,7 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.SingleArticleActivity"
             android:label="@string/single_article_activity_name"
@@ -47,7 +41,6 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="1739100849694117" />
 
-
         <service android:name=".service.RadioService" />
 
         <activity
@@ -60,6 +53,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="bkoruznjak.from.hr.antenazagreb.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.LaunchActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

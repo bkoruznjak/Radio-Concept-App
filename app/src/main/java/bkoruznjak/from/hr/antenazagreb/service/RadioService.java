@@ -34,7 +34,6 @@ import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.activity.MainActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.NetworkConstants;
-import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.metadata.IcyMetadataHandler;
@@ -255,42 +254,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
 
     @Subscribe
     public void changeStation(String stationURI) {
-        if (StreamUriConstants.ANTENA_MAIN.equals(stationURI) && !radioState.getStreamUri().equals(stationURI)) {
-            radioState.setStreamUri(stationURI);
-            if (radioState.isMusicPlaying()) {
-                prepareRadioStream(stationURI, true);
-            } else {
-                prepareRadioStream(stationURI, false);
-            }
-        } else if (StreamUriConstants.ANTENA_HIT.equals(stationURI) && !radioState.getStreamUri().equals(stationURI)) {
-            radioState.setStreamUri(stationURI);
-            if (radioState.isMusicPlaying()) {
-                prepareRadioStream(stationURI, true);
-            } else {
-                prepareRadioStream(stationURI, false);
-            }
-        } else if (StreamUriConstants.ANTENA_ROCK.equals(stationURI) && !radioState.getStreamUri().equals(stationURI)) {
-            radioState.setStreamUri(stationURI);
-            if (radioState.isMusicPlaying()) {
-                prepareRadioStream(stationURI, true);
-            } else {
-                prepareRadioStream(stationURI, false);
-            }
-        } else if (StreamUriConstants.ANTENA_2000.equals(stationURI) && !radioState.getStreamUri().equals(stationURI)) {
-            radioState.setStreamUri(stationURI);
-            if (radioState.isMusicPlaying()) {
-                prepareRadioStream(stationURI, true);
-            } else {
-                prepareRadioStream(stationURI, false);
-            }
-        } else if (StreamUriConstants.ANTENA_90.equals(stationURI) && !radioState.getStreamUri().equals(stationURI)) {
-            radioState.setStreamUri(stationURI);
-            if (radioState.isMusicPlaying()) {
-                prepareRadioStream(stationURI, true);
-            } else {
-                prepareRadioStream(stationURI, false);
-            }
-        } else if (StreamUriConstants.ANTENA_80.equals(stationURI) && !radioState.getStreamUri().equals(stationURI)) {
+        if (stationURI.toLowerCase().startsWith(NetworkConstants.STREAM_PREFIX_STRING) && !radioState.getStreamUri().equals(stationURI)) {
             radioState.setStreamUri(stationURI);
             if (radioState.isMusicPlaying()) {
                 prepareRadioStream(stationURI, true);

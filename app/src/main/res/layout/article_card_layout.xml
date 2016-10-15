@@ -26,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_placeholder"
                 android:tag="image_tag" />
 
             <RelativeLayout

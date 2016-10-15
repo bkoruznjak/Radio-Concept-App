@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
+import bkoruznjak.from.hr.antenazagreb.model.network.StreamModel;
 
 /**
  * Created by bkoruznjak on 29/06/16.
  */
-public class RadioStateModel implements Serializable{
+public class RadioStateModel implements Serializable {
 
     private boolean isServiceUp;
     private boolean isMusicPlaying;
@@ -17,27 +18,35 @@ public class RadioStateModel implements Serializable{
 
     private String streamUri;
     private String radioStationName;
+    private String radioStationNameImage;
+    private String radioStationIconId;
     private String songAuthor;
     private String songTitle;
+    private StreamModel currentStreamModel;
 
     private RadioStateEnum stateEnum;
 
-    public RadioStateModel(){
-        this(false,false);
+    public RadioStateModel() {
+        this(false, false);
     }
 
-    public RadioStateModel(boolean isServiceUp,boolean isMusicPlaying){
+    public RadioStateModel(boolean isServiceUp, boolean isMusicPlaying) {
         this.isServiceUp = isServiceUp;
         this.isMusicPlaying = isMusicPlaying;
 
-        this.setStreamUri("Unknown");
-        this.setRadioStationName("Unknown");
+        this.setStreamUri(StreamUriConstants.ANTENA_MAIN);
+        this.setRadioStationName(StreamUriConstants.NAME_ANTENA_MAIN);
         this.setSongAuthor("Unknown");
         this.setSongTitle("Unknown");
         this.setStateEnum(RadioStateEnum.UNKNOWN);
+        this.currentStreamModel = new StreamModel();
+        currentStreamModel.id = "1";
+        currentStreamModel.name = StreamUriConstants.NAME_ANTENA_MAIN;
+        currentStreamModel.url = StreamUriConstants.ANTENA_MAIN;
+        currentStreamModel.iconId = "ic_live_stream_icon_beige";
     }
 
-    public boolean isServiceUp(){
+    public boolean isServiceUp() {
         return isServiceUp;
     }
 
@@ -45,12 +54,22 @@ public class RadioStateModel implements Serializable{
         this.isServiceUp = isServiceUp;
     }
 
-    public boolean isMusicPlaying(){
+    public boolean isMusicPlaying() {
         return isMusicPlaying;
     }
 
     public void setMusicPlaying(boolean isMusicPlaying) {
         this.isMusicPlaying = isMusicPlaying;
+    }
+
+    public StreamModel getStreamModel() {
+        return this.currentStreamModel;
+    }
+
+    public void setStreamModel(StreamModel streamModel) {
+        this.currentStreamModel = streamModel;
+        this.radioStationName = streamModel.name;
+        this.radioStationNameImage = streamModel.imageUrl;
     }
 
     public String getStreamUri() {
@@ -59,13 +78,6 @@ public class RadioStateModel implements Serializable{
 
     public void setStreamUri(String streamUri) {
         this.streamUri = streamUri;
-        if (StreamUriConstants.ANTENA_MAIN.equals(streamUri)) {
-            radioStationName = "Antena Live";
-        } else if (StreamUriConstants.ANTENA_80.equals(streamUri)) {
-            radioStationName = "Antena 80's";
-        } else if (StreamUriConstants.ANTENA_ROCK.equals(streamUri)) {
-            radioStationName = "Antena Rock";
-        }
     }
 
     public String getRadioStationName() {
@@ -74,6 +86,22 @@ public class RadioStateModel implements Serializable{
 
     public void setRadioStationName(String radioStationName) {
         this.radioStationName = radioStationName;
+    }
+
+    public String getRadioStationNameImage() {
+        return radioStationNameImage;
+    }
+
+    public void setRadioStationNameImage(String radioStationNameImage) {
+        this.radioStationNameImage = radioStationNameImage;
+    }
+
+    public String getRadioStationIconId() {
+        return radioStationIconId;
+    }
+
+    public void setRadioStationIconId(String radioStationIconId) {
+        this.radioStationIconId = radioStationIconId;
     }
 
     public String getSongAuthor() {
@@ -114,6 +142,8 @@ public class RadioStateModel implements Serializable{
                 .concat("service running: " + isServiceUp)
                 .concat(", music playing: " + isMusicPlaying)
                 .concat(", radio station: " + radioStationName)
+                .concat(", radio image: " + radioStationNameImage)
+                .concat(", radio icon: " + radioStationIconId)
                 .concat(", stream uri: " + streamUri)
                 .concat(", stream author: " + songAuthor)
                 .concat(", stream title: " + songTitle);
