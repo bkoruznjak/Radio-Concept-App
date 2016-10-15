@@ -10,6 +10,7 @@ public class PreferenceKeyConstants {
     public static final String KEY_DEFAULT_STATION = "keyDefaultStation";
     public static final String KEY_LANGUAGE = "keyLanguage";
     public static final String KEY_STORE_ARTICLES = "keyStoreArticles";
+    public static final String KEY_STREAM_DEFAULT = "keyStreamDefault";
     public static final String KEY_STREAM_PACKET = "keyStreamPacket";
     public static final String KEY_VOLUME = "keyVolume";
 }

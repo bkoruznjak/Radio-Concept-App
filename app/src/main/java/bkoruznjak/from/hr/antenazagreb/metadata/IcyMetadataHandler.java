@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.Map;
 
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
-import bkoruznjak.from.hr.antenazagreb.constants.SongMetadataUriConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
@@ -41,7 +40,7 @@ public class IcyMetadataHandler {
                                 String songArtist = "Unknown";
                                 String songName = "Unknown";
                                 //todo need to expand streamModel by metadataUri and add it also in RadioStateModel
-                                SongModel currentSong = new AntenaSongProvider(SongMetadataUriConstants.ANTENA_MAIN).fetchCurrentSong();
+                                SongModel currentSong = new AntenaSongProvider(stateModel.getStreamModel().metadataUrl).fetchCurrentSong();
                                 Log.d("bbb", "title:" + currentSong.getTitle() + ", author:" + currentSong.getmAuthor());
                                 songArtist = currentSong.getmAuthor();
                                 songName = currentSong.getTitle();

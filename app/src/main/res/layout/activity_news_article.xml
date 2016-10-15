@@ -23,7 +23,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/img_article_placeholder" />
+            android:src="@drawable/img_article" />
 
 
         <TextView

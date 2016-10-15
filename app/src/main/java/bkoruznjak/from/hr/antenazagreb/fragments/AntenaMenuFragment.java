@@ -199,7 +199,6 @@ public class AntenaMenuFragment extends MenuFragment {
             if (streamEvent.imageUrl != null) {
                 Picasso.with(getActivity())
                         .load(streamEvent.imageUrl)
-                        .placeholder(R.drawable.img_article_placeholder)
                         .resize(avatarSize, avatarSize)
                         .centerCrop()
                         .transform(new CircleTransformation())
@@ -215,7 +214,6 @@ public class AntenaMenuFragment extends MenuFragment {
             if (streamImageUrl != null) {
                 Picasso.with(getActivity())
                         .load(streamImageUrl)
-                        .placeholder(R.drawable.img_article_placeholder)
                         .resize(avatarSize, avatarSize)
                         .centerCrop()
                         .transform(new CircleTransformation())
@@ -223,7 +221,6 @@ public class AntenaMenuFragment extends MenuFragment {
             } else {
                 Picasso.with(getActivity())
                         .load(R.drawable.random_background_image)
-                        .placeholder(R.drawable.img_article_placeholder)
                         .resize(avatarSize, avatarSize)
                         .centerCrop()
                         .transform(new CircleTransformation())

@@ -41,6 +41,7 @@ import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
+import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
@@ -133,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         myBus.unregister(this);
+        mPreferences.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.NAME_ANTENA_MAIN);
+        mPreferences.edit().putString(PreferenceKeyConstants.KEY_DEFAULT_STATION, mRadioStateModel.getRadioStationName()).commit();
+        mRadioStateModel.setDefaultStream(mRadioStateModel.getRadioStationName());
+        Log.d("bbb", "dodajem novi default radio station:" + mRadioStateModel.getRadioStationName());
     }
 
     @Override
@@ -170,6 +175,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private void handleStreams() {
         mStreamList = RadioApplication.getInstance().getStreamList();
+        //setDefaultStream
+        for (StreamModel stream : mStreamList) {
+            if (mRadioStateModel.getDefaultStream().equals(stream.name)) {
+                Log.d("bbb", "setting default stream");
+                mRadioStateModel.setStreamModel(stream);
+            }
+        }
+
     }
 
     /**

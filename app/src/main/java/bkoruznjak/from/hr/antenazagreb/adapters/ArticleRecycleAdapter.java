@@ -58,7 +58,7 @@ public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAd
         textViewTitle.setText(dataSet.get(listPosition).title);
         ArrayList<ArticleModel.Image> articleImagesList = (ArrayList<ArticleModel.Image>) dataSet.get(listPosition).images;
         if (articleImagesList.size() == 0) {
-            Picasso.with(RadioApplication.getContext()).load(R.drawable.img_article_placeholder).resize(imageHeight, imageWidth).centerInside().into(imageView);
+            Picasso.with(RadioApplication.getContext()).load(R.drawable.img_article).resize(imageHeight, imageWidth).centerInside().into(imageView);
         } else {
             for (ArticleModel.Image articleImage : articleImagesList) {
                 Picasso.with(RadioApplication.getContext()).load(articleImage.url).resize(imageHeight, imageWidth).centerCrop().into(imageView);

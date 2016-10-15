@@ -63,6 +63,11 @@ public class RadioApplication extends Application {
 
 
         SharedPreferences preferences = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
+        if (!preferences.contains(PreferenceKeyConstants.KEY_DEFAULT_STATION)) {
+            Log.d("BBB", "SETTING DEFAULT STATION TO ANTENA LIVE");
+            preferences.edit().putString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.NAME_ANTENA_MAIN).commit();
+        }
+
         if (!preferences.contains(PreferenceKeyConstants.KEY_AUTOPLAY)) {
             Log.d("BBB", "SETTING AUTOPLAY FOR FIRST TIME TO TRUE");
             preferences.edit().putBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, false).commit();
@@ -121,6 +126,9 @@ public class RadioApplication extends Application {
         if (myStateModel == null) {
             myStateModel = new RadioStateModel();
             myStateModel.setStreamUri(StreamUriConstants.ANTENA_MAIN);
+            SharedPreferences prefs = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
+            String defaultStationName = prefs.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.NAME_ANTENA_MAIN);
+            myStateModel.setDefaultStream(defaultStationName);
         }
         return myStateModel;
     }

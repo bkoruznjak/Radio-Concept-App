@@ -13,6 +13,9 @@ public class StreamModel {
     public String id;
     public String name;
     public String url;
+    @JsonField(name = "metadata_url")
+    @SerializedName("metadata_url")
+    public String metadataUrl;
     @JsonField(name = "image_url")
     @SerializedName("image_url")
     public String imageUrl;
@@ -31,6 +34,7 @@ public class StreamModel {
         String modelDefinition = "id:" + this.id
                 + " name:" + this.name
                 + " url:" + this.url
+                + " meta url:" + this.metadataUrl
                 + " image url:" + this.imageUrl
                 + " icon id:" + this.iconId
                 + " created at:" + this.createdAt

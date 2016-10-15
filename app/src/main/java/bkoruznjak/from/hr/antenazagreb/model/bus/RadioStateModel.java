@@ -2,6 +2,7 @@ package bkoruznjak.from.hr.antenazagreb.model.bus;
 
 import java.io.Serializable;
 
+import bkoruznjak.from.hr.antenazagreb.constants.SongMetadataUriConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
 import bkoruznjak.from.hr.antenazagreb.model.network.StreamModel;
@@ -16,6 +17,7 @@ public class RadioStateModel implements Serializable {
     //added for testing when something breaks
     private boolean isStreamInterrupted;
 
+    private String defaultStream;
     private String streamUri;
     private String radioStationName;
     private String radioStationNameImage;
@@ -43,6 +45,7 @@ public class RadioStateModel implements Serializable {
         currentStreamModel.id = "1";
         currentStreamModel.name = StreamUriConstants.NAME_ANTENA_MAIN;
         currentStreamModel.url = StreamUriConstants.ANTENA_MAIN;
+        currentStreamModel.metadataUrl = SongMetadataUriConstants.ANTENA_MAIN;
         currentStreamModel.iconId = "ic_live_stream_icon_beige";
     }
 
@@ -102,6 +105,14 @@ public class RadioStateModel implements Serializable {
 
     public void setRadioStationIconId(String radioStationIconId) {
         this.radioStationIconId = radioStationIconId;
+    }
+
+    public String getDefaultStream() {
+        return this.defaultStream;
+    }
+
+    public void setDefaultStream(String defaultStream) {
+        this.defaultStream = defaultStream;
     }
 
     public String getSongAuthor() {

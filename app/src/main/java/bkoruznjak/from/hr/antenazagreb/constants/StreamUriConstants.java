@@ -7,7 +7,7 @@ public class StreamUriConstants {
 
     public static final String STREAM_IDENTIFICATOR = "STREAM_URI";
 
-    public static final String NAME_ANTENA_MAIN = "Antena Default";
+    public static final String NAME_ANTENA_MAIN = "Antena";
 
     public static final String ANTENA_MAIN = "http://173.192.137.34:8050/";
     public static final String ANTENA_HIT= "http://173.192.137.34:8066/";

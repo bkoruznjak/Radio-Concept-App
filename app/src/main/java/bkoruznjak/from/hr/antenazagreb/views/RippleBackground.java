@@ -8,7 +8,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
@@ -132,14 +131,12 @@ public class RippleBackground extends RelativeLayout {
             }
 
             if (animatorList != null) {
-                Log.d("bbb", "resuming existing animation");
                 for (Animator anim : animatorList) {
                     if (anim instanceof ObjectAnimator)
                         ((ObjectAnimator) anim).setRepeatCount(ObjectAnimator.INFINITE);
                 }
             }
             if (!animatorSet.isRunning()) {
-                Log.d("bbb", "fire new animation");
                 animatorSet.start();
             }
             animationRunning = true;
@@ -149,10 +146,8 @@ public class RippleBackground extends RelativeLayout {
     public void stopRippleAnimation() {
         if (isRippleAnimationRunning()) {
             if (animatorList != null) {
-                Log.d("bbb", "animatorList size" + animatorList.size());
                 for (Animator anim : animatorList) {
                     if (anim instanceof ObjectAnimator)
-                        Log.d("bbb", "stavljam repeat count na 0 trenutno " + ((ObjectAnimator) anim).getRepeatMode() + ", " + ((ObjectAnimator) anim).getRepeatCount());
                     ((ObjectAnimator) anim).setRepeatCount(0);
                 }
             }
@@ -161,7 +156,6 @@ public class RippleBackground extends RelativeLayout {
     }
 
     public void hardStopRippleAnimation() {
-        Log.d("bbb", "hard stoppam ripple");
         animatorSet.end();
         animationRunning = false;
     }
