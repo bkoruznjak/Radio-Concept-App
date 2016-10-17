@@ -3,9 +3,9 @@ package bkoruznjak.from.hr.antenazagreb.activity;
 import android.media.MediaCodec;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -50,11 +50,13 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     //private ExitActivityTransition exitTransition;
     private PodcastModel podcastModel;
     private ExoPlayer videoPlayer;
+    private Handler mHandler;
     private int RENDERER_COUNT = 300000;
     private int minBufferMs = 250000;
     private long duration = 1000l;
     private long streamProgress = 0l;
     private int seekProgress = 0;
+    private boolean isUpdatingSeekBar = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,16 +64,20 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
         setContentView(R.layout.activity_single_podcast);
         overridePendingTransition(R.anim.article_enter_in, R.anim.article_enter_out);
         ButterKnife.bind(this);
-        //exitTransition = ActivityTransition.with(getIntent()).to(findViewById(R.id.singleArticleContainer)).start(savedInstanceState);
         String jsonPodcast = getIntent().getStringExtra("PODCAST");
         try {
             podcastModel = LoganSquare.parse(jsonPodcast, PodcastModel.class);
         } catch (IOException IOex) {
 
         }
-
+        mHandler = new Handler();
         updateViewContainer(podcastModel);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void updateViewContainer(PodcastModel podcastModel) {
@@ -132,6 +138,7 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
 
     private void cleanUpVideoPlayer() {
         if (videoPlayer != null) {
+            isUpdatingSeekBar = false;
             videoPlayer.stop();
             videoPlayer.seekTo(0);
             videoPlayer.removeListener(this);
@@ -155,7 +162,6 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
                 break;
             case ExoPlayer.STATE_READY:
                 duration = videoPlayer.getDuration();
-                Log.d("BBB", "firstDuration:" + duration);
                 break;
             default:
                 break;
@@ -164,17 +170,35 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
 
     @Override
     public void onPlayWhenReadyCommitted() {
+        isUpdatingSeekBar = true;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (videoPlayer != null && isUpdatingSeekBar) {
+                    int currentPosition = (int) videoPlayer.getCurrentPosition() / 1000;
+                    long durationInMillis = videoPlayer.getDuration() == ExoPlayer.UNKNOWN_TIME ? 0
+                            : (int) videoPlayer.getDuration();
+                    long durationInSeconds = durationInMillis / 1000;
+                    if (durationInSeconds != 0) {
+                        podcastSeekBar.setProgress((int) (currentPosition * 100 / durationInSeconds));
+                    }
+                }
+                mHandler.postDelayed(this, 1000);
+            }
+        });
 
     }
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-
+        isUpdatingSeekBar = false;
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        seekProgress = progress;
+        if (videoPlayer != null && fromUser) {
+            seekProgress = progress;
+        }
     }
 
     @Override
@@ -184,7 +208,6 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        Log.d("BBB", "progress:" + seekProgress);
         streamProgress = seekProgress;
         long duration = videoPlayer.getDuration() == ExoPlayer.UNKNOWN_TIME ? 0
                 : (int) videoPlayer.getDuration();
