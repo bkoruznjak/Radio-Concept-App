@@ -49,7 +49,7 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     SeekBar podcastSeekBar;
     //private ExitActivityTransition exitTransition;
     private PodcastModel podcastModel;
-    private ExoPlayer videoPlayer;
+    private ExoPlayer podcastPlayer;
     private Handler mHandler;
     private int RENDERER_COUNT = 300000;
     private int minBufferMs = 250000;
@@ -91,6 +91,7 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
                 case "mp3":
                     //todo set audio only icon
                     podcastTypeTextView.setText("audio podcast");
+                    setupAndStartAudioPlayer(url);
                     break;
                 case "mp4":
                     //todo set audio/video icon
@@ -118,14 +119,32 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
 
         MediaCodecAudioTrackRenderer audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource, MediaCodecSelector.DEFAULT);
 
-        videoPlayer = ExoPlayer.Factory.newInstance(RENDERER_COUNT);
-        videoPlayer.addListener(this);
+        podcastPlayer = ExoPlayer.Factory.newInstance(RENDERER_COUNT);
+        podcastPlayer.addListener(this);
         podcastSeekBar.setOnSeekBarChangeListener(this);
-        videoPlayer.prepare(videoRenderer, audioRenderer);
-        videoPlayer.sendMessage(videoRenderer,
+        podcastPlayer.prepare(videoRenderer, audioRenderer);
+        podcastPlayer.sendMessage(videoRenderer,
                 MediaCodecVideoTrackRenderer.MSG_SET_SURFACE,
                 surfaceView.getHolder().getSurface());
-        videoPlayer.setPlayWhenReady(true);
+        podcastPlayer.setPlayWhenReady(true);
+    }
+
+    private void setupAndStartAudioPlayer(String url) {
+        String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:40.0) Gecko/20100101 Firefox/40.0";
+        Allocator allocator = new DefaultAllocator(minBufferMs);
+        DataSource dataSource = new DefaultUriDataSource(this, null, userAgent);
+
+
+        ExtractorSampleSource sampleSource = new ExtractorSampleSource(Uri.parse(url), dataSource, allocator,
+                BUFFER_SEGMENT_COUNT * BUFFER_SEGMENT_SIZE);
+
+        MediaCodecAudioTrackRenderer audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource, MediaCodecSelector.DEFAULT);
+
+        podcastPlayer = ExoPlayer.Factory.newInstance(RENDERER_COUNT);
+        podcastPlayer.addListener(this);
+        podcastSeekBar.setOnSeekBarChangeListener(this);
+        podcastPlayer.prepare(audioRenderer);
+        podcastPlayer.setPlayWhenReady(true);
     }
 
     @Override
@@ -137,13 +156,13 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     }
 
     private void cleanUpVideoPlayer() {
-        if (videoPlayer != null) {
+        if (podcastPlayer != null) {
             isUpdatingSeekBar = false;
-            videoPlayer.stop();
-            videoPlayer.seekTo(0);
-            videoPlayer.removeListener(this);
-            videoPlayer.release();
-            videoPlayer = null;
+            podcastPlayer.stop();
+            podcastPlayer.seekTo(0);
+            podcastPlayer.removeListener(this);
+            podcastPlayer.release();
+            podcastPlayer = null;
             System.gc();
         }
     }
@@ -161,7 +180,7 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
             case ExoPlayer.STATE_PREPARING:
                 break;
             case ExoPlayer.STATE_READY:
-                duration = videoPlayer.getDuration();
+                duration = podcastPlayer.getDuration();
                 break;
             default:
                 break;
@@ -174,10 +193,10 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (videoPlayer != null && isUpdatingSeekBar) {
-                    int currentPosition = (int) videoPlayer.getCurrentPosition() / 1000;
-                    long durationInMillis = videoPlayer.getDuration() == ExoPlayer.UNKNOWN_TIME ? 0
-                            : (int) videoPlayer.getDuration();
+                if (podcastPlayer != null && isUpdatingSeekBar) {
+                    int currentPosition = (int) podcastPlayer.getCurrentPosition() / 1000;
+                    long durationInMillis = podcastPlayer.getDuration() == ExoPlayer.UNKNOWN_TIME ? 0
+                            : (int) podcastPlayer.getDuration();
                     long durationInSeconds = durationInMillis / 1000;
                     if (durationInSeconds != 0) {
                         podcastSeekBar.setProgress((int) (currentPosition * 100 / durationInSeconds));
@@ -196,7 +215,7 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (videoPlayer != null && fromUser) {
+        if (podcastPlayer != null && fromUser) {
             seekProgress = progress;
         }
     }
@@ -209,9 +228,9 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         streamProgress = seekProgress;
-        long duration = videoPlayer.getDuration() == ExoPlayer.UNKNOWN_TIME ? 0
-                : (int) videoPlayer.getDuration();
+        long duration = podcastPlayer.getDuration() == ExoPlayer.UNKNOWN_TIME ? 0
+                : (int) podcastPlayer.getDuration();
         long seekingSector = duration / 100;
-        videoPlayer.seekTo(seekingSector * streamProgress);
+        podcastPlayer.seekTo(seekingSector * streamProgress);
     }
 }
