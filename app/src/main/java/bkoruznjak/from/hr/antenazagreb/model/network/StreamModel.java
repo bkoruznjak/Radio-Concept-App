@@ -13,6 +13,9 @@ public class StreamModel {
     public String id;
     public String name;
     public String url;
+    @JsonField(name = "is_active")
+    @SerializedName("is_active")
+    public int isActive;
     @JsonField(name = "metadata_url")
     @SerializedName("metadata_url")
     public String metadataUrl;
@@ -32,6 +35,7 @@ public class StreamModel {
     @Override
     public String toString() {
         String modelDefinition = "id:" + this.id
+                + " is active" + this.isActive
                 + " name:" + this.name
                 + " url:" + this.url
                 + " meta url:" + this.metadataUrl

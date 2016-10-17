@@ -4,4 +4,10 @@
     android:layout_height="match_parent"
     tools:context="bkoruznjak.from.hr.antenazagreb.fragments.PodcastFragment">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/podcastRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+
 </FrameLayout>

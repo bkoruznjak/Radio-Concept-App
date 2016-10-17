@@ -11,6 +11,7 @@
     <!-- SETTINGS -->
     <string name="action_settings">Postavke</string>
     <string name="single_article_activity_name">Detalji</string>
+    <string name="single_podcast_activity_name">Podcast</string>
     <!-- Drawer -->
 
     <string name="setting_radio_title">Radio:</string>

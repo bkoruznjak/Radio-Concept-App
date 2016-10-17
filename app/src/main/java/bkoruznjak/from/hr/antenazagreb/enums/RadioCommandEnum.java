@@ -8,6 +8,7 @@ public enum RadioCommandEnum {
     MUTE,
     PLAY,
     PAUSE,
+    PODCAST,
     STOP,
     UNMUTE,
     VOLUME_DOWN,

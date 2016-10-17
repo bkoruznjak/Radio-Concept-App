@@ -47,6 +47,7 @@ public class RadioStateModel implements Serializable {
         currentStreamModel.url = StreamUriConstants.ANTENA_MAIN;
         currentStreamModel.metadataUrl = SongMetadataUriConstants.ANTENA_MAIN;
         currentStreamModel.iconId = "ic_live_stream_icon_beige";
+        this.defaultStream = StreamUriConstants.NAME_ANTENA_MAIN;
     }
 
     public boolean isServiceUp() {

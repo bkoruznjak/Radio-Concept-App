@@ -72,14 +72,6 @@ public class RadioApplication extends Application {
             Log.d("BBB", "SETTING AUTOPLAY FOR FIRST TIME TO TRUE");
             preferences.edit().putBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, false).commit();
         }
-        if (!preferences.contains(PreferenceKeyConstants.KEY_DEFAULT_STATION)) {
-            Log.d("BBB", "SETTING DEF STATIONS FOR FIRST TIME TO MAIN");
-            preferences.edit().putString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.ANTENA_MAIN).commit();
-        }
-        if (!preferences.contains(PreferenceKeyConstants.KEY_STORE_ARTICLES)) {
-            Log.d("BBB", "SETTING STORE ARTICLES FOR FIRST TIME TO FALSE");
-            preferences.edit().putBoolean(PreferenceKeyConstants.KEY_STORE_ARTICLES, false).commit();
-        }
         if (!preferences.contains(PreferenceKeyConstants.KEY_VOLUME)) {
             Log.d("BBB", "SETTING VOLUME FOR FIRST TIME TO 5");
             preferences.edit().putInt(PreferenceKeyConstants.KEY_VOLUME, 5).commit();
@@ -109,7 +101,7 @@ public class RadioApplication extends Application {
         mStreamList = new ArrayList<>();
         StreamModel model1 = new StreamModel();
         model1.id = "1";
-        model1.name = "Antena Default";
+        model1.name = "Antena";
         model1.url = StreamUriConstants.ANTENA_MAIN;
         model1.iconId = "ic_live_stream_icon_beige";
         mStreamList.add(model1);

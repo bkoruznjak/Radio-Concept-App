@@ -50,6 +50,7 @@ import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioVolumeModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.ArticleModel;
+import bkoruznjak.from.hr.antenazagreb.model.network.PodcastModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.SocialModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.StreamModel;
 import bkoruznjak.from.hr.antenazagreb.service.RadioService;
@@ -91,10 +92,12 @@ public class MainActivity extends AppCompatActivity {
     private BitmapDrawable mBackgroundBitmap;
     private ArrayList<SocialModel> socialData;
     private ArrayList<ArticleModel> articleData;
+    private ArrayList<PodcastModel> podcastData;
     private FloatingActionMenu rightLowerMenu;
     private ImageView mRadioMainControlImage;
     private ArrayList<StreamModel> mStreamList;
     private ArrayList<SubActionButton> mStreamButtonsList;
+    private CustomFloatingActionButton rightLowerButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -182,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                 mRadioStateModel.setStreamModel(stream);
             }
         }
-
     }
 
     /**
@@ -388,9 +390,11 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void handleData(final ArrayList data) {
         if (data.get(0) instanceof ArticleModel) {
-            this.articleData = data;
+            setArticleData(data);
+        } else if (data.get(0) instanceof PodcastModel) {
+            setPodcastData(data);
         } else if (data.get(0) instanceof SocialModel) {
-            this.socialData = data;
+            setSocialData(data);
         }
     }
 
@@ -482,28 +486,37 @@ public class MainActivity extends AppCompatActivity {
         return mBackgroundBitmap;
     }
 
-    public ArrayList<SocialModel> getSocialData() {
-        return socialData;
-    }
-
-    public void setSocialData(ArrayList<SocialModel> socialData) {
-        this.socialData = socialData;
-    }
-
     public ArrayList<ArticleModel> getArticleData() {
-        return articleData;
+        return this.articleData;
     }
 
     public void setArticleData(ArrayList<ArticleModel> articleData) {
         this.articleData = articleData;
     }
 
+    public ArrayList<PodcastModel> getPodcastData() {
+        return this.podcastData;
+    }
+
+    public void setPodcastData(ArrayList<PodcastModel> podcastData) {
+        this.podcastData = podcastData;
+    }
+
+    public ArrayList<SocialModel> getSocialData() {
+        return this.socialData;
+    }
+
+    public void setSocialData(ArrayList<SocialModel> socialData) {
+        this.socialData = socialData;
+    }
+
+
     private void initFabButtons() {
         mStreamButtonsList = new ArrayList<>();
         // Set up the orange button on the lower right corner
         // more or less with default parameter
         mRadioMainControlImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_24dp));
-        final CustomFloatingActionButton rightLowerButton = new CustomFloatingActionButton.Builder(this)
+        rightLowerButton = new CustomFloatingActionButton.Builder(this)
                 .setContentView(mRadioMainControlImage)
                 .build();
 
@@ -511,6 +524,9 @@ public class MainActivity extends AppCompatActivity {
         SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(this);
         if (mStreamList != null) {
             for (final StreamModel stream : mStreamList) {
+                if (stream.isActive == 0) {
+                    continue;
+                }
                 ImageView streamIcon = new ImageView(this);
                 int iconId = ResourceUtils.imgResIdFromName(getApplicationContext(), stream.iconId);
                 streamIcon.setImageDrawable(getResources().getDrawable(iconId));
@@ -532,7 +548,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         rightLowerMenu = streamButtonBuilder.attachTo(rightLowerButton).build();
-
         rightLowerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -554,5 +569,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Subscribe
+    public void handlePodcastStart(RadioCommandEnum radioCommandEnum) {
+        if (radioCommandEnum == RadioCommandEnum.PODCAST && rightLowerButton != null) {
+            Log.d("bbb", "handling podcast");
+            if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
+                Log.d("bbb", "first if");
+                rightLowerButton.callOnClick();
+            } else if (mRadioStateModel.getStateEnum() == RadioStateEnum.BUFFERING) {
+                Log.d("bbb", "second if");
+                rightLowerButton.callOnClick();
+            }
+        }
     }
 }
