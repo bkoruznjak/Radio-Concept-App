@@ -80,6 +80,8 @@ public class SocialFragment extends Fragment implements View.OnClickListener {
 
         ArrayList<SocialModel> socialData = ((MainActivity) getActivity()).getSocialData();
         if (socialData == null) {
+            socialRecycleAdapter = new SocialRecycleAdapter(new ArrayList<SocialModel>());
+            socialRecyclerView.setAdapter(socialRecycleAdapter);
             new SocialStore().fetchRecentSocials();
         } else {
             handleSocialData(socialData);
@@ -106,6 +108,7 @@ public class SocialFragment extends Fragment implements View.OnClickListener {
                     }
                 }));
             }
+            socialRecycleAdapter.notifyDataSetChanged();
         }
     }
 }

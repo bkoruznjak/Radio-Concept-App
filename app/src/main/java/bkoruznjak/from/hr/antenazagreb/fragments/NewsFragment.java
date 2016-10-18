@@ -82,6 +82,8 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
         ArrayList<ArticleModel> articleData = ((MainActivity) getActivity()).getArticleData();
         if (articleData == null) {
+            newsRecycleAdapter = new ArticleRecycleAdapter(new ArrayList<ArticleModel>());
+            newsRecyclerView.setAdapter(newsRecycleAdapter);
             new ArticleStore().fetchAllArticles();
         } else {
             handleArticleData(articleData);
@@ -114,6 +116,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                     }
                 }));
             }
+            newsRecycleAdapter.notifyDataSetChanged();
         }
     }
 }

@@ -9,4 +9,6 @@ public class AntenaConstants {
     public static final String SUPPORT_EMAIL = "support@premiumbinary.com";
     public static final String[] LANGUAGE_ARRAY = {"English", "Hrvatski"};
     public static final String DEFAULT_LOCALE = "hr";
+
+    public static final String GENERIC_STREAM_ICON_NAME = "ic_stream_generic";
 }

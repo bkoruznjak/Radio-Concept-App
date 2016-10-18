@@ -83,6 +83,8 @@ public class PodcastFragment extends Fragment implements View.OnClickListener {
 
         ArrayList<PodcastModel> podcastData = ((MainActivity) getActivity()).getPodcastData();
         if (podcastData == null) {
+            podcastRecycleAdapter = new PodcastRecycleAdapter(new ArrayList<PodcastModel>());
+            podcastRecyclerView.setAdapter(podcastRecycleAdapter);
             new PodcastStore().fetchAllPodcasts();
         } else {
             handlePodcastData(podcastData);
@@ -117,6 +119,7 @@ public class PodcastFragment extends Fragment implements View.OnClickListener {
                     }
                 }));
             }
+            podcastRecycleAdapter.notifyDataSetChanged();
         }
     }
 }
