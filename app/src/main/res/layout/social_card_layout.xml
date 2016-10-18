@@ -9,7 +9,7 @@
         android:id="@+id/socialCardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/antena_beige"
+        card_view:cardBackgroundColor="@color/md_white_1000"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="5dp"
         card_view:cardUseCompatPadding="true">

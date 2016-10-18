@@ -1,9 +1,11 @@
 package bkoruznjak.from.hr.antenazagreb.activity;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -13,7 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import bkoruznjak.from.hr.antenazagreb.R;
+import bkoruznjak.from.hr.antenazagreb.constants.UtilConstants;
 import bkoruznjak.from.hr.antenazagreb.model.network.ArticleModel;
+import bkoruznjak.from.hr.antenazagreb.util.ResourceUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,8 +35,8 @@ public class SingleArticleActivity extends AppCompatActivity {
     @BindView(R.id.articleCardBottomTextViewBig)
     TextView articleBottomText;
 
-    //private ExitActivityTransition exitTransition;
     private ArticleModel articleModel;
+    private BitmapDrawable mBackgroundBitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +44,9 @@ public class SingleArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_article);
         overridePendingTransition(R.anim.article_enter_in, R.anim.article_enter_out);
         ButterKnife.bind(this);
-        //exitTransition = ActivityTransition.with(getIntent()).to(findViewById(R.id.singleArticleContainer)).start(savedInstanceState);
+        mBackgroundBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, UtilConstants.BACKGROUND_BITMAP_WIDTH, UtilConstants.BACKGROUND_BITMAP_HEIGHT));
+        RelativeLayout mainContainer = (RelativeLayout) findViewById(R.id.singleArticleContainer);
+        mainContainer.setBackground(mBackgroundBitmap);
         String jsonArticle = getIntent().getStringExtra("ARTICLE");
         try {
             articleModel = LoganSquare.parse(jsonArticle, ArticleModel.class);
@@ -66,7 +72,6 @@ public class SingleArticleActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //exitTransition.exit(this)
         finish();
         overridePendingTransition(R.anim.article_exit_in, R.anim.article_exit_out);
     }

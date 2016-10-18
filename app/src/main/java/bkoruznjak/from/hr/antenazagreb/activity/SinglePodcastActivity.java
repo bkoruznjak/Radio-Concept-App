@@ -1,5 +1,6 @@
 package bkoruznjak.from.hr.antenazagreb.activity;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaCodec;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -21,11 +25,14 @@ import com.google.android.exoplayer.upstream.Allocator;
 import com.google.android.exoplayer.upstream.DataSource;
 import com.google.android.exoplayer.upstream.DefaultAllocator;
 import com.google.android.exoplayer.upstream.DefaultUriDataSource;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
 import bkoruznjak.from.hr.antenazagreb.R;
+import bkoruznjak.from.hr.antenazagreb.constants.UtilConstants;
 import bkoruznjak.from.hr.antenazagreb.model.network.PodcastModel;
+import bkoruznjak.from.hr.antenazagreb.util.ResourceUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -47,7 +54,10 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     SurfaceView surfaceView;
     @BindView(R.id.podcastSeekBar)
     SeekBar podcastSeekBar;
-    //private ExitActivityTransition exitTransition;
+    @BindView(R.id.podcastImageView)
+    ImageView podcastImageView;
+
+    private BitmapDrawable mBackgroundBitmap;
     private PodcastModel podcastModel;
     private ExoPlayer podcastPlayer;
     private Handler mHandler;
@@ -64,6 +74,9 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
         setContentView(R.layout.activity_single_podcast);
         overridePendingTransition(R.anim.article_enter_in, R.anim.article_enter_out);
         ButterKnife.bind(this);
+        mBackgroundBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, UtilConstants.BACKGROUND_BITMAP_WIDTH, UtilConstants.BACKGROUND_BITMAP_HEIGHT));
+        RelativeLayout mainContainer = (RelativeLayout) findViewById(R.id.singlePodcastContainer);
+        mainContainer.setBackground(mBackgroundBitmap);
         String jsonPodcast = getIntent().getStringExtra("PODCAST");
         try {
             podcastModel = LoganSquare.parse(jsonPodcast, PodcastModel.class);
@@ -91,11 +104,14 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
                 case "mp3":
                     //todo set audio only icon
                     podcastTypeTextView.setText("audio podcast");
+                    podcastImageView.setVisibility(View.VISIBLE);
+                    Picasso.with(this).load(R.drawable.img_podcast_audio_placeholder).into(podcastImageView);
                     setupAndStartAudioPlayer(url);
                     break;
                 case "mp4":
                     //todo set audio/video icon
                     podcastTypeTextView.setText("video podcast");
+                    surfaceView.setVisibility(View.VISIBLE);
                     setupAndStartVideoPlayer(url);
                     break;
                 default:

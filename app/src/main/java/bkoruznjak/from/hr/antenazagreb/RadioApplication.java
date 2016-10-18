@@ -10,7 +10,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -52,7 +51,7 @@ public class RadioApplication extends Application {
     public void onCreate() {
         instance = this;
         super.onCreate();
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         NetworkUtils.registerLoganSquareTypeConverters();
         Fabric.with(this, new Crashlytics());
 

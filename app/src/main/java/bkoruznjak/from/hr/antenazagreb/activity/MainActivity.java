@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -42,6 +40,7 @@ import bkoruznjak.from.hr.antenazagreb.adapters.AntenaPagerAdapter;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
+import bkoruznjak.from.hr.antenazagreb.constants.UtilConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioCommandEnum;
 import bkoruznjak.from.hr.antenazagreb.enums.RadioStateEnum;
@@ -68,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    private final int mBitmapWidth = 300;
-    private final int mBitmapHeight = 399;
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.antenaTabLayout)
@@ -157,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         ButterKnife.bind(this);
         mRadioMainControlImage = new ImageView(this);
-        mBackgroundBitmap = new BitmapDrawable(decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, mBitmapWidth, mBitmapHeight));
+        mBackgroundBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, UtilConstants.BACKGROUND_BITMAP_WIDTH, UtilConstants.BACKGROUND_BITMAP_HEIGHT));
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         myBus = ((RadioApplication) getApplication()).getBus();
         mRadioStateModel = ((RadioApplication) getApplication()).getRadioStateModel();
@@ -441,47 +438,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                   int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
-    }
-
-    private int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
 
     public BitmapDrawable getBackgroundBitmap() {
         if (mBackgroundBitmap == null) {
-            mBackgroundBitmap = new BitmapDrawable(decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, mBitmapWidth, mBitmapHeight));
+            mBackgroundBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, UtilConstants.BACKGROUND_BITMAP_WIDTH, UtilConstants.BACKGROUND_BITMAP_HEIGHT));
         }
         return mBackgroundBitmap;
     }

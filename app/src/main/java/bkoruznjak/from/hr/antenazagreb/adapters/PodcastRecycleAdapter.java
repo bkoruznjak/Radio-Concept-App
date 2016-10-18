@@ -56,12 +56,10 @@ public class PodcastRecycleAdapter extends RecyclerView.Adapter<PodcastRecycleAd
 
         switch (podcastType.toLowerCase()) {
             case "mp3":
-                //todo set audio only icon
-                podcastTypeImageView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.ic_podcast_audio_icon));
+                podcastTypeImageView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.img_podcast_audio));
                 break;
             case "mp4":
-                //todo set audio/video icon
-                podcastTypeImageView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.ic_podcast_video_icon));
+                podcastTypeImageView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.img_podcast_video));
                 break;
             default:
                 break;

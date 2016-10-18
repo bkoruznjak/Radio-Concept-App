@@ -7,59 +7,83 @@
     android:background="@color/antena_beige"
     tools:context=".activity.SinglePodcastActivity">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/newsCardLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="@color/md_white_1000"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true">
 
-
-        <TextView
-            android:id="@+id/podcastCardTitleTextViewBig"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="left"
-            android:text="ovo je naslov"
-            android:textColor="@color/colorAccent"
-            android:textSize="24sp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/podcastCardTopTextViewBig"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/podcastCardTitleTextViewBig"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="left"
-            android:text="ovo je datum"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/podcastTypeTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/podcastCardTopTextViewBig"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="left"
-            android:text="type"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="10sp" />
+            <TextView
+                android:id="@+id/podcastCardTitleTextViewBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="left"
+                android:text="ovo je naslov"
+                android:textColor="@color/colorAccent"
+                android:textSize="24sp" />
 
-        <SurfaceView
-            android:id="@+id/podcastVideoSurface"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_below="@id/podcastTypeTextView" />
+            <TextView
+                android:id="@+id/podcastCardTopTextViewBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/podcastCardTitleTextViewBig"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="left"
+                android:text="ovo je datum"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="10sp" />
 
-        <SeekBar
-            android:id="@+id/podcastSeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/podcastVideoSurface" />
+            <TextView
+                android:id="@+id/podcastTypeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/podcastCardTopTextViewBig"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="left"
+                android:text="type"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="10sp" />
 
-    </RelativeLayout>
+            <FrameLayout
+                android:id="@+id/content_frame_layout"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@id/podcastTypeTextView">
+
+                <SurfaceView
+                    android:id="@+id/podcastVideoSurface"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/podcastImageView"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:visibility="invisible" />
+            </FrameLayout>
+
+            <SeekBar
+                android:id="@+id/podcastSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/content_frame_layout" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>
