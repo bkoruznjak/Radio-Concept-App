@@ -1,6 +1,5 @@
 package bkoruznjak.from.hr.antenazagreb.activity;
 
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaCodec;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -30,9 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 import bkoruznjak.from.hr.antenazagreb.R;
-import bkoruznjak.from.hr.antenazagreb.constants.UtilConstants;
 import bkoruznjak.from.hr.antenazagreb.model.network.PodcastModel;
-import bkoruznjak.from.hr.antenazagreb.util.ResourceUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -56,8 +52,9 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     SeekBar podcastSeekBar;
     @BindView(R.id.podcastImageView)
     ImageView podcastImageView;
+    @BindView(R.id.container_background_image)
+    ImageView backgroundImageView;
 
-    private BitmapDrawable mBackgroundBitmap;
     private PodcastModel podcastModel;
     private ExoPlayer podcastPlayer;
     private Handler mHandler;
@@ -74,9 +71,7 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
         setContentView(R.layout.activity_single_podcast);
         overridePendingTransition(R.anim.article_enter_in, R.anim.article_enter_out);
         ButterKnife.bind(this);
-        mBackgroundBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, UtilConstants.BACKGROUND_BITMAP_WIDTH, UtilConstants.BACKGROUND_BITMAP_HEIGHT));
-        RelativeLayout mainContainer = (RelativeLayout) findViewById(R.id.singlePodcastContainer);
-        mainContainer.setBackground(mBackgroundBitmap);
+        Picasso.with(this).load(R.drawable.antena_bg).fit().into(backgroundImageView);
         String jsonPodcast = getIntent().getStringExtra("PODCAST");
         try {
             podcastModel = LoganSquare.parse(jsonPodcast, PodcastModel.class);

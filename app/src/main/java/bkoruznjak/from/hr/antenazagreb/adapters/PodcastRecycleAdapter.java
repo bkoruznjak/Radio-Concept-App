@@ -1,5 +1,6 @@
 package bkoruznjak.from.hr.antenazagreb.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -11,10 +12,13 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
+import bkoruznjak.from.hr.antenazagreb.activity.MainActivity;
 import bkoruznjak.from.hr.antenazagreb.constants.AnimationConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.UtilConstants;
 import bkoruznjak.from.hr.antenazagreb.model.network.PodcastModel;
@@ -28,6 +32,7 @@ public class PodcastRecycleAdapter extends RecyclerView.Adapter<PodcastRecycleAd
     private ArrayList<PodcastModel> dataSet;
     private int imageWidth;
     private int imageHeight;
+    private Context mContext;
 
     public PodcastRecycleAdapter(ArrayList<PodcastModel> data) {
         this.dataSet = data;
@@ -40,7 +45,7 @@ public class PodcastRecycleAdapter extends RecyclerView.Adapter<PodcastRecycleAd
                                                                       int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.podcast_card_layout, parent, false);
-
+        mContext = parent.getContext();
         PodcastRecycleAdapter.PodcastViewHolder myViewHolder = new PodcastRecycleAdapter.PodcastViewHolder(view);
         return myViewHolder;
     }
@@ -50,16 +55,25 @@ public class PodcastRecycleAdapter extends RecyclerView.Adapter<PodcastRecycleAd
         TextView textViewDate = holder.textViewDate;
         TextView textViewTitle = holder.textViewTitle;
         ImageView podcastTypeImageView = holder.podcastTypeIconImage;
+        ImageView podcastCornerImage = holder.podcastCornerImage;
 
         String url = dataSet.get(listPosition).url;
         String podcastType = url.substring(url.length() - 3, url.length());
 
         switch (podcastType.toLowerCase()) {
             case "mp3":
-                podcastTypeImageView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.img_podcast_audio));
+                Picasso.with(RadioApplication
+                        .getContext())
+                        .load(R.drawable.img_podcast_audio)
+                        .resize(imageHeight, imageWidth)
+                        .into(podcastTypeImageView);
                 break;
             case "mp4":
-                podcastTypeImageView.setImageDrawable(RadioApplication.getContext().getResources().getDrawable(R.drawable.img_podcast_video));
+                Picasso.with(RadioApplication
+                        .getContext())
+                        .load(R.drawable.img_podcast_video)
+                        .resize(imageHeight, imageWidth)
+                        .into(podcastTypeImageView);
                 break;
             default:
                 break;
@@ -67,6 +81,7 @@ public class PodcastRecycleAdapter extends RecyclerView.Adapter<PodcastRecycleAd
 
         textViewDate.setText(dataSet.get(listPosition).createdAt);
         textViewTitle.setText(dataSet.get(listPosition).name);
+        podcastCornerImage.setImageDrawable(((MainActivity) mContext).getAntenaLogoCornerBitmap());
         setScaleAnimation(holder.itemView);
     }
 
@@ -97,6 +112,7 @@ public class PodcastRecycleAdapter extends RecyclerView.Adapter<PodcastRecycleAd
         TextView textViewDate;
         TextView textViewTitle;
         ImageView podcastTypeIconImage;
+        ImageView podcastCornerImage;
         View mItemView;
 
         public PodcastViewHolder(View itemView) {
@@ -105,6 +121,7 @@ public class PodcastRecycleAdapter extends RecyclerView.Adapter<PodcastRecycleAd
             this.textViewDate = (TextView) itemView.findViewById(R.id.podcastCardTopTextView);
             this.textViewTitle = (TextView) itemView.findViewById(R.id.podcastCardBottomTextView);
             this.podcastTypeIconImage = (ImageView) itemView.findViewById(R.id.podcastTypeIcon);
+            this.podcastCornerImage = (ImageView) itemView.findViewById(R.id.podcast_corner_logo);
         }
 
         public void clearAnimation() {

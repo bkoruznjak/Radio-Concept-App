@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private AudioManager mAudioManager;
     private RadioVolumeModel mRadioVolume;
     private BitmapDrawable mBackgroundBitmap;
+    private BitmapDrawable mAntenaLogoCornerBitmap;
     private ArrayList<SocialModel> socialData;
     private ArrayList<ArticleModel> articleData;
     private ArrayList<PodcastModel> podcastData;
@@ -155,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mRadioMainControlImage = new ImageView(this);
         mBackgroundBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, UtilConstants.BACKGROUND_BITMAP_WIDTH, UtilConstants.BACKGROUND_BITMAP_HEIGHT));
+        mAntenaLogoCornerBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.img_antena_logo_corner, UtilConstants.ARTICLE_IMAGE_WIDTH, UtilConstants.ARTICLE_IMAGE_HEIGHT));
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         myBus = ((RadioApplication) getApplication()).getBus();
         mRadioStateModel = ((RadioApplication) getApplication()).getRadioStateModel();
@@ -444,6 +446,13 @@ public class MainActivity extends AppCompatActivity {
             mBackgroundBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.antena_bg, UtilConstants.BACKGROUND_BITMAP_WIDTH, UtilConstants.BACKGROUND_BITMAP_HEIGHT));
         }
         return mBackgroundBitmap;
+    }
+
+    public BitmapDrawable getAntenaLogoCornerBitmap() {
+        if (mAntenaLogoCornerBitmap == null) {
+            mAntenaLogoCornerBitmap = new BitmapDrawable(ResourceUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.img_antena_logo_corner, UtilConstants.ARTICLE_IMAGE_WIDTH, UtilConstants.ARTICLE_IMAGE_HEIGHT));
+        }
+        return mAntenaLogoCornerBitmap;
     }
 
     public ArrayList<ArticleModel> getArticleData() {

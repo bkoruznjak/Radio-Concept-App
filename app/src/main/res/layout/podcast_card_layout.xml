@@ -34,10 +34,10 @@
                 android:layout_height="128dp">
 
                 <ImageView
+                    android:id="@+id/podcast_corner_logo"
                     android:layout_width="128dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:src="@drawable/img_antena_logo_corner" />
+                    android:layout_gravity="right" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
