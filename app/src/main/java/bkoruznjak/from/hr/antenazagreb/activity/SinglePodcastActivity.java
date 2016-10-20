@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import bkoruznjak.from.hr.antenazagreb.model.network.PodcastModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static bkoruznjak.from.hr.antenazagreb.R.id.podcastTypeTextView;
+
 /**
  * Created by bkoruznjak on 16/10/2016.
  */
@@ -40,12 +43,14 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
 
     private final int BUFFER_SEGMENT_SIZE = 64 * 1024;
     private final int BUFFER_SEGMENT_COUNT = 256;
+    @BindView(R.id.content_frame_layout)
+    FrameLayout podcastContentLayout;
     @BindView(R.id.podcastCardTitleTextViewBig)
     TextView podcastTitle;
     @BindView(R.id.podcastCardTopTextViewBig)
+    TextView podcastDate;
+    @BindView(podcastTypeTextView)
     TextView podcastSummary;
-    @BindView(R.id.podcastTypeTextView)
-    TextView podcastTypeTextView;
     @BindView(R.id.podcastVideoSurface)
     SurfaceView surfaceView;
     @BindView(R.id.podcastSeekBar)
@@ -64,6 +69,7 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     private long streamProgress = 0l;
     private int seekProgress = 0;
     private boolean isUpdatingSeekBar = true;
+    private boolean isContentPlaying = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,21 +97,18 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     private void updateViewContainer(PodcastModel podcastModel) {
         if (podcastModel != null) {
             podcastTitle.setText(podcastModel.name);
+            podcastDate.setText(podcastModel.createdAt);
             podcastSummary.setText("" + podcastModel.summary);
             String url = podcastModel.url;
             String podcastType = url.substring(url.length() - 3, url.length());
 
             switch (podcastType.toLowerCase()) {
                 case "mp3":
-                    //todo set audio only icon
-                    podcastTypeTextView.setText("audio podcast");
                     podcastImageView.setVisibility(View.VISIBLE);
-                    Picasso.with(this).load(R.drawable.img_podcast_audio_placeholder).into(podcastImageView);
+                    Picasso.with(this).load(R.drawable.img_podcast_audio_placeholder).fit().into(podcastImageView);
                     setupAndStartAudioPlayer(url);
                     break;
                 case "mp4":
-                    //todo set audio/video icon
-                    podcastTypeTextView.setText("video podcast");
                     surfaceView.setVisibility(View.VISIBLE);
                     setupAndStartVideoPlayer(url);
                     break;
@@ -113,6 +116,20 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
                     break;
             }
         }
+
+        podcastContentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isContentPlaying) {
+                    podcastPlayer.setPlayWhenReady(false);
+                    isContentPlaying = false;
+                } else {
+                    podcastPlayer.setPlayWhenReady(true);
+                    isContentPlaying = true;
+                }
+
+            }
+        });
     }
 
     private void setupAndStartVideoPlayer(String url) {
@@ -183,15 +200,15 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         switch (playbackState) {
             case ExoPlayer.STATE_BUFFERING:
-                break;
-            case ExoPlayer.STATE_ENDED:
-                break;
-            case ExoPlayer.STATE_IDLE:
-                break;
             case ExoPlayer.STATE_PREPARING:
+            case ExoPlayer.STATE_ENDED:
+                isContentPlaying = false;
                 break;
             case ExoPlayer.STATE_READY:
                 duration = podcastPlayer.getDuration();
+                isContentPlaying = true;
+                break;
+            case ExoPlayer.STATE_IDLE:
                 break;
             default:
                 break;
