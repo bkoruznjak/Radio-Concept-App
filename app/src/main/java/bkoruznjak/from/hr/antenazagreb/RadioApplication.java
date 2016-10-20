@@ -119,6 +119,8 @@ public class RadioApplication extends Application {
             myStateModel.setStreamUri(StreamUriConstants.ANTENA_MAIN);
             SharedPreferences prefs = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
             String defaultStationName = prefs.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.NAME_ANTENA_MAIN);
+            Log.d("bbb", "u radio app klasi stavljam default stream na:" + defaultStationName);
+            Log.d("bbb", "u radio app klasi stavljam default stream url:" + myStateModel.getStreamUri());
             myStateModel.setDefaultStream(defaultStationName);
         }
         return myStateModel;

@@ -98,6 +98,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
 
         notification.flags |= Notification.FLAG_NO_CLEAR;
         startForeground(1337, notification);
+        Log.d("bbb", "starting service for:" + radioState.getDefaultStream() + " on url:" + radioState.getStreamUri());
         prepareRadioStream(radioState.getStreamUri(), true);
         return Service.START_STICKY;
     }
@@ -254,7 +255,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
 
     @Subscribe
     public void changeStation(String stationURI) {
-        if (stationURI.toLowerCase().startsWith(NetworkConstants.STREAM_PREFIX_STRING) && !radioState.getStreamUri().equals(stationURI)) {
+        if (stationURI.toLowerCase().startsWith(NetworkConstants.STREAM_PREFIX_STRING)) {
             radioState.setStreamUri(stationURI);
             if (radioState.isMusicPlaying()) {
                 prepareRadioStream(stationURI, true);

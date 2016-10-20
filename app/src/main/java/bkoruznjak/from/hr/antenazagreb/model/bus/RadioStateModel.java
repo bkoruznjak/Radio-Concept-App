@@ -74,6 +74,7 @@ public class RadioStateModel implements Serializable {
         this.currentStreamModel = streamModel;
         this.radioStationName = streamModel.name;
         this.radioStationNameImage = streamModel.imageUrl;
+        this.streamUri = streamModel.url;
     }
 
     public String getStreamUri() {

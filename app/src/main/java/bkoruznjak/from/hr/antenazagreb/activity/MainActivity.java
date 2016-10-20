@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         mPreferences.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.NAME_ANTENA_MAIN);
         mPreferences.edit().putString(PreferenceKeyConstants.KEY_DEFAULT_STATION, mRadioStateModel.getRadioStationName()).commit();
         mRadioStateModel.setDefaultStream(mRadioStateModel.getRadioStationName());
-        Log.d("bbb", "dodajem novi default radio station:" + mRadioStateModel.getRadioStationName());
+        Log.d("bbb", "mijenjam default radio station na:" + mRadioStateModel.getRadioStationName());
     }
 
     @Override
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         //setDefaultStream
         for (StreamModel stream : mStreamList) {
             if (mRadioStateModel.getDefaultStream().equals(stream.name)) {
-                Log.d("bbb", "setting default stream");
+                Log.d("bbb", "setting default stream:" + stream.name);
                 mRadioStateModel.setStreamModel(stream);
             }
         }
@@ -413,6 +413,7 @@ public class MainActivity extends AppCompatActivity {
         if (mStreamButtonsList != null) {
             for (SubActionButton button : mStreamButtonsList) {
                 if (button.getStreamName().equals(streamModel.name)) {
+                    Log.d("bbb", "marking stream:" + streamModel.name + " as current stream");
                     button.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_dark_orange_selector));
                 } else {
                     button.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_orange_selector));
@@ -499,16 +500,19 @@ public class MainActivity extends AppCompatActivity {
                 ImageView streamIcon = new ImageView(this);
                 int iconId = ResourceUtils.imgResIdFromName(getApplicationContext(), stream.iconId);
                 streamIcon.setImageDrawable(getResources().getDrawable(iconId));
-                SubActionButton streamButton = rLSubBuilder.setContentView(streamIcon).build();
+                final SubActionButton streamButton = rLSubBuilder.setContentView(streamIcon).build();
                 streamButton.setStreamName(stream.name);
                 streamButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mRadioStateModel.setStreamModel(stream);
-                        handleStreamURI(stream);
-                        refreshStreamButtons(stream);
-                        myBus.post(new SongModel(mRadioStateModel.getSongTitle(), mRadioStateModel.getSongAuthor()));
-                        myBus.post(stream);
+                        if (streamButton.getStreamName().equals(mRadioStateModel.getRadioStationName())) {
+                        } else {
+                            mRadioStateModel.setStreamModel(stream);
+                            handleStreamURI(stream);
+                            refreshStreamButtons(stream);
+                            myBus.post(new SongModel(mRadioStateModel.getSongTitle(), mRadioStateModel.getSongAuthor()));
+                            myBus.post(stream);
+                        }
                     }
                 });
                 mStreamButtonsList.add(streamButton);
@@ -532,7 +536,6 @@ public class MainActivity extends AppCompatActivity {
                 } else if (mRadioStateModel.isServiceUp()) {
                     myBus.post(RadioCommandEnum.PLAY);
                 } else {
-                    Log.d("BBB", "starting service anew");
                     Intent startRadioServiceIntent = new Intent(getApplicationContext(), RadioService.class);
                     startService(startRadioServiceIntent);
                 }
@@ -543,12 +546,9 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void handlePodcastStart(RadioCommandEnum radioCommandEnum) {
         if (radioCommandEnum == RadioCommandEnum.PODCAST && rightLowerButton != null) {
-            Log.d("bbb", "handling podcast");
             if (mRadioStateModel.isServiceUp() && mRadioStateModel.isMusicPlaying() && !mRadioStateModel.isStreamInterrupted()) {
-                Log.d("bbb", "first if");
                 rightLowerButton.callOnClick();
             } else if (mRadioStateModel.getStateEnum() == RadioStateEnum.BUFFERING) {
-                Log.d("bbb", "second if");
                 rightLowerButton.callOnClick();
             }
         }
