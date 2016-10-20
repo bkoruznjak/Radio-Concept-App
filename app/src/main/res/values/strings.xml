@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">Antena Zagreb</string>
 
+    <!--LAUNCH ACTIVITY-->
+    <string name="no_stream_dialog_title">No active Streams found</string>
+    <string name="no_stream_dialog_description">We regret to inform You that no active Radio Streams were found. Please try again later.</string>
+    <string name="no_internet_dialog_title">No Internet Connection</string>
+    <string name="no_internet_dialog_description">Stream load failed! Check your internet connection and press retry or restart the application.</string>
+    <string name="no_internet_dialog_accept">Retry</string>
+    <string name="no_internet_dialog_cancel">Quit</string>
+    <string name="no_internet_mail_description">Report a bug...</string>
+    <string name="no_internet_mail_subject">Can\'t start Application</string>
+    <string name="no_internet_mail_message">Hey Antena Zagreb!\nI can\'t get your Application to run, help me out :(</string>
+
     <!-- TAB TITLES -->
     <string name="radio_tab">Radio</string>
     <string name="news_tab">News</string>

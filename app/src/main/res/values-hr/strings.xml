@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">Antena Zagreb</string>
 
+    <!--LAUNCH ACTIVITY-->
+    <string name="no_stream_dialog_title">Nisu pronađeni strimovi</string>
+    <string name="no_stream_dialog_description">Ispričavamo se no nisu pronađeni strimovi Antene Zagreb, pokušajte kasnije.</string>
+    <string name="no_internet_dialog_title">Loša Internet veza</string>
+    <string name="no_internet_dialog_description">Neuspjelo učitavanje strimova! Provjerite internet vezu i pokušajte opet ili ponovo pokrenite aplikaciju.</string>
+    <string name="no_internet_dialog_accept">Pokušaj opet</string>
+    <string name="no_internet_dialog_cancel">Ugasi</string>
+    <string name="no_internet_mail_description">Prijavi grešku...</string>
+    <string name="no_internet_mail_subject">Nemogu pokrenuti aplikaciju</string>
+    <string name="no_internet_mail_message">Bok Antena Zagreb!\nNemogu pokrenuti aplikaciju, pomozite :(</string>
+
     <!-- TAB TITLES -->
     <string name="radio_tab">Radio</string>
     <string name="news_tab">Novosti</string>
