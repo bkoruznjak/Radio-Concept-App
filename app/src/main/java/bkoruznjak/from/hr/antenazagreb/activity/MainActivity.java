@@ -275,8 +275,8 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (rightLowerMenu != null && event.getAction() == 2 && rightLowerMenu.isOpen()) {
-                    rightLowerMenu.close(true);
+                if (event.getAction() == 2) {
+                    closeStreamFabButtons();
                 }
                 return false;
             }
@@ -320,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
         antenaTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                closeStreamFabButtons();
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
@@ -505,14 +506,14 @@ public class MainActivity extends AppCompatActivity {
                 streamButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (streamButton.getStreamName().equals(mRadioStateModel.getRadioStationName())) {
-                        } else {
+                        if (!streamButton.getStreamName().equals(mRadioStateModel.getRadioStationName())) {
                             mRadioStateModel.setStreamModel(stream);
                             handleStreamURI(stream);
                             refreshStreamButtons(stream);
                             myBus.post(new SongModel(mRadioStateModel.getSongTitle(), mRadioStateModel.getSongAuthor()));
                             myBus.post(stream);
                         }
+                        closeStreamFabButtons();
                     }
                 });
                 mStreamButtonsList.add(streamButton);
@@ -541,6 +542,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void closeStreamFabButtons() {
+        if (rightLowerMenu != null && rightLowerMenu.isOpen()) {
+            rightLowerMenu.close(true);
+        }
     }
 
     @Subscribe
