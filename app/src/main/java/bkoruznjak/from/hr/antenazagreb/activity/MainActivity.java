@@ -50,6 +50,7 @@ import bkoruznjak.from.hr.antenazagreb.model.bus.RadioVolumeModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.ArticleModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.PodcastModel;
+import bkoruznjak.from.hr.antenazagreb.model.network.PromoModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.SocialModel;
 import bkoruznjak.from.hr.antenazagreb.model.network.StreamModel;
 import bkoruznjak.from.hr.antenazagreb.service.RadioService;
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<SocialModel> socialData;
     private ArrayList<ArticleModel> articleData;
     private ArrayList<PodcastModel> podcastData;
+    private ArrayList<PromoModel> promoData;
     private FloatingActionMenu rightLowerMenu;
     private ImageView mRadioMainControlImage;
     private ArrayList<StreamModel> mStreamList;
@@ -395,6 +397,8 @@ public class MainActivity extends AppCompatActivity {
             setPodcastData(data);
         } else if (data.get(0) instanceof SocialModel) {
             setSocialData(data);
+        } else if (data.get(0) instanceof PromoModel) {
+            setPromoData(data);
         }
     }
 
@@ -463,6 +467,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setArticleData(ArrayList<ArticleModel> articleData) {
         this.articleData = articleData;
+    }
+
+    public ArrayList<PromoModel> getPromoData() {
+        return this.promoData;
+    }
+
+    public void setPromoData(ArrayList<PromoModel> promoData) {
+        this.promoData = promoData;
     }
 
     public ArrayList<PodcastModel> getPodcastData() {
