@@ -28,8 +28,6 @@ public class SongMetaProvider {
         this.streamURL = streamURL;
     }
 
-    boolean isError;
-
     public Map<String, String> retreiveMetadata() throws IOException {
         if (streamURL == null) {
             Log.i("BBB","No URL to get metadata for!");
@@ -76,7 +74,6 @@ public class SongMetaProvider {
 
         // In case no data was sent
         if (metaDataOffset == 0) {
-            isError = true;
             return null;
         }
 
@@ -95,11 +92,7 @@ public class SongMetaProvider {
                 metaDataLength = b * 16;
             }
 
-            if (count > metaDataOffset + 1 && count < (metaDataOffset + metaDataLength)) {
-                inData = true;
-            } else {
-                inData = false;
-            }
+            inData = count > metaDataOffset + 1 && count < (metaDataOffset + metaDataLength);
             if (inData) {
                 if (b != 0) {
                     metaData.append((char) b);
@@ -127,7 +120,7 @@ public class SongMetaProvider {
         for (int i = 0; i < metaParts.length; i++) {
             m = p.matcher(metaParts[i]);
             if (m.find()) {
-                metadata.put((String) m.group(1), (String) m.group(2));
+                metadata.put(m.group(1), m.group(2));
             }
         }
 

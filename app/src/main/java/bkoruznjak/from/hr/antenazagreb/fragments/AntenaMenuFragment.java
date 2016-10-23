@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ import bkoruznjak.from.hr.antenazagreb.activity.TutorialActivity;
 import bkoruznjak.from.hr.antenazagreb.bus.RadioBus;
 import bkoruznjak.from.hr.antenazagreb.constants.AntenaConstants;
 import bkoruznjak.from.hr.antenazagreb.constants.PreferenceKeyConstants;
-import bkoruznjak.from.hr.antenazagreb.constants.StreamUriConstants;
 import bkoruznjak.from.hr.antenazagreb.enums.LanguagesEnum;
 import bkoruznjak.from.hr.antenazagreb.model.bus.RadioStateModel;
 import bkoruznjak.from.hr.antenazagreb.model.db.SongModel;
@@ -68,8 +66,6 @@ public class AntenaMenuFragment extends MenuFragment {
     private SharedPreferences mPreferences;
 
     private boolean isAutoplayOn;
-    private String defaultStation;
-    private int volume;
     private int avatarSize;
     private ImageView streamImageView;
 
@@ -81,8 +77,6 @@ public class AntenaMenuFragment extends MenuFragment {
         mPreferences = getActivity().getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         isAutoplayOn = mPreferences.getBoolean(PreferenceKeyConstants.KEY_AUTOPLAY, true);
-        defaultStation = mPreferences.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.ANTENA_MAIN);
-        volume = mPreferences.getInt(PreferenceKeyConstants.KEY_VOLUME, 5);
     }
 
     @Override
@@ -102,7 +96,6 @@ public class AntenaMenuFragment extends MenuFragment {
         View drawerMenu = inflater.inflate(R.layout.fragment_drawer_menu, container, false);
         ButterKnife.bind(this, drawerMenu);
         avatarSize = getResources().getDimensionPixelSize(R.dimen.item_height);
-        final NavigationView naviView = (NavigationView) drawerMenu.findViewById(R.id.vNavigation);
         streamImageView = (ImageView) drawerMenu.findViewById(ivMenuUserProfilePhoto);
         setupHeader();
 

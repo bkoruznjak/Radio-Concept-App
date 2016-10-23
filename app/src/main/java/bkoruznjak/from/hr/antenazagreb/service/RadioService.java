@@ -226,7 +226,7 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
             mExoPlayer.removeListener(this);
             mExoPlayer.release();
             mExoPlayer = null;
-            System.gc();
+//            System.gc();
         }
     }
 
@@ -249,6 +249,8 @@ public class RadioService extends Service implements ExoPlayer.Listener, MediaCo
                 break;
             case STOP:
                 stop();
+                break;
+            default:
                 break;
         }
     }

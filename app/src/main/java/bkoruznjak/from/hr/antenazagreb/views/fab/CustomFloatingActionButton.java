@@ -35,8 +35,6 @@ public class CustomFloatingActionButton extends FrameLayout {
     public static final int POSITION_LEFT_CENTER = 7;
     public static final int POSITION_TOP_LEFT = 8;
 
-    private View contentView;
-
     private boolean systemOverlay;
 
     /**
@@ -151,7 +149,6 @@ public class CustomFloatingActionButton extends FrameLayout {
      * @param contentView
      */
     public void setContentView(View contentView, FrameLayout.LayoutParams contentParams) {
-        this.contentView = contentView;
         FrameLayout.LayoutParams params;
         if (contentParams == null) {
             params = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER);

@@ -17,7 +17,8 @@ public class ResourceUtils {
     public static int imgResIdFromName(Context context, String imgFileName) {
         if (context == null || imgFileName == null) {
             Log.e("bbb", "Input params cannot be null!");
-            return context.getResources().getIdentifier(AntenaConstants.GENERIC_STREAM_ICON_NAME, "drawable", context.getPackageName());
+            int genericImageId = context.getResources().getIdentifier(AntenaConstants.GENERIC_STREAM_ICON_NAME, "drawable", context.getPackageName());
+            return genericImageId;
         }
         String fileNameWithPrefix = String.format("img_%s", imgFileName);
         int identifier = context.getResources().getIdentifier(fileNameWithPrefix, "drawable", context.getPackageName());

@@ -1,8 +1,6 @@
 package bkoruznjak.from.hr.antenazagreb.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import bkoruznjak.from.hr.antenazagreb.R;
 import bkoruznjak.from.hr.antenazagreb.RadioApplication;
 import bkoruznjak.from.hr.antenazagreb.constants.AnimationConstants;
-import bkoruznjak.from.hr.antenazagreb.constants.UtilConstants;
 import bkoruznjak.from.hr.antenazagreb.model.network.PromoModel;
 
 /**
@@ -29,14 +26,9 @@ import bkoruznjak.from.hr.antenazagreb.model.network.PromoModel;
 public class PromoRecycleAdapter extends RecyclerView.Adapter<PromoRecycleAdapter.PromoViewHolder> {
 
     private ArrayList<PromoModel> dataSet;
-    private int imageWidth;
-    private int imageHeight;
-    private Context mContext;
 
     public PromoRecycleAdapter(ArrayList<PromoModel> data) {
         this.dataSet = data;
-        this.imageHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UtilConstants.ARTICLE_IMAGE_HEIGHT, RadioApplication.getContext().getResources().getDisplayMetrics());
-        this.imageWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UtilConstants.ARTICLE_IMAGE_WIDTH, RadioApplication.getContext().getResources().getDisplayMetrics());
     }
 
     @Override
@@ -44,7 +36,6 @@ public class PromoRecycleAdapter extends RecyclerView.Adapter<PromoRecycleAdapte
                                                                   int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.promo_card_layout, parent, false);
-        mContext = parent.getContext();
         PromoRecycleAdapter.PromoViewHolder myViewHolder = new PromoRecycleAdapter.PromoViewHolder(view);
         return myViewHolder;
     }

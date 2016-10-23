@@ -24,7 +24,7 @@ public class ArticleModel implements Serializable {
     public List<Image> images;
 
     @JsonObject(fieldDetectionPolicy = JsonObject.FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS)
-    public static class Image{
+    public static class Image implements Serializable {
 
         public int id;
         public String title;

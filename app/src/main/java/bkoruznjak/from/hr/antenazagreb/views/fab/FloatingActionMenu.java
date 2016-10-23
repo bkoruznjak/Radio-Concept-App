@@ -558,10 +558,6 @@ public class FloatingActionMenu {
         this.stateChangeListener = listener;
     }
 
-    public void setOnClickListener(View.OnClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
     /**
      * A listener to listen open/closed state changes of the Menu
      */

@@ -268,10 +268,20 @@ public class VolumeSlider extends View {
         double sectorPICoef = Math.PI / numberOfSectorsPerPI;
         if (sectorID >= 1 && sectorID <= 8) {
             // od 0 do 3.14
-            setAngle(sectorPICoef * sectorID);
+            double tempAngle = sectorPICoef * sectorID;
+            if (tempAngle <= 0) {
+                setAngle(0.00);
+            } else {
+                setAngle(tempAngle);
+            }
         } else {
             // od -3.14 do 0
-            setAngle(-sectorPICoef * ((numberOfSectorsPerPI * 2) - sectorID));
+            double tempAngle = (-sectorPICoef * ((numberOfSectorsPerPI * 2) - sectorID));
+            if (tempAngle >= 0) {
+                setAngle(-0.1);
+            } else {
+                setAngle(tempAngle);
+            }
         }
         invalidate();
     }
@@ -405,13 +415,13 @@ public class VolumeSlider extends View {
                 // start moving the thumb (this is the first touch)
                 int x = (int) ev.getX();
                 int y = (int) ev.getY();
-//if (isThumbMovingAllowed(y)){
-                if (x < mThumbX + mThumbSize && x > mThumbX - mThumbSize && y < mThumbY + mThumbSize && y > mThumbY - mThumbSize) {
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                    mIsThumbSelected = true;
-                    updateSliderState(x, y);
+                if (isThumbMovingAllowed(y)) {
+                    if (x < mThumbX + mThumbSize && x > mThumbX - mThumbSize && y < mThumbY + mThumbSize && y > mThumbY - mThumbSize) {
+                        getParent().requestDisallowInterceptTouchEvent(true);
+                        mIsThumbSelected = true;
+                        updateSliderState(x, y);
+                    }
                 }
-//            }
                 break;
             }
 
@@ -420,9 +430,9 @@ public class VolumeSlider extends View {
                 if (mIsThumbSelected) {
                     int x = (int) ev.getX();
                     int y = (int) ev.getY();
-//                    if (isThumbMovingAllowed(y)) {
-                    updateSliderState(x, y);
-//                    }
+                    if (isThumbMovingAllowed(y)) {
+                        updateSliderState(x, y);
+                    }
                 }
                 break;
             }
@@ -433,6 +443,8 @@ public class VolumeSlider extends View {
                 mIsThumbSelected = false;
                 break;
             }
+            default:
+                break;
         }
         // redraw the whole component
         invalidate();
@@ -442,9 +454,11 @@ public class VolumeSlider extends View {
     private boolean isThumbMovingAllowed(int y) {
         //todo block the slider from passing the 0 to max volume barrier
         int distanceY = mCircleCenterY - y;
-        if (distanceY <= 0 && sectorID == 1) {
+        if (distanceY < 0 && sectorID == 1) {
             return false;
-        } else return !(distanceY >= 0 && sectorID == 16);
+        } else if (distanceY >= 0 && sectorID == 16) {
+            return false;
+        } else return !(distanceY <= 0 && sectorID == 0);
     }
 
     /**

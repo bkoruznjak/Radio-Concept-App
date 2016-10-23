@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     Animation infiniteRotateAnim;
     Animation realInfiniteRotateAnim;
     RadioStateModel mRadioStateModel;
-    float densityPixelCoef;
     private RadioBus myBus;
     private boolean isRadioStationPickerShown = false;
     private SharedPreferences mPreferences;
@@ -255,7 +254,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupAnimations() {
-        densityPixelCoef = getResources().getDisplayMetrics().widthPixels / 100;
         //animation for main control fab
         infiniteRotateAnim = AnimationUtils.loadAnimation(this, R.anim.inf_rotate);
         realInfiniteRotateAnim = new RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);

@@ -64,6 +64,8 @@ public class SocialRecycleAdapter extends RecyclerView.Adapter<SocialRecycleAdap
             case "INSTAGRAM":
                 socialNetworkLogoView.setImageDrawable(RadioApplication.getInstance().getSocialIconInstagram());
                 break;
+            default:
+                break;
         }
 
         textViewDate.setText(dataSet.get(listPosition).postedAt);

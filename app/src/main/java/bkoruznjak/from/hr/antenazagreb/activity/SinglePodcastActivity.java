@@ -191,7 +191,7 @@ public class SinglePodcastActivity extends AppCompatActivity implements ExoPlaye
             podcastPlayer.removeListener(this);
             podcastPlayer.release();
             podcastPlayer = null;
-            System.gc();
+//            System.gc();
         }
     }
 

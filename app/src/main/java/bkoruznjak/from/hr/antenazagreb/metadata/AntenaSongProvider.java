@@ -27,10 +27,16 @@ public class AntenaSongProvider {
                 .build();
 
         Response response = okHttpClient.newCall(request).execute();
-        String body = response.body().string();
-        String songData = body.substring(0, body.indexOf('\n'));
-        String[] songRawData = songData.split(";");
-        return new SongModel(songRawData[1], songRawData[0]);
+        try {
+            String body = response.body().string();
+            String songData = body.substring(0, body.indexOf('\n'));
+            String[] songRawData = songData.split(";");
+            return new SongModel(songRawData[1], songRawData[0]);
+        } catch (NullPointerException npEx) {
+            return new SongModel("Unknown", "Unknown");
+        } catch (IndexOutOfBoundsException indexOobEx) {
+            return new SongModel("Unknown", "Unknown");
+        }
     }
 
     public void setStreamUriString(String streamUriString) {

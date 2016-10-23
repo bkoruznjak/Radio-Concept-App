@@ -36,7 +36,7 @@ public class IcyMetadataHandler {
                     try {
                         try {
                             Log.d("BBB", "______________________METADATA______________________");
-                            if (stateModel.getStreamUri().equals(StreamUriConstants.ANTENA_MAIN)) {
+                            if (stateModel.getStreamUri().equals(StreamUriConstants.ANTENA_MAIN) || stateModel.getStreamUri().equals(StreamUriConstants.ANTENA_HIT)) {
                                 String songArtist = "Unknown";
                                 String songName = "Unknown";
                                 //todo need to expand streamModel by metadataUri and add it also in RadioStateModel

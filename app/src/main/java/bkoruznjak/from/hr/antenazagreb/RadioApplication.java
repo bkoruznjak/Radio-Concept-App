@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -37,7 +38,6 @@ public class RadioApplication extends Application {
     private Drawable mSocialIconFacebook;
     private Drawable mSocialIconTwitter;
     private Drawable mSocialIconInstagram;
-    private Locale locale = null;
 
     public static RadioApplication getInstance() {
         return instance;
@@ -51,7 +51,7 @@ public class RadioApplication extends Application {
     public void onCreate() {
         instance = this;
         super.onCreate();
-//        LeakCanary.install(this);
+        LeakCanary.install(this);
         NetworkUtils.registerLoganSquareTypeConverters();
         Fabric.with(this, new Crashlytics());
 
@@ -107,21 +107,25 @@ public class RadioApplication extends Application {
     }
 
     public RadioBus getBus() {
-        if (myBus == null) {
-            myBus = new RadioBus();
+        synchronized (this) {
+            if (myBus == null) {
+                myBus = new RadioBus();
+            }
+            return myBus;
         }
-        return myBus;
     }
 
     public RadioStateModel getRadioStateModel() {
-        if (myStateModel == null) {
-            myStateModel = new RadioStateModel();
-            myStateModel.setStreamUri(StreamUriConstants.ANTENA_MAIN);
-            SharedPreferences prefs = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
-            String defaultStationName = prefs.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.NAME_ANTENA_MAIN);
-            Log.d("bbb", "u radio app klasi stavljam default stream na:" + defaultStationName);
-            Log.d("bbb", "u radio app klasi stavljam default stream url:" + myStateModel.getStreamUri());
-            myStateModel.setDefaultStream(defaultStationName);
+        synchronized (this) {
+            if (myStateModel == null) {
+                myStateModel = new RadioStateModel();
+                myStateModel.setStreamUri(StreamUriConstants.ANTENA_MAIN);
+                SharedPreferences prefs = getSharedPreferences(PreferenceKeyConstants.PREFERENCE_NAME, MODE_PRIVATE);
+                String defaultStationName = prefs.getString(PreferenceKeyConstants.KEY_DEFAULT_STATION, StreamUriConstants.NAME_ANTENA_MAIN);
+                Log.d("bbb", "u radio app klasi stavljam default stream na:" + defaultStationName);
+                Log.d("bbb", "u radio app klasi stavljam default stream url:" + myStateModel.getStreamUri());
+                myStateModel.setDefaultStream(defaultStationName);
+            }
         }
         return myStateModel;
     }
